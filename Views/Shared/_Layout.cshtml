@@ -9,22 +9,38 @@
         <title>Case Management System</title>
     </head>
 
-    <body class="bg-gray-100">
-        <nav class="bg-blue-600 p-4">
-            <div class="container mx-auto flex justify-between items-center">
-                <a href="#" class="text-white text-lg font-bold">Case Management System</a>
-                <div>
-                    <a href="#" class="text-gray-300 hover:text-white px-3">Home</a>
-                    <a href="#" class="text-gray-300 hover:text-white px-3">Cases</a>
-                    <a href="#" class="text-gray-300 hover:text-white px-3">About</a>
-                    <a href="#" class="text-gray-300 hover:text-white px-3">Contact</a>
-                </div>
+    <body class="bg-slate-950 text-slate-100 antialiased">
+        <div class="min-h-screen bg-slate-950">
+            <nav class="border-b border-slate-800 bg-slate-900/95 backdrop-blur-xl">
+                <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
+                    <a href="#" class="text-white text-lg font-semibold tracking-tight">Case Management System</a>
+                    <div class="hidden items-center gap-6 md:flex">
+                        <a href="#" class="text-slate-300 transition hover:text-white">Home</a>
+                        <a href="#features" class="text-slate-300 transition hover:text-white">Features</a>
+                        <a href="#" class="text-slate-300 transition hover:text-white">About</a>
+                        <a href="#" class="text-slate-300 transition hover:text-white">Contact</a>
+                    </div>
+                    <a href="#get-started"
+                           class="inline-flex items-center justify-center rounded-full bg-cyan-500 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400">Get
+                        started</a>
+                    </div>
+                </nav>
+
+                <main class="mx-auto max-w-7xl px-6 py-10 lg:px-8">
+                    @RenderBody()
+                </main>
+
+                <footer class="border-t border-slate-800 bg-slate-950/90 px-6 py-6 text-slate-400 lg:px-8">
+                    <div class="mx-auto flex max-w-7xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                        <p class="text-sm">© 2026 Case Management System. Built for case workers and clients.</p>
+                        <div class="flex flex-wrap gap-4 text-sm text-slate-400">
+                            <a href="#" class="transition hover:text-white">Privacy</a>
+                            <a href="#" class="transition hover:text-white">Terms</a>
+                            <a href="#" class="transition hover:text-white">Support</a>
+                        </div>
+                    </div>
+                </footer>
             </div>
-        </nav>
+        </body>
 
-        <div class="container mx-auto mt-8">
-            @RenderBody()
-        </div>
-    </body>
-
-</html>
+    </html>
