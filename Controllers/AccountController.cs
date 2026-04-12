@@ -27,8 +27,10 @@ namespace caseManageMentSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser
+                var user = new ApplicationUser
                 {
+                    FirstName = regUser.FirstName,
+                    LastName = regUser.LastName,
                     UserName = regUser.Email,
                     Email = regUser.Email,
                 };
