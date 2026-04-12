@@ -7,8 +7,8 @@ namespace caseManageMentSystem.Controllers
     public class AccountController : Controller
     {
 
-        private readonly UserManager<IdentityUser> _userManager;
-        public AccountController(UserManager<IdentityUser> userManager)
+        private readonly UserManager<ApplicationUser> _userManager;
+        public AccountController(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
         }

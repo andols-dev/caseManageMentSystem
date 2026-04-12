@@ -1,7 +1,7 @@
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Mvc.Rendering
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<caseManageMentSystem.Models.ApplicationUser> SignInManager
+@inject UserManager<caseManageMentSystem.Models.ApplicationUser> UserManager
 
 <div class="flex items-center gap-4 text-sm">
     @if (SignInManager.IsSignedIn(User))
@@ -13,7 +13,7 @@
     }
     else
     {
-        <a asp-area="Identity" asp-page="/Account/Login" class="text-slate-300 transition hover:text-white">Login</a>
-        <a asp-area="Identity" asp-page="/Account/Register" class="text-slate-300 transition hover:text-white">Register</a>
+        <a class="text-slate-300 transition hover:text-white">Login</a>
+        <a asp-controller="Account" asp-action="Register" class="text-slate-300 transition hover:text-white">Register</a>
     }
 </div>
