@@ -8,9 +8,11 @@ namespace caseManageMentSystem.Controllers
     {
 
         private readonly UserManager<ApplicationUser> _userManager;
-        public AccountController(UserManager<ApplicationUser> userManager)
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
         }
         // GET: AccountController
         public ActionResult Index()
@@ -38,6 +40,7 @@ namespace caseManageMentSystem.Controllers
                 if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(user, "client");
+                    await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("Index", "Home");
                 }
                 else
