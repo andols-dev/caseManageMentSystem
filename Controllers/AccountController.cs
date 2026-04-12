@@ -38,7 +38,7 @@ namespace caseManageMentSystem.Controllers
                 if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(user, "client");
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {
