@@ -19,7 +19,7 @@
    - customize login page ✅
    - customize register page ✅
 
-6. add admin area
+6. add admin area ✅
 
 7. add user management in admin area
    - admin can create, edit, delete users
