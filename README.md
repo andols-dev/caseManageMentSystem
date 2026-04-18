@@ -1,3 +1,5 @@
-# Case Management System, c# .net core mvc
+# Case Management System
 
-This is a case management system built using C# .NET Core MVC framework. It allows users to manage and track cases efficiently. The system provides features such as case creation, assignment, status tracking, and reporting.
+Building a case management system using c# .net core mvc and sql database, with identity and Entity framework core for user management and authentication.
+
+The system will have two types of users: case managers and clients and three roles: admin, case manager and client.
