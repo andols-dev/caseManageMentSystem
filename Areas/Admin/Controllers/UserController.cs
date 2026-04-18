@@ -17,9 +17,8 @@ namespace caseManageMentSystem.Areas.Admin.Controllers
         // GET: UserController
         public async Task<IActionResult> Index()
         {
-            //TODO: Get all users and their roles and pass to the view
             var users = _userManager.Users;
-            // get roles for each user and pass to the view
+
             var userRolesViewModel = new List<UserVM>();
             foreach (var user in users)
             {

@@ -24,8 +24,9 @@
 7. add user management in admin area
    - show all users and their respective roles ✅
      - style with tailwind css
-   - admin can create, edit, delete users
-   - admin can assign roles to users
+     - add pagination
+     - add create user and role functionality
+     - add delete user and role functionality
 
 8. add specific user profiles
    - client profile
