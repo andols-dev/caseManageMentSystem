@@ -1,10 +1,12 @@
 using caseManageMentSystem.Areas.Admin.Models.ViewModels;
 using caseManageMentSystem.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace caseManageMentSystem.Areas.Admin.Controllers
 {
+    [Authorize]// add role based authorization
     [Area("Admin")]
     public class UserController : Controller
     {
