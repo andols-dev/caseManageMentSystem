@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using caseManageMentSystem.Data;
 using caseManageMentSystem.Models;
+using caseManageMentSystem.Enums;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,7 +43,7 @@ using (var scope = app.Services.CreateScope())
     await db.Database.EnsureCreatedAsync();
 
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    var roles = new[] { "admin", "client", "caseManager" };
+    var roles = Enum.GetNames(typeof(UserRole));
 
     foreach (var roleName in roles)
     {

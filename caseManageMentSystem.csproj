@@ -18,6 +18,7 @@
     <Folder Include="Areas\Admin\Models\ViewModels\" />
     <Folder Include="Areas\Admin\Views\User\" />
     <Folder Include="Controllers\" />
+    <Folder Include="Enums\" />
     <Folder Include="Models\" />
     <Folder Include="Views\Account\" />
   </ItemGroup>
