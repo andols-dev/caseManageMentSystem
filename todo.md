@@ -28,10 +28,13 @@
      - add create user and role functionality
      - add delete user and role functionality
 
-8. add specific user profiles
+8. add support for 404 and 500
+
+9. add specific user profiles
    - client profile
    - case manager profile
 
-9. add specific user behavior to client and case manager profiles
-   - case manager can see client profiles
-   - client can only see their user information (application user information)
+10. add specific user behavior to client and case manager profiles
+    - case manager can see client profiles
+
+- client can only see their user information (application user information)
