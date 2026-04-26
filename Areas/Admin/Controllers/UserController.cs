@@ -1,3 +1,4 @@
+using caseManageMentSystem.Areas.Admin.Models;
 using caseManageMentSystem.Areas.Admin.Models.ViewModels;
 using caseManageMentSystem.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -34,9 +35,21 @@ namespace caseManageMentSystem.Areas.Admin.Controllers
             return View(userRolesViewModel);
         }
 
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create(CreateUserVM createUser)
         {
-
+            var user = new ApplicationUser
+            {
+                FirstName = createUser.FirstName,
+                LastName = createUser.LastName,
+                UserName = createUser.Email,
+                Email = createUser.Email,
+            };
+            var result = await _userManager.CreateAsync(user, createUser.Password);
+            if (result.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(user, createUser.Role.ToString());
+                return RedirectToAction(nameof(Index));
+            }
             return View();
         }
     }
