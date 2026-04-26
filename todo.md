@@ -23,10 +23,10 @@
 
 7. add user management in admin area
    - show all users and their respective roles ✅
-     - style with tailwind css
-     - add pagination
      - add create user and role functionality
      - add delete user and role functionality
+     - style with tailwind css
+     - add pagination
 
 8. add support for 404 and 500
 
