@@ -34,5 +34,10 @@ namespace caseManageMentSystem.Areas.Admin.Controllers
             return View(userRolesViewModel);
         }
 
+        public async Task<IActionResult> Create()
+        {
+
+            return View();
+        }
     }
 }
