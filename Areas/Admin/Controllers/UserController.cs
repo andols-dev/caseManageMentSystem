@@ -37,20 +37,31 @@ namespace caseManageMentSystem.Areas.Admin.Controllers
 
         public async Task<IActionResult> Create(CreateUserVM createUser)
         {
-            var user = new ApplicationUser
+            if (ModelState.IsValid)
             {
-                FirstName = createUser.FirstName,
-                LastName = createUser.LastName,
-                UserName = createUser.Email,
-                Email = createUser.Email,
-            };
-            var result = await _userManager.CreateAsync(user, createUser.Password);
-            if (result.Succeeded)
-            {
-                await _userManager.AddToRoleAsync(user, createUser.Role.ToString());
-                return RedirectToAction(nameof(Index));
+                var user = new ApplicationUser
+                {
+                    FirstName = createUser.FirstName,
+                    LastName = createUser.LastName,
+                    UserName = createUser.Email,
+                    Email = createUser.Email,
+                };
+                var result = await _userManager.CreateAsync(user, createUser.Password);
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(user, createUser.Role);
+                    return RedirectToAction(nameof(Index));
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
             }
-            return View();
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Please correct the errors and try again.");
+            }
+            return View(createUser);
         }
     }
 }
