@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace caseManageMentSystem.Areas.Admin.Controllers
 {
-    [Authorize]// add role based authorization
+    [Authorize(Roles = "admin")]// add role based authorization
     [Area("Admin")]
     public class UserController : Controller
     {
@@ -46,6 +46,7 @@ namespace caseManageMentSystem.Areas.Admin.Controllers
                     UserName = createUser.Email,
                     Email = createUser.Email,
                 };
+
                 var result = await _userManager.CreateAsync(user, createUser.Password);
                 if (result.Succeeded)
                 {
