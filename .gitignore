@@ -118,6 +118,9 @@ _TeamCity*
 *.coverage
 *.coveragexml
 
+# Local database file
+caseManagement.db
+
 # NCrunch
 _NCrunch_*
 .*crunch*.local.xml
