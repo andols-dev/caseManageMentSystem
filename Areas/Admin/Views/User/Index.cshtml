@@ -58,18 +58,20 @@
                                         }
                                     </div>
                                 </td>
-                                <td class="px-5 py-4"><a asp-action="Delete" asp-route-id="@user.User.Id"
-                                                             class="text-red-500 hover:text-red-400">Delete user</a></td>
-                                    <td class="px-5 py-4"></td>
-                                    <td class="px-5 py-4"></td>
-                                    <td class="px-5 py-4"></td>
-                                    <td class="px-5 py-4"></td>
-                                    <td class="px-5 py-4"></td>
-                                    <td class="px-5 py-4"></td>
-                                </tr>
-                            }
+                                <td class="px-5 py-4">
+                                    <a asp-action="Delete" asp-route-id="@user.User.Id"
+                                       class="text-red-500 hover:text-red-400">Delete user</a>
+                                </td>
+                                <td class="px-5 py-4"><a asp-action="Edit" asp-route-id="@user.User.Id">Edit User</a></td>
+                                <td class="px-5 py-4"></td>
+                                <td class="px-5 py-4"></td>
+                                <td class="px-5 py-4"></td>
+                                <td class="px-5 py-4"></td>
+                                <td class="px-5 py-4"></td>
+                            </tr>
                         }
-                    </tbody>
-                </table>
-            </div>
+                    }
+                </tbody>
+            </table>
         </div>
+    </div>

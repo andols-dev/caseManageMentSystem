@@ -95,5 +95,55 @@ namespace caseManageMentSystem.Areas.Admin.Controllers
 
             return View(user);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+                return NotFound();
+            var userVM = new EditUserVM
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Role = await _userManager.GetRolesAsync(user).ContinueWith(t => t.Result.FirstOrDefault() ?? string.Empty)
+            };
+            return View(userVM);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditUserVM appUser)
+        {
+            var user = await _userManager.FindByIdAsync(appUser.Id);
+            if (user == null) return NotFound();
+
+            if (ModelState.IsValid)
+            {
+                user.FirstName = appUser.FirstName;
+                user.LastName = appUser.LastName;
+                user.Email = appUser.Email;
+                user.UserName = appUser.Email;
+
+                var updateResult = await _userManager.UpdateAsync(user);
+                if (!updateResult.Succeeded)
+                {
+                    foreach (var error in updateResult.Errors)
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    return View(appUser);
+                }
+
+                var currentRoles = await _userManager.GetRolesAsync(user);
+                if (!currentRoles.Contains(appUser.Role))
+                {
+                    await _userManager.RemoveFromRolesAsync(user, currentRoles);
+                    await _userManager.AddToRoleAsync(user, appUser.Role);
+                }
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(appUser);
+        }
     }
 }
