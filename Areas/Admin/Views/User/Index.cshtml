@@ -26,7 +26,7 @@
                         </th>
                         <th class="px-5 py-4 text-left font-semibold uppercase tracking-[0.14em] text-slate-400">Email</th>
                         <th class="px-5 py-4 text-left font-semibold uppercase tracking-[0.14em] text-slate-400">Roles</th>
-                        <th class="w-24 px-5 py-4"></th>
+                        <th class="w-24 px-5 py-4"><b>Actions</b></th>
                         <th class="w-24 px-5 py-4"></th>
                         <th class="w-24 px-5 py-4"></th>
                         <th class="w-24 px-5 py-4"></th>
@@ -58,17 +58,18 @@
                                         }
                                     </div>
                                 </td>
-                                <td class="px-5 py-4"></td>
-                                <td class="px-5 py-4"></td>
-                                <td class="px-5 py-4"></td>
-                                <td class="px-5 py-4"></td>
-                                <td class="px-5 py-4"></td>
-                                <td class="px-5 py-4"></td>
-                                <td class="px-5 py-4"></td>
-                            </tr>
+                                <td class="px-5 py-4"><a asp-action="Delete" asp-route-id="@user.User.Id"
+                                                             class="text-red-500 hover:text-red-400">Delete user</a></td>
+                                    <td class="px-5 py-4"></td>
+                                    <td class="px-5 py-4"></td>
+                                    <td class="px-5 py-4"></td>
+                                    <td class="px-5 py-4"></td>
+                                    <td class="px-5 py-4"></td>
+                                    <td class="px-5 py-4"></td>
+                                </tr>
+                            }
                         }
-                    }
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>

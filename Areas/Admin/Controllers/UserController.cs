@@ -1,9 +1,11 @@
 using caseManageMentSystem.Areas.Admin.Models;
 using caseManageMentSystem.Areas.Admin.Models.ViewModels;
+using caseManageMentSystem.Data;
 using caseManageMentSystem.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SQLitePCL;
 
 namespace caseManageMentSystem.Areas.Admin.Controllers
 {
@@ -11,9 +13,11 @@ namespace caseManageMentSystem.Areas.Admin.Controllers
     [Area("Admin")]
     public class UserController : Controller
     {
+
+
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public UserController(UserManager<ApplicationUser> userManager)
+        public UserController(UserManager<ApplicationUser> userManager, ApplicationDbContext context)
         {
             _userManager = userManager;
         }
@@ -64,6 +68,32 @@ namespace caseManageMentSystem.Areas.Admin.Controllers
                 ModelState.AddModelError(string.Empty, "Please correct the errors and try again.");
             }
             return View(createUser);
+        }
+
+
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            return View(user);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+                return NotFound();
+
+            var result = await _userManager.DeleteAsync(user);
+            if (result.Succeeded)
+                return RedirectToAction(nameof(Index));
+
+            foreach (var error in result.Errors)
+                ModelState.AddModelError(string.Empty, error.Description);
+
+            return View(user);
         }
     }
 }
