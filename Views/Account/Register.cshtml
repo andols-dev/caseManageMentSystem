@@ -13,43 +13,45 @@
             <div class="rounded-[1.75rem] border border-slate-800/80 bg-slate-950/80 p-6 sm:p-8">
                 <form asp-action="Register" method="post" class="space-y-6">
                     <div class="grid gap-4 sm:grid-cols-2">
-                        <label class="space-y-2">
-                            <span class="text-sm font-medium text-slate-200">First name</span>
+                        <label class="space-y-2 block">
+                            
+                            <span class="block mb-2 text-sm font-medium text-slate-200">First name</span>
                             <input asp-for="FirstName"
                                    class="w-full rounded-2xl border border-slate-700/80 bg-slate-900 px-4 py-3 text-slate-100 outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20" />
                             <span asp-validation-for="FirstName" class="text-sm text-rose-300"></span>
                         </label>
 
-                        <label class="space-y-2">
-                            <span class="text-sm font-medium text-slate-200">Last name</span>
+                        <label class="space-y-2 block">
+                            <span class="block mb-2 text-sm font-medium text-slate-200">Last name</span>
                             <input asp-for="LastName"
                                    class="w-full rounded-2xl border border-slate-700/80 bg-slate-900 px-4 py-3 text-slate-100 outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20" />
                             <span asp-validation-for="LastName" class="text-sm text-rose-300"></span>
                         </label>
                     </div>
 
-                    <label class="space-y-2">
-                        <span class="text-sm font-medium text-slate-200">Email address</span>
+                    <label class="space-y-2 block">
+                        <span class="block mb-2 text-sm font-medium text-slate-200">Email address</span>
                         <input asp-for="Email"
                                class="w-full rounded-2xl border border-slate-700/80 bg-slate-900 px-4 py-3 text-slate-100 outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20" />
-                        <span asp-validation-for="Email" class="text-sm text-rose-300"></span>
+                        <span asp-validation-for="Email" class="text-sm text-rose-300"></span><br />
                     </label>
 
-                    <label class="space-y-2">
-                        <span class="text-sm font-medium text-slate-200">Password</span>
+                    <label class="space-y-2 block">
+                        <span class="block mb-2 text-sm font-medium text-slate-200">Password</span>
                         <input asp-for="Password"
                                class="w-full rounded-2xl border border-slate-700/80 bg-slate-900 px-4 py-3 text-slate-100 outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20" />
                         <span asp-validation-for="Password" class="text-sm text-rose-300"></span>
                     </label>
+                    <label class="space-y-2 block">
+                        <span class="block mb-2 text-sm font-medium text-slate-200">Confirm password</span>
+                        <input asp-for="ConfirmPassword" type="password"
+                               class="w-full rounded-2xl border border-slate-700/80 bg-slate-900 px-4 py-3 text-slate-100 outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20" />
+                        <span asp-validation-for="ConfirmPassword" class="text-sm text-rose-300"></span>
+                    </label>
 
-                    <div>
-                        <div asp-validation-summary="All"
-                             class="rounded-2xl border border-rose-500/20 bg-rose-500/5 px-4 py-3 text-sm text-rose-200">
-                        </div>
-                    </div>
 
                     <button type="submit"
-                            class="inline-flex w-full items-center justify-center rounded-full bg-cyan-500 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/80">Register
+                            class="cursor-pointer inline-flex w-full items-center justify-center rounded-full bg-cyan-500 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/80">Register
                         account</button>
                     </form>
                 </div>

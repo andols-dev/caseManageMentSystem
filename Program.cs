@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using caseManageMentSystem.Data;
 using caseManageMentSystem.Models;
+using caseManageMentSystem.Enums;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,9 +21,14 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 })
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
-
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/Login";
+    options.LogoutPath = "/Account/Logout";
+});
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+
 builder.Services.Configure<RouteOptions>(options =>
 {
     options.LowercaseUrls = true;
@@ -37,7 +43,7 @@ using (var scope = app.Services.CreateScope())
     await db.Database.EnsureCreatedAsync();
 
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    var roles = new[] { "admin", "client", "caseManager" };
+    var roles = Enum.GetNames(typeof(UserRole));
 
     foreach (var roleName in roles)
     {
@@ -57,9 +63,12 @@ app.MapRazorPages();
 app.MapAreaControllerRoute(
     name: "Admin",
     areaName: "Admin",
-    pattern: "Admin/{controller=Home}/{action=Index}/{id?}"
+    pattern: "Admin/{controller=User}/{action=Index}/{id?}"
     );
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
+
 app.Run();

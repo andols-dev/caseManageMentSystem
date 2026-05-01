@@ -22,13 +22,25 @@
 6. add admin area ✅
 
 7. add user management in admin area
-   - admin can create, edit, delete users
-   - admin can assign roles to users
+   - show all users and their respective roles ✅
+     - add create user and role functionality ✅
+     - add delete user and role functionality ✅
+     - style with tailwind css ✅
+     - add pagination
+     - add search functionality
 
-8. add specific user profiles
-   - client profile
-   - case manager profile
+8. add user profile page in account controller
+   - show user information
+   - add edit user information functionality
+   - style with tailwind css
 
-9. add specific user behavior to client and case manager profiles
-   - case manager can see client profiles
-   - client can only see their user information (application user information)
+9. add support for 404 and 500
+
+10. add specific user profiles
+    - client profile
+    - case manager profile
+
+11. add specific user behavior to client and case manager profiles
+    - case manager can see client profiles
+
+- client can only see their user information (application user information)

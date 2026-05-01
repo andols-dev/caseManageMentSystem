@@ -16,7 +16,7 @@
                         <span class="text-sm font-medium text-slate-200">Email address</span>
                         <input asp-for="Email"
                                class="w-full rounded-2xl border border-slate-700/80 bg-slate-900 px-4 py-3 text-slate-100 outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20" />
-                        <span asp-validation-for="Email" class="text-sm text-rose-300"></span>
+                        <span asp-validation-for="Email" class="text-sm text-rose-300"></span> <br />
                     </label>
 
                     <label class="space-y-2">
@@ -27,13 +27,16 @@
                     </label>
 
                     <div>
-                        <div asp-validation-summary="All"
-                             class="rounded-2xl border border-rose-500/20 bg-rose-500/5 px-4 py-3 text-sm text-rose-200">
-                        </div>
+                        <label class="inline-flex items-center text-sm text-slate-400">
+                            <input asp-for="RememberMe" type="checkbox"
+                                   class="rounded border-slate-700/80 bg-slate-900 text-cyan-500 focus:ring-cyan-500/20" />
+                            <span class="ml-2">Remember me</span>
+                        </label>
                     </div>
 
+                    
                     <button type="submit"
-                            class="inline-flex w-full items-center justify-center rounded-full bg-cyan-500 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/80">Sign
+                            class="cursor-pointer inline-flex w-full items-center justify-center rounded-full bg-cyan-500 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/80">Sign
                         in</button>
                     </form>
                 </div>
