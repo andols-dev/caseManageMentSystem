@@ -110,7 +110,8 @@ namespace caseManageMentSystem.Controllers
                     Email = u.Email,
                     UserName = u.UserName,
                     FirstName = u.FirstName,
-                    LastName = u.LastName
+                    LastName = u.LastName,
+                    FullName = u.FullName,
                 })
                 .FirstOrDefaultAsync();
 
@@ -120,6 +121,12 @@ namespace caseManageMentSystem.Controllers
             }
 
             return View(userProfileInfo);
+        }
+
+
+        public IActionResult EditUser()
+        {
+            return View();
         }
     }
 }

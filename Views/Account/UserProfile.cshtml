@@ -5,6 +5,34 @@
     ViewData["Title"] = "User Profile";
 }
 
-<h1>User profile</h1>
-
-<p>@Model.FirstName</p><p>@Model.UserName</p>
+<div class="flex flex-col gap-4 rounded-[2rem] border border-slate-800/80 bg-slate-900/95 p-6 shadow-2xl shadow-slate-950/20 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+        <div>
+            
+            <div>
+                <p class="text-sm uppercase tracking-[0.32em] text-cyan-300">User profile</p>
+                <h1 class="mt-2 text-3xl font-semibold text-white">@($"{Model.FullName}")</h1>
+                <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
+                    Your account information and contact
+                    details are shown below.
+                </p>
+            </div>
+    
+            
+            @* Email and user name *@
+            <div class="grid gap-6 sm:grid-cols-2">
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Email</p>
+                    <p class="mt-3 text-xl font-semibold text-white">@Model.Email</p>
+                </div>
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">User name</p>
+                    <p class="mt-3 text-xl font-semibold text-white">@Model.UserName</p>
+                </div>
+            </div>
+                
+            @* Edit profile link *@
+            <a asp-area="" asp-action="EditUser" class="inline-flex items-center justify-center rounded-full bg-cyan-500 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400">Edit</a>
+        </div>
+    </div>
+</div>
