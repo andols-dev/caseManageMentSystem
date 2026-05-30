@@ -30,11 +30,12 @@
      - add search functionality ✅
 
 8. add user profile page in account controller
-   - show user information
-   - add edit user information functionality
-   - style with tailwind css
+   - show user information ✅
+   - add edit user information functionality ✅
+   - add change password functionality ✅
+   - style with tailwind css ✅
 
-9. add support for 404 and 500
+9. add support for 404 and 500 errors ✅
 
 10. add specific user profiles
     - client profile
