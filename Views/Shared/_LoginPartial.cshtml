@@ -6,7 +6,7 @@
 <div class="flex items-center gap-4 text-sm">
     @if (SignInManager.IsSignedIn(User))
     {
-        <span class="text-slate-200">Hello, @User.Identity?.Name</span>
+        <a asp-area=""  asp-action="UserProfile" asp-controller="Account" class="text-slate-200">Hello, @User.Identity?.Name</a>
         <form class="inline" asp-area="" asp-controller="Account" asp-action="Logout" method="post">
             <button type="submit" class=" cursor-pointer text-slate-300 transition hover:text-white">Logout</button>
         </form>

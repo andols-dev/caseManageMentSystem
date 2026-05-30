@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using caseManageMentSystem.Models;
+using caseManageMentSystem.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace caseManageMentSystem.Controllers
 {
@@ -95,5 +97,29 @@ namespace caseManageMentSystem.Controllers
             return View();
         }
 
+        // User profile page
+
+        public async Task<IActionResult> UserProfile()
+        {
+            var userId = _userManager.GetUserId(User);
+
+            var userProfileInfo = await _userManager.Users
+                .Where(u => u.Id == userId)
+                .Select(u => new UserProfileViewModel
+                {
+                    Email = u.Email,
+                    UserName = u.UserName,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName
+                })
+                .FirstOrDefaultAsync();
+
+            if (userProfileInfo == null)
+            {
+                return NotFound();
+            }
+
+            return View(userProfileInfo);
+        }
     }
 }
