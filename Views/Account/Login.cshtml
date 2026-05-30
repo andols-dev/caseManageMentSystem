@@ -1,4 +1,8 @@
-﻿@model caseManageMentSystem.Models.LoginUser
+﻿@{
+    ViewData["Title"] = "Login";
+
+}
+@model caseManageMentSystem.Models.LoginUser
 
 <div class="min-h-[calc(100vh-6rem)] flex items-center justify-center py-12">
     <div
@@ -10,6 +14,11 @@
 
         <div class="rounded-[1.75rem] border border-slate-800/80 bg-slate-950/80 p-6 sm:p-8">
             <form asp-action="Login" method="post" class="space-y-6">
+                @if (ViewBag.Error != null && ViewBag.Error == true)
+                {
+                    <div asp-validation-summary="All"
+                         class="rounded-xl border border-rose-400/30 bg-rose-950/80 p-4 text-sm text-rose-200"></div>
+                }
                 <label class="space-y-2">
                     <span class="text-sm font-medium text-slate-200">Email address</span>
                     <input asp-for="Email"

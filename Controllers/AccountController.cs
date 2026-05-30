@@ -43,6 +43,9 @@ namespace caseManageMentSystem.Controllers
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("Index", "Home");
                 }
+
+
+
                 else
                 {
                     // Handle registration errors
@@ -61,6 +64,7 @@ namespace caseManageMentSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginUser loginUser)
         {
+            var modelStateErrors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
             if (ModelState.IsValid)
             {
                 var result = await _signInManager.PasswordSignInAsync(loginUser.Email, loginUser.Password, isPersistent: loginUser.RememberMe, lockoutOnFailure: false);
@@ -68,10 +72,14 @@ namespace caseManageMentSystem.Controllers
                 {
                     return RedirectToAction("Index", "Home");
                 }
+
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt. Please check your email and password.");
+                    ViewBag.Error = true;
                 }
+
+
             }
             return View(loginUser);
         }
