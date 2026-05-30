@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using caseManageMentSystem.Models;
+using caseManageMentSystem.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace caseManageMentSystem.Controllers
 {
@@ -95,5 +97,136 @@ namespace caseManageMentSystem.Controllers
             return View();
         }
 
+        // User profile page
+
+        public async Task<IActionResult> UserProfile()
+        {
+            var userId = _userManager.GetUserId(User);
+
+            var userProfileInfo = await _userManager.Users
+                .Where(u => u.Id == userId)
+                .Select(u => new UserProfileViewModel
+                {
+                    Email = u.Email,
+                    UserName = u.UserName,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    FullName = u.FullName,
+                    PhoneNumber = u.PhoneNumber,
+                    Id = userId,
+
+                })
+                .FirstOrDefaultAsync();
+
+            if (userProfileInfo == null)
+            {
+                return NotFound();
+            }
+
+            return View(userProfileInfo);
+        }
+
+        [HttpGet]
+        public IActionResult EditUserProfile(string id)
+        {
+            var user = _userManager.Users.FirstOrDefault(u => u.Id == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var userInfo = new UserProfileViewModel
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber
+            };
+
+
+            return View(userInfo);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditUserProfile(UserProfileViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (model.Id == null)
+                {
+                    return NotFound();
+                }
+
+                var user = await _userManager.FindByIdAsync(model.Id);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+
+                user.FirstName = model.FirstName ?? string.Empty;
+                user.LastName = model.LastName ?? string.Empty;
+                user.Email = model.Email ?? string.Empty;
+                user.PhoneNumber = model.PhoneNumber;
+
+                var result = await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction(nameof(UserProfile));
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
+            }
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult ChangePassword()
+        {
+            return View(new ChangePasswordViewModel());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var userId = _userManager.GetUserId(User);
+            if (userId == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+            if (result.Succeeded)
+            {
+                await _signInManager.RefreshSignInAsync(user);
+                return RedirectToAction(nameof(UserProfile));
+            }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
+            return View(model);
+        }
     }
 }
