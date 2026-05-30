@@ -1,0 +1,12 @@
+@model int?
+@{
+    var statusCode = Model ?? 0;
+    ViewData["Title"] = statusCode == 0 ? "Error" : $"Error {statusCode}";
+}
+<h1 class="text-danger">@statusCode - An error occurred</h1>
+<p class="text-danger">An unexpected error occurred while processing your request.</p>
+<p>
+    <a asp-controller="Home" asp-action="Index">Return to Home Page</a>
+    or <a asp-controller="Error" asp-action="NotFound">Report this issue</a>.
+</p>
+    
