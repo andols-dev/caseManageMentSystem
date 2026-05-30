@@ -22,21 +22,32 @@ namespace caseManageMentSystem.Areas.Admin.Controllers
             _userManager = userManager;
         }
         // GET: UserController
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
+            int pageSize = 4;
             var users = _userManager.Users;
 
-            var userRolesViewModel = new List<UserVM>();
+            var userAndRolesList = new List<UserVM>();
             foreach (var user in users)
             {
                 var roles = await _userManager.GetRolesAsync(user);
-                userRolesViewModel.Add(new UserVM
+                userAndRolesList.Add(new UserVM
                 {
                     User = user,
                     Roles = roles
                 });
             }
-            return View(userRolesViewModel);
+
+            var pagedResult = new PagedResult<UserVM>
+            {
+                Items = userAndRolesList.Skip((page - 1) * pageSize).Take(pageSize).ToList(),
+                PageNumber = page,
+                PageSize = pageSize,
+                TotalItems = userAndRolesList.Count
+            };
+
+
+            return View(pagedResult);
         }
 
         public async Task<IActionResult> Create(CreateUserVM createUser)
