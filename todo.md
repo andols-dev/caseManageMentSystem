@@ -35,7 +35,7 @@
    - add change password functionality ✅
    - style with tailwind css ✅
 
-9. add support for 404 and 500 errors ✅
+9. add support for 404 and 500 errors
 
 10. add specific user profiles
     - client profile
