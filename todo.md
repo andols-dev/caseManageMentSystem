@@ -26,8 +26,8 @@
      - add create user and role functionality ✅
      - add delete user and role functionality ✅
      - style with tailwind css ✅
-     - add pagination
-     - add search functionality
+     - add pagination ✅
+     - add search functionality ✅
 
 8. add user profile page in account controller
    - show user information
