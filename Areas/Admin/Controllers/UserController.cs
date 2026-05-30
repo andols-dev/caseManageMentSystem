@@ -22,10 +22,12 @@ namespace caseManageMentSystem.Areas.Admin.Controllers
             _userManager = userManager;
         }
         // GET: UserController
-        public async Task<IActionResult> Index(int page = 1)
+        public async Task<IActionResult> Index(string? searchString, int page = 1)
         {
             int pageSize = 4;
             var users = _userManager.Users;
+            searchString = searchString?.Trim();
+            ViewData["CurrentFilter"] = searchString;
 
             var userAndRolesList = new List<UserVM>();
             foreach (var user in users)
@@ -38,9 +40,22 @@ namespace caseManageMentSystem.Areas.Admin.Controllers
                 });
             }
 
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                userAndRolesList = userAndRolesList
+                    .Where(s =>
+                        s.User.FirstName?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true ||
+                        s.User.LastName?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true ||
+                        s.User.UserName?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true ||
+                        s.User.Email?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true ||
+                        s.Roles.Any(r => r.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                    )
+                    .ToList();
+            }
+
             var pagedResult = new PagedResult<UserVM>
             {
-                Items = userAndRolesList.Skip((page - 1) * pageSize).Take(pageSize).ToList(),
+                Items = [.. userAndRolesList.Skip((page - 1) * pageSize).Take(pageSize)],
                 PageNumber = page,
                 PageSize = pageSize,
                 TotalItems = userAndRolesList.Count
@@ -156,5 +171,7 @@ namespace caseManageMentSystem.Areas.Admin.Controllers
 
             return View(appUser);
         }
+
+
     }
 }
