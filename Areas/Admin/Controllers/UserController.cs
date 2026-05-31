@@ -42,13 +42,15 @@ namespace caseManageMentSystem.Areas.Admin.Controllers
 
             if (!string.IsNullOrEmpty(searchString))
             {
+
+
                 userAndRolesList = userAndRolesList
                     .Where(s =>
-                        s.User.FirstName?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true ||
-                        s.User.LastName?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true ||
-                        s.User.UserName?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true ||
-                        s.User.Email?.Contains(searchString, StringComparison.OrdinalIgnoreCase) == true ||
-                        s.Roles.Any(r => r.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                        string.Equals(s.User.FirstName, searchString, StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(s.User.LastName, searchString, StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(s.User.UserName, searchString, StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(s.User.Email, searchString, StringComparison.OrdinalIgnoreCase) ||
+                        s.Roles.Any(r => string.Equals(r, searchString, StringComparison.OrdinalIgnoreCase))
                     )
                     .ToList();
             }

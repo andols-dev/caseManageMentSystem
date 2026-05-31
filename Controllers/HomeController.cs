@@ -12,6 +12,5 @@ namespace caseManageMentSystem.Controllers
         }
 
 
-
     }
 }

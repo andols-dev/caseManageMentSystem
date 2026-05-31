@@ -17,11 +17,13 @@ namespace caseManageMentSystem.Controllers
             return View("Error", statusCode);
         }
 
-        public IActionResult NotFound()
+        public new IActionResult NotFound()
         {
             Response.StatusCode = 404;
             return View("NotFound");
         }
+
+
     }
 
 
