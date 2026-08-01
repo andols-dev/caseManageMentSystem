@@ -1,7 +1,50 @@
 # Case Management System
 
-Building a case management system using c# .net core mvc and sql database, with identity and Entity framework core for user management and authentication.
+This project is an ASP.NET Core MVC web application currently under development. Its goal is to provide a secure and user-friendly case management system where administrators, case managers, and clients can manage cases and user information through role-based access control.
 
-The system will have two types of users: case managers and clients and three roles: admin, case manager and client.
+## Tech Stack
 
-See `todo.md` for applied features and future features.
+### Backend
+
+* C#
+* ASP.NET Core MVC
+* Entity Framework Core
+* ASP.NET Core Identity
+* SQL Server
+
+### Frontend
+
+* Razor Views
+* Tailwind CSS
+* JavaScript
+
+## Features
+
+### ✅ Implemented Features
+
+* ASP.NET Core Identity authentication
+* Role-based authorization (Admin, Case Manager, Client)
+* Customized login and registration pages
+* Admin area
+* User and role management
+* User search
+* Pagination
+* User profile page
+* Edit user information
+* Change password
+* Responsive UI with Tailwind CSS
+
+### Planned Features
+
+* Custom 404 and 500 error pages
+* Client profiles
+* Case manager profiles
+* Role-specific functionality
+* Case managers can view assigned client profiles
+* Clients can view and manage their own profile information
+
+## Status
+
+🚧 This project is currently under active development.
+
+The current focus is Custom 404 and 500 error pages
