@@ -48,4 +48,3 @@ This project is an ASP.NET Core MVC web application currently under development.
 
 🚧 This project is currently under active development.
 
-The current focus is Custom 404 and 500 error pages
