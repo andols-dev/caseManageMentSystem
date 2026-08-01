@@ -33,10 +33,11 @@ This project is an ASP.NET Core MVC web application currently under development.
 * Edit user information
 * Change password
 * Responsive UI with Tailwind CSS
+* Custom 404 and 500 error pages
 
 ### Planned Features
 
-* Custom 404 and 500 error pages
+
 * Client profiles
 * Case manager profiles
 * Role-specific functionality
