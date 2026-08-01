@@ -141,7 +141,8 @@ namespace caseManageMentSystem.Controllers
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
-                PhoneNumber = user.PhoneNumber
+                PhoneNumber = user.PhoneNumber,
+                FullName = user.FullName
             };
 
 
