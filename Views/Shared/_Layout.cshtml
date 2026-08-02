@@ -21,10 +21,8 @@
                     <div class="flex items-center gap-10">
                         <a href="#" class="text-white text-lg font-semibold tracking-tight">Case Management System</a>
                         <div class="hidden items-center gap-6 md:flex">
-                            <a href="#" class="text-slate-300 transition hover:text-white">Home</a>
-                            <a href="#features" class="text-slate-300 transition hover:text-white">Features</a>
-                            <a href="#" class="text-slate-300 transition hover:text-white">About</a>
-                            <a href="#" class="text-slate-300 transition hover:text-white">Contact</a>
+@*                             <a href="#" class="text-slate-300 transition hover:text-white">Home</a>
+ *@
                             @if (SignInManager.IsSignedIn(User) && User.IsInRole("admin"))
                             {
                                 <a asp-area="Admin" asp-controller="User" asp-action="Index"
@@ -35,10 +33,6 @@
                     </div>
                     <div class="flex items-center gap-4">
                         @await Html.PartialAsync("_LoginPartial")
-                        <a href="#get-started"
-                               class="inline-flex items-center justify-center rounded-full bg-cyan-500 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400">Get
-                            started</a>
-                        </div>
                     </div>
                 </nav>
 
