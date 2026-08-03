@@ -37,12 +37,8 @@ This project is an ASP.NET Core MVC web application currently under development.
 
 ### Planned Features
 
-
-* Client profiles
-* Case manager profiles
+* Case manager Area and Client Area
 * Role-specific functionality
-* Case managers can view assigned client profiles
-* Clients can view and manage their own profile information
 
 ## Status
 
