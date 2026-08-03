@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -17,10 +17,8 @@
     <Folder Include="Areas\Admin\Views\User\" />
     <Folder Include="Areas\CaseManager\Data\" />
     <Folder Include="Areas\CaseManager\Models\" />
-    <Folder Include="Areas\Client\Controllers\" />
     <Folder Include="Areas\Client\Data\" />
     <Folder Include="Areas\Client\Models\" />
-    <Folder Include="Areas\Client\Views\" />
     <Folder Include="Enums\" />
   </ItemGroup>
   	<ItemGroup>
