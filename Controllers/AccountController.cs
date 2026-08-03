@@ -43,7 +43,10 @@ namespace caseManageMentSystem.Controllers
                 {
                     await _userManager.AddToRoleAsync(user, "client");
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction(
+                        "Index",
+                        "Dashboard",
+                        new { area = "Client" });
                 }
 
 
