@@ -72,7 +72,30 @@ namespace caseManageMentSystem.Controllers
                 var result = await _signInManager.PasswordSignInAsync(loginUser.Email, loginUser.Password, isPersistent: loginUser.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Home");
+                    var user = await _userManager.GetUserAsync(User);
+                    if (await _userManager.IsInRoleAsync(user, "Admin"))
+                    {
+                        return RedirectToAction(
+                            "Index",
+                            "Dashboard",
+                            new { area = "Admin" });
+                    }
+                    if (await _userManager.IsInRoleAsync(user, "CaseManager"))
+                    {
+                        return RedirectToAction(
+                            "Index",
+                            "Dashboard",
+                            new { area = "CaseManager" });
+                    }
+                    if (await _userManager.IsInRoleAsync(user, "Client"))
+                    {
+                        return RedirectToAction(
+                            "Index",
+                            "Dashboard",
+                            new { area = "Client" });
+                    }
+
+
                 }
 
                 else
@@ -83,6 +106,7 @@ namespace caseManageMentSystem.Controllers
 
 
             }
+
             return View(loginUser);
         }
 
