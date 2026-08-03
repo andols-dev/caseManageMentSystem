@@ -25,20 +25,18 @@ This project is an ASP.NET Core MVC web application currently under development.
 * ASP.NET Core Identity authentication
 * Role-based authorization (Admin, Case Manager, Client)
 * Customized login and registration pages
-* Admin area
+* Admin area, Case manager Area and Client Area
 * User and role management
 * User search
 * Pagination
 * User profile page
 * Edit user information
-* Change password
 * Responsive UI with Tailwind CSS
 * Custom 404 and 500 error pages
+* Dashboard pages for case manager, client and admin Areas
 
 ### Planned Features
-
-* Case manager Area and Client Area
-* Role-specific functionality
+* Role-specific functionality for case manager and client
 
 ## Status
 
