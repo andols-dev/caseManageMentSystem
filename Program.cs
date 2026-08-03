@@ -72,6 +72,16 @@ app.MapAreaControllerRoute(
     areaName: "Admin",
     pattern: "Admin/{controller=User}/{action=Index}/{id?}"
     );
+app.MapAreaControllerRoute(
+    name: "Client",
+    areaName: "Client",
+    pattern: "Client/{controller=DashBoard}/{action=Index}/{id?}"
+    );
+app.MapAreaControllerRoute(
+    name: "CaseManager",
+    areaName: "CaseManager",
+    pattern: "CaseManager/{controller=DashBoard}/{action=Index}/{id?}"
+    );
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=Login}/{id?}");
