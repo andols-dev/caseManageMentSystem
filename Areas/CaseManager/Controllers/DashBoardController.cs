@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using caseManageMentSystem.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace caseManageMentSystem.Areas.CaseManager.Controllers
@@ -7,9 +9,19 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
     [Authorize(Roles = "caseManager")]
     public class DashBoardController : Controller
     {
-        public IActionResult Index()
+        // get logged in user save in var
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public DashBoardController(UserManager<ApplicationUser> userManager)
         {
-            return View();
+            _userManager = userManager;
+        }
+        public async Task<IActionResult> Index()
+        {
+
+            var loggedInUser = await _userManager.GetUserAsync(User);
+
+            return View(loggedInUser);
         }
     }
 }
