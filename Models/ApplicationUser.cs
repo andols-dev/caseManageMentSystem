@@ -15,4 +15,6 @@ public class ApplicationUser : IdentityUser
 
     // Ärenden där användaren är handläggare
     public ICollection<Case> ManagedCases { get; set; } = new List<Case>();
+
+    public ICollection<Note> Notes { get; set; } = new List<Note>();
 }
