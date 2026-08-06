@@ -20,6 +20,7 @@
     <Folder Include="Areas\Client\Data\" />
     <Folder Include="Areas\Client\Models\" />
     <Folder Include="Enums\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
   	<ItemGroup>
 		<UpToDateCheckBuilt Include="wwwroot/css/site.css" Set="Css" />

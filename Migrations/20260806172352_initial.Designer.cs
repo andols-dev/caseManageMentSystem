@@ -11,8 +11,8 @@ using caseManageMentSystem.Data;
 namespace caseManageMentSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260803080950_AddCaseUserRelationships")]
-    partial class AddCaseUserRelationships
+    [Migration("20260806172352_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -245,6 +245,9 @@ namespace caseManageMentSystem.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -259,6 +262,39 @@ namespace caseManageMentSystem.Migrations
                     b.HasIndex("ClientId");
 
                     b.ToTable("Cases");
+                });
+
+            modelBuilder.Entity("caseManageMentSystem.Models.Note", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CaseId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CaseId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Notes");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -331,11 +367,37 @@ namespace caseManageMentSystem.Migrations
                     b.Navigation("Client");
                 });
 
+            modelBuilder.Entity("caseManageMentSystem.Models.Note", b =>
+                {
+                    b.HasOne("caseManageMentSystem.Models.Case", "Case")
+                        .WithMany("Notes")
+                        .HasForeignKey("CaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("caseManageMentSystem.Models.ApplicationUser", "User")
+                        .WithMany("Notes")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Case");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("caseManageMentSystem.Models.ApplicationUser", b =>
                 {
                     b.Navigation("ClientCases");
 
                     b.Navigation("ManagedCases");
+
+                    b.Navigation("Notes");
+                });
+
+            modelBuilder.Entity("caseManageMentSystem.Models.Case", b =>
+                {
+                    b.Navigation("Notes");
                 });
 #pragma warning restore 612, 618
         }
