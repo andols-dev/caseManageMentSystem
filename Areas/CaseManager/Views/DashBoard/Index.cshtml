@@ -6,11 +6,13 @@
 
 
 <h2>My cases</h2>
-@if (Model.ClientCases.Any())
+@if (Model.ManagedCases.Any())
 {
-    foreach(var client in Model.ClientCases)
+    foreach (var client in Model.ManagedCases)
     {
-        // add table
+        <p>@client.Status</p>
+        <p>@client.Title</p>
+        <p>@client.Client.FullName</p>
     }
 }
 else
