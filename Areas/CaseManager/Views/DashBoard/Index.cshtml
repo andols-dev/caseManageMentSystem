@@ -1,22 +1,248 @@
-﻿@model ApplicationUser
-<h1>Case Manager dashboard</h1>
+﻿@using caseManageMentSystem.Areas.CaseManager.Enums
+@model ApplicationUser
 
-<p>Welcome @Model.FirstName</p>
-
-
-
-<h2>My cases</h2>
-@if (Model.ManagedCases.Any())
-{
-    foreach (var client in Model.ManagedCases)
-    {
-        <p>@client.Status</p>
-        <p>@client.Title</p>
-        <p>@client.Client.FullName</p>
-    }
+@{
+    var activeCases = Model.ManagedCases.Count(c => c.Status == Status.active); 
+    var closedCases = Model.ManagedCases.Count(c => c.Status == Status.closed); 
+    var waitingCases = Model.ManagedCases.Count(c => c.Status == Status.waiting); 
+    var delayedCases = Model.ManagedCases.Count(c => c.Status == Status.delayed);
 }
-else
-{
-    <p>no clients</p>
-}
+
+
+
+
+<div class="space-y-6">
+    <div class="flex flex-col gap-3 rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-lg shadow-slate-950/20 sm:flex-row sm:items-center sm:justify-between">
+
+        <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-400">
+                Case Manager Dashboard
+            </p>
+
+            <h1 class="mt-2 text-2xl font-bold tracking-tight text-white">
+                Welcome, @Model.FirstName
+            </h1>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="mt-6 mb-8"> <h1 class="text-2xl font-bold text-white">Case statistics</h1>
+    <p class="mt-1 text-sm text-slate-400">Overview of your current cases</p> 
+</div>
+<div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+
+    <!-- Active -->
+    <div class="rounded-xl border p-5 @(activeCases > 0
+                 ? "border-green-500 bg-green-500/10"
+                 : "border-slate-700 bg-slate-900")">
+
+        <div class="text-sm font-medium @(activeCases > 0
+                         ? "text-green-400"
+                         : "text-slate-400")">
+            Active cases
+        </div>
+
+        <div class="mt-2 text-3xl font-bold @(activeCases > 0
+                         ? "text-green-400"
+                         : "text-slate-200")">
+            @activeCases
+        </div>
+    </div>
+
+
+    <!-- Closed -->
+    <div class="rounded-xl border p-5 @(closedCases > 0
+                 ? "border-slate-500 bg-slate-500/10"
+                 : "border-slate-700 bg-slate-900")">
+
+        <div class="text-sm font-medium @(closedCases > 0
+                         ? "text-slate-300"
+                         : "text-slate-400")">
+            Closed cases
+        </div>
+
+        <div class="mt-2 text-3xl font-bold @(closedCases > 0
+                         ? "text-slate-200"
+                         : "text-slate-200")">
+            @closedCases
+        </div>
+    </div>
+
+
+    <!-- Waiting -->
+    <div class="rounded-xl border p-5 @(waitingCases > 0
+                 ? "border-yellow-500 bg-yellow-500/10"
+                 : "border-slate-700 bg-slate-900")">
+
+        <div class="text-sm font-medium @(waitingCases > 0
+                         ? "text-yellow-400"
+                         : "text-slate-400")">
+            Waiting cases
+        </div>
+
+        <div class="mt-2 text-3xl font-bold @(waitingCases > 0
+                         ? "text-yellow-400"
+                         : "text-slate-200")">
+            @waitingCases
+        </div>
+    </div>
+
+
+    <!-- Delayed -->
+    <div class="rounded-xl border p-5 @(delayedCases > 0
+                 ? "border-red-500 bg-red-500/10"
+                 : "border-slate-700 bg-slate-900")">
+
+        <div class="text-sm font-medium @(delayedCases > 0
+                         ? "text-red-400"
+                         : "text-slate-400")">
+            Delayed cases
+        </div>
+
+        <div class="mt-2 text-3xl font-bold @(delayedCases > 0
+                         ? "text-red-400"
+                         : "text-slate-200")">
+            @delayedCases
+        </div>
+    </div>
+
+</div>
+
+<div class="mt-6 overflow-hidden rounded-xl border border-slate-800 bg-slate-900 shadow-sm">
+
+    <!-- Table header -->
+    <div class="border-b border-slate-800 px-5 py-4">
+        <h2 class="text-lg font-semibold text-white">
+            Managed cases
+        </h2>
+
+        <p class="mt-1 text-sm text-slate-400">
+            Overview of the cases you are currently managing.
+        </p>
+    </div>
+
+    <!-- Table -->
+    <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm">
+
+            <!-- Head -->
+            <thead class="border-b border-slate-800 bg-slate-950/60">
+                <tr>
+                    <th class="px-5 py-4 font-semibold text-slate-300">
+                        Client
+                    </th>
+
+                    <th class="px-5 py-4 font-semibold text-slate-300">
+                        Title
+                    </th>
+
+                    <th class="px-5 py-4 font-semibold text-slate-300">
+                        Status
+                    </th>
+
+                    <th class="px-5 py-4 font-semibold text-slate-300">
+                        Description
+                    </th>
+
+                    <th class="px-5 py-4 font-semibold text-slate-300">
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+
+            <!-- Body -->
+            <tbody class="divide-y divide-slate-800">
+
+                @if (Model.ManagedCases.Any())
+                {
+                    foreach (var client in Model.ManagedCases)
+                    {
+                        <tr class="transition-colors hover:bg-slate-800/50">
+
+                            <!-- Client -->
+                            <td class="whitespace-nowrap px-5 py-4">
+                                <span class="font-medium text-white">
+                                    @client.Client.FullName
+                                </span>
+                            </td>
+
+                            <!-- Title -->
+                            <td class="px-5 py-4">
+                                <span class="font-medium text-slate-200">
+                                    @client.Title
+                                </span>
+                            </td>
+
+                            <!-- Status -->
+                            <td class="whitespace-nowrap px-5 py-4">
+
+                                @if (client.Status == Status.active)
+                                {
+                                    <span class="inline-flex items-center rounded-full bg-green-500/10 px-2.5 py-1 text-xs font-semibold text-green-400 ring-1 ring-inset ring-green-500/20">
+                                        <span class="mr-1.5 h-1.5 w-1.5 rounded-full bg-green-400"></span>
+                                        Active
+                                    </span>
+                                }
+                                else if (client.Status == Status.closed)
+                                {
+                                    <span class="inline-flex items-center rounded-full bg-slate-700 px-2.5 py-1 text-xs font-semibold text-slate-300 ring-1 ring-inset ring-slate-600">
+                                        <span class="mr-1.5 h-1.5 w-1.5 rounded-full bg-slate-400"></span>
+                                        Closed
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="inline-flex items-center rounded-full bg-yellow-500/10 px-2.5 py-1 text-xs font-semibold text-yellow-400 ring-1 ring-inset ring-yellow-500/20">
+                                        <span class="mr-1.5 h-1.5 w-1.5 rounded-full bg-yellow-400"></span>
+                                        @client.Status
+                                    </span>
+                                }
+
+                            </td>
+
+                            <!-- Description -->
+                            <td class="max-w-md px-5 py-4">
+                                <p class="truncate text-slate-400">
+                                    @client.Description
+                                </p>
+                            </td>
+
+                            <!-- Actions -->
+                            <td class="whitespace-nowrap px-5 py-4">
+
+                                <button type="button"
+                                        class="rounded-lg px-3 py-2 text-xs font-medium text-slate-300 transition-colors hover:bg-slate-800 hover:text-white">
+                                    View
+                                </button>
+
+                            </td>
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <!-- No cases -->
+                    <tr>
+                        <td colspan="5" class="px-5 py-12 text-center">
+
+                            <p class="font-medium text-slate-300">
+                                No cases found
+                            </p>
+
+                            <p class="mt-1 text-sm text-slate-500">
+                                You currently don't have any managed cases.
+                            </p>
+
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+
+</div>
 
