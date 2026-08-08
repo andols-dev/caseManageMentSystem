@@ -66,17 +66,17 @@
 
     <!-- Closed -->
     <div class="rounded-xl border p-5 @(closedCases > 0
-                          ? "border-slate-500 bg-slate-500/10"
+                          ? "border-red-500 bg-red-500/10"
                           : "border-slate-700 bg-slate-900")">
 
         <div class="text-sm font-medium @(closedCases > 0
-                                      ? "text-slate-300"
+                                      ? "text-red-300"
                                       : "text-slate-400")">
             Closed cases
         </div>
 
         <div class="mt-2 text-3xl font-bold @(closedCases > 0
-                                      ? "text-slate-200"
+                                      ? "text-red-200"
                                       : "text-slate-200")">
             @closedCases
         </div>
