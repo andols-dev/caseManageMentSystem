@@ -1,4 +1,5 @@
-﻿using caseManageMentSystem.Data;
+﻿using caseManageMentSystem.Areas.CaseManager.Enums;
+using caseManageMentSystem.Data;
 using caseManageMentSystem.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -20,15 +21,35 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
             _userManager = userManager;
             _context = context;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(Status? caseStatus = null)
         {
+            // visa cases med rätt casestatus
+
+            var userId = _userManager.GetUserId(User);
 
             var loggedInUser = await _context.Users
-                .Include(u => u.ManagedCases)
-                .ThenInclude(c => c.Client)
-                .FirstOrDefaultAsync(u => u.Id == _userManager.GetUserId(User));
+                .FirstOrDefaultAsync(u => u.Id == userId);
 
-            return View(loggedInUser);
+            var cases = await _context.Cases
+                    .Where(c => c.CaseManagerId == userId)
+                    .Include(c => c.Client)
+                    .ToListAsync();
+
+            var viewModel = new CasesViewModel()
+            {
+                Cases = cases,
+                FullName = loggedInUser.FullName,
+                CaseStatus = caseStatus,
+            };
+
+            //var loggedInUser = await _context.Users
+            //    .Include(u => u.ManagedCases)
+            //    .ThenInclude(c => c.Client)
+            //    .FirstOrDefaultAsync(u => u.Id == _userManager.GetUserId(User));
+
+            //return View(loggedInUser);
+
+            return  View(viewModel);
         }
     }
 }
