@@ -562,6 +562,9 @@
       border-color: color-mix(in oklab, var(--color-rose-500) 20%, transparent);
     }
   }
+  .border-slate-500 {
+    border-color: var(--color-slate-500);
+  }
   .border-slate-700 {
     border-color: var(--color-slate-700);
   }
@@ -624,6 +627,9 @@
   }
   .bg-indigo-600 {
     background-color: var(--color-indigo-600);
+  }
+  .bg-red-400 {
+    background-color: var(--color-red-400);
   }
   .bg-red-500\/10 {
     background-color: color-mix(in srgb, oklch(63.7% 0.237 25.331) 10%, transparent);
@@ -1039,6 +1045,9 @@
     @supports (color: color-mix(in lab, red, red)) {
       --tw-ring-color: color-mix(in oklab, var(--color-green-500) 20%, transparent);
     }
+  }
+  .ring-red-600 {
+    --tw-ring-color: var(--color-red-600);
   }
   .ring-slate-600 {
     --tw-ring-color: var(--color-slate-600);
