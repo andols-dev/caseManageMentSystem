@@ -2,10 +2,11 @@
 @model ApplicationUser
 
 @{
-    var activeCases = Model.ManagedCases.Count(c => c.Status == Status.active); 
-    var closedCases = Model.ManagedCases.Count(c => c.Status == Status.closed); 
-    var waitingCases = Model.ManagedCases.Count(c => c.Status == Status.waiting); 
+    var activeCases = Model.ManagedCases.Count(c => c.Status == Status.active);
+    var closedCases = Model.ManagedCases.Count(c => c.Status == Status.closed);
+    var waitingCases = Model.ManagedCases.Count(c => c.Status == Status.waiting);
     var delayedCases = Model.ManagedCases.Count(c => c.Status == Status.delayed);
+    var totalCases = Model.ManagedCases.Count();
 }
 
 
@@ -28,25 +29,36 @@
 </div>
 
 
-<div class="mt-6 mb-8"> <h1 class="text-2xl font-bold text-white">Case statistics</h1>
-    <p class="mt-1 text-sm text-slate-400">Overview of your current cases</p> 
+<div class="mt-6 mb-8">
+    <h1 class="text-2xl font-bold text-white">Case statistics</h1>
+    <p class="mt-1 text-sm text-slate-400">Overview of your current cases</p>
 </div>
 <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <!-- casse managers total cases -->
+    <div class="rounded-xl border p-5">
+        <div class="text-sm font-medium ">
+            Total cases
+        </div>
+        <div class="mt-2 text-3xl font-bold">
+            @totalCases
+        </div>
+        
+    </div>
 
     <!-- Active -->
     <div class="rounded-xl border p-5 @(activeCases > 0
-                 ? "border-green-500 bg-green-500/10"
-                 : "border-slate-700 bg-slate-900")">
+                            ? "border-green-500 bg-green-500/10"
+                          : "border-slate-700 bg-slate-900")">
 
         <div class="text-sm font-medium @(activeCases > 0
-                         ? "text-green-400"
-                         : "text-slate-400")">
+                                      ? "text-green-400"
+                                      : "text-slate-400")">
             Active cases
         </div>
 
         <div class="mt-2 text-3xl font-bold @(activeCases > 0
-                         ? "text-green-400"
-                         : "text-slate-200")">
+                                      ? "text-green-400"
+                                      : "text-slate-200")">
             @activeCases
         </div>
     </div>
@@ -54,18 +66,18 @@
 
     <!-- Closed -->
     <div class="rounded-xl border p-5 @(closedCases > 0
-                 ? "border-slate-500 bg-slate-500/10"
-                 : "border-slate-700 bg-slate-900")">
+                          ? "border-slate-500 bg-slate-500/10"
+                          : "border-slate-700 bg-slate-900")">
 
         <div class="text-sm font-medium @(closedCases > 0
-                         ? "text-slate-300"
-                         : "text-slate-400")">
+                                      ? "text-slate-300"
+                                      : "text-slate-400")">
             Closed cases
         </div>
 
         <div class="mt-2 text-3xl font-bold @(closedCases > 0
-                         ? "text-slate-200"
-                         : "text-slate-200")">
+                                      ? "text-slate-200"
+                                      : "text-slate-200")">
             @closedCases
         </div>
     </div>
@@ -73,18 +85,18 @@
 
     <!-- Waiting -->
     <div class="rounded-xl border p-5 @(waitingCases > 0
-                 ? "border-yellow-500 bg-yellow-500/10"
-                 : "border-slate-700 bg-slate-900")">
+                          ? "border-yellow-500 bg-yellow-500/10"
+                          : "border-slate-700 bg-slate-900")">
 
         <div class="text-sm font-medium @(waitingCases > 0
-                         ? "text-yellow-400"
-                         : "text-slate-400")">
+                                      ? "text-yellow-400"
+                                      : "text-slate-400")">
             Waiting cases
         </div>
 
         <div class="mt-2 text-3xl font-bold @(waitingCases > 0
-                         ? "text-yellow-400"
-                         : "text-slate-200")">
+                                      ? "text-yellow-400"
+                                      : "text-slate-200")">
             @waitingCases
         </div>
     </div>
@@ -92,18 +104,18 @@
 
     <!-- Delayed -->
     <div class="rounded-xl border p-5 @(delayedCases > 0
-                 ? "border-red-500 bg-red-500/10"
-                 : "border-slate-700 bg-slate-900")">
+                          ? "border-red-500 bg-red-500/10"
+                          : "border-slate-700 bg-slate-900")">
 
         <div class="text-sm font-medium @(delayedCases > 0
-                         ? "text-red-400"
-                         : "text-slate-400")">
+                                      ? "text-red-400"
+                                      : "text-slate-400")">
             Delayed cases
         </div>
 
         <div class="mt-2 text-3xl font-bold @(delayedCases > 0
-                         ? "text-red-400"
-                         : "text-slate-200")">
+                                      ? "text-red-400"
+                                      : "text-slate-200")">
             @delayedCases
         </div>
     </div>
