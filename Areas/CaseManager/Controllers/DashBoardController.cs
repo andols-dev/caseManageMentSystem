@@ -25,6 +25,11 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
         {
             var userId = _userManager.GetUserId(User);
 
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
             var cases = _context.Cases
                 .Where(c => c.CaseManagerId == userId);
 
