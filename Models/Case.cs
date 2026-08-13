@@ -12,7 +12,7 @@ namespace caseManageMentSystem.Models
         public string CaseManagerId { get; set; } = string.Empty;
         public ApplicationUser CaseManager { get; set; } = null!;
 
-
+        public string CaseNumber { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public Status Status { get; set; }  

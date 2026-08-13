@@ -21,8 +21,10 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
             _userManager = userManager;
             _context = context;
         }
-        public async Task<IActionResult> Index(Status? caseStatus)
+        public async Task<IActionResult> Index(Status? caseStatus, string? search)
         {
+  
+            //filter
             var userId = _userManager.GetUserId(User);
 
             if (userId == null)
@@ -30,8 +32,27 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
                 return Unauthorized();
             }
 
-            var cases = _context.Cases
+
+            var allCases = _context.Cases
                 .Where(c => c.CaseManagerId == userId);
+
+            var cases = allCases;
+            //search
+            // användaren är inloggad case manager, ska kunna söka på ärendenummer, klient eller titel...
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                search = search.Trim();
+
+                cases = cases.Where(c => 
+                    c.CaseNumber.Contains(search) || 
+                    c.Title.Contains(search) ||
+                    c.Client.FirstName.Contains(search) ||
+                    c.Client.LastName.Contains(search) ||
+                    (c.Client.FirstName + " " + c.Client.LastName).Contains(search));
+            }
+
+
 
             if (caseStatus.HasValue)
             {
@@ -49,8 +70,15 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
                     .Include(c => c.Client)
                     .ToListAsync(),
 
+                TotalCases = await allCases.CountAsync(),
+                ActiveCases = await allCases.CountAsync(c => c.Status == Status.active),
+                ClosedCases = await allCases.CountAsync(c => c.Status == Status.closed),
+                WaitingCases = await allCases.CountAsync(c => c.Status == Status.waiting),
+                DelayedCases = await allCases.CountAsync(c => c.Status == Status.delayed),
+
                 FullName = loggedInUser ?? string.Empty,
-                CaseStatus = caseStatus
+                CaseStatus = caseStatus,
+                Search = search ?? string.Empty,
             };
 
 
