@@ -21,33 +21,33 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
             _userManager = userManager;
             _context = context;
         }
-        public async Task<IActionResult> Index(Status? caseStatus = null)
+        public async Task<IActionResult> Index(Status? caseStatus)
         {
-            // visa cases med rätt casestatus
-
             var userId = _userManager.GetUserId(User);
 
-            var loggedInUser = await _context.Users
-                .FirstOrDefaultAsync(u => u.Id == userId);
-
-            var cases = await _context.Cases
-                    .Where(c => c.CaseManagerId == userId)
-                    .Include(c => c.Client)
-                    .ToListAsync();
-
-            var viewModel = new CasesViewModel()
+            var cases = _context.Cases
+                .Where(c => c.CaseManagerId == userId)
+                .AsQueryable();
+            if (caseStatus.HasValue)
             {
-                Cases = cases,
-                FullName = loggedInUser.FullName,
-                CaseStatus = caseStatus,
+                cases = cases.Where(c => c.Status == caseStatus.Value);
+            }
+
+            var loggedInUser = await _context.Users
+                .Where(u => u.Id == userId)
+                .Select(u => u.FullName)
+                .FirstOrDefaultAsync();
+
+            var viewModel = new CasesViewModel
+            {
+                Cases = await cases
+                    .Include(c => c.Client)
+                    .ToListAsync(),
+
+                FullName = loggedInUser ?? string.Empty,
+                CaseStatus = caseStatus
             };
 
-            //var loggedInUser = await _context.Users
-            //    .Include(u => u.ManagedCases)
-            //    .ThenInclude(c => c.Client)
-            //    .FirstOrDefaultAsync(u => u.Id == _userManager.GetUserId(User));
-
-            //return View(loggedInUser);
 
             return  View(viewModel);
         }
