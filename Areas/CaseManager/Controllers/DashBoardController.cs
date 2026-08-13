@@ -26,8 +26,8 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
             var userId = _userManager.GetUserId(User);
 
             var cases = _context.Cases
-                .Where(c => c.CaseManagerId == userId)
-                .AsQueryable();
+                .Where(c => c.CaseManagerId == userId);
+
             if (caseStatus.HasValue)
             {
                 cases = cases.Where(c => c.Status == caseStatus.Value);
