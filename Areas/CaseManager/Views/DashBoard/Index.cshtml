@@ -193,15 +193,14 @@
 
                 @if (Model.Cases.Any())
                 {
-                    @foreach (var caseItem in Model.Cases.Where(c =>
-    Model.CaseStatus == null || c.Status == Model.CaseStatus))
+                    @foreach (var caseItem in Model.Cases)
                     {
                         <tr class="transition-colors hover:bg-slate-800/50">
 
                             <!-- Client -->
                             <td class="whitespace-nowrap px-5 py-4">
                                 <span class="font-medium text-white">
-                                    @caseItem.CaseManager.FullName
+                                    @caseItem.Client.FullName
                                 </span>
                             </td>
 
