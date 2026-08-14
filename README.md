@@ -33,15 +33,14 @@ This project is an ASP.NET Core MVC web application currently under development.
 * Edit user information
 * Responsive UI with Tailwind CSS
 * Custom 404 and 500 error pages
-* Dashboard pages for case manager, client and admin Areas
+* Dashboard page for case manager
+	- Case manager can view all of their cases. 
+	- Case manager can filter cases by status.
+	- search a case either by case number, client name or description.
 
 ## Status
 
 🚧 This project is currently under active development.
 
-## Current Focus: Case Manager Dashboard
-- add status to case table
-- add activity table
-- add todo table
 
 

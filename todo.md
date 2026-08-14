@@ -35,13 +35,6 @@
    - add change password functionality ✅
    - style with tailwind css ✅
 
-9. add support for 404 and 500 errors
+9. add support for 404 and 500 errors ✅
 
-10. add specific user profiles
-    - client profile
-    - case manager profile
-
-11. add specific user behavior to client and case manager profiles
-    - case manager can see client profiles
-
-- client can only see their user information (application user information)
+10. Create daschboard for Case Managers ✅
