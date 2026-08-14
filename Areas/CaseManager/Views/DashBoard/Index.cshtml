@@ -1,17 +1,6 @@
 ﻿@using caseManageMentSystem.Areas.CaseManager.Enums
 @model CasesViewModel
 
-@{
-    var activeCases = Model.Cases.Count(c => c.Status == Status.active);
-    var closedCases = Model.Cases.Count(c => c.Status == Status.closed);
-    var waitingCases = Model.Cases.Count(c => c.Status == Status.waiting);
-    var delayedCases = Model.Cases.Count(c => c.Status == Status.delayed);
-    var totalCases = Model.Cases.Count;
-
-}
-
-
-
 
 <div class="space-y-6">
     <div class="flex flex-col gap-3 rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-lg shadow-slate-950/20 sm:flex-row sm:items-center sm:justify-between">
@@ -32,7 +21,7 @@
 
 <div class="mt-6 mb-8">
     <h1 class="text-2xl font-bold text-white">Case statistics</h1>
-    <p class="mt-1 text-sm text-slate-400">Overview of your current cases</p>
+    <p class="mt-1 text-sm text-slate-400">All cases</p>
 </div>
 <div class="mt-6 mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
     <!-- casse managers total cases -->
@@ -41,89 +30,90 @@
             Total cases
         </div>
         <div class="mt-2 text-3xl font-bold">
-            @totalCases
+            @Model.TotalCases
         </div>
-        
+
     </div>
 
     <!-- Active -->
-    <div class="rounded-xl border p-5 @(activeCases > 0
-                            ? "border-green-500 bg-green-500/10"
-                          : "border-slate-700 bg-slate-900")">
+    <div class="rounded-xl border p-5 @(Model.ActiveCases > 0
+                                                       ? "border-green-500 bg-green-500/10"
+                                                     : "border-slate-700 bg-slate-900")">
 
-        <div class="text-sm font-medium @(activeCases > 0
-                                      ? "text-green-400"
-                                      : "text-slate-400")">
+        <div class="text-sm font-medium @(Model.ActiveCases > 0
+                                                                             ? "text-green-400"
+                                                                             : "text-slate-400")">
             Active cases
         </div>
 
-        <div class="mt-2 text-3xl font-bold @(activeCases > 0
-                                      ? "text-green-400"
-                                      : "text-slate-200")">
-            @activeCases
+        <div class="mt-2 text-3xl font-bold @(Model.ActiveCases > 0
+                                                                             ? "text-green-400"
+                                                                             : "text-slate-200")">
+            @Model.ActiveCases
         </div>
     </div>
 
 
     <!-- Closed -->
-    <div class="rounded-xl border p-5 @(closedCases > 0
-                          ? "border-slate-500 bg-slate-500/10"
-                          : "border-slate-700 bg-slate-900")">
+    <div class="rounded-xl border p-5 @(Model.ClosedCases > 0
+                                                     ? "border-slate-500 bg-slate-500/10"
+                                                     : "border-slate-700 bg-slate-900")">
 
-        <div class="text-sm font-medium @(closedCases > 0
-                                      ? "text-slate-300"
-                                      : "text-slate-400")">
+        <div class="text-sm font-medium @(Model.ClosedCases > 0
+                                                                             ? "text-slate-300"
+                                                                             : "text-slate-400")">
             Closed cases
         </div>
 
-        <div class="mt-2 text-3xl font-bold @(closedCases > 0
-                                      ? "text-slate-200"
-                                      : "text-slate-200")">
-            @closedCases
+        <div class="mt-2 text-3xl font-bold @(Model.ClosedCases > 0
+                                                                             ? "text-slate-200"
+                                                                             : "text-slate-200")">
+            @Model.ClosedCases
         </div>
     </div>
 
 
     <!-- Waiting -->
-    <div class="rounded-xl border p-5 @(waitingCases > 0
-                          ? "border-yellow-500 bg-yellow-500/10"
-                          : "border-slate-700 bg-slate-900")">
+    <div class="rounded-xl border p-5 @(Model.WaitingCases > 0
+                                                     ? "border-yellow-500 bg-yellow-500/10"
+                                                     : "border-slate-700 bg-slate-900")">
 
-        <div class="text-sm font-medium @(waitingCases > 0
-                                      ? "text-yellow-400"
-                                      : "text-slate-400")">
+        <div class="text-sm font-medium @(Model.WaitingCases > 0
+                                                                             ? "text-yellow-400"
+                                                                             : "text-slate-400")">
             Waiting cases
         </div>
 
-        <div class="mt-2 text-3xl font-bold @(waitingCases > 0
-                                      ? "text-yellow-400"
-                                      : "text-slate-200")">
-            @waitingCases
+        <div class="mt-2 text-3xl font-bold @(Model.WaitingCases > 0
+                                                                             ? "text-yellow-400"
+                                                                             : "text-slate-200")">
+            @Model.WaitingCases
         </div>
     </div>
 
 
     <!-- Delayed -->
-    <div class="rounded-xl border p-5 @(delayedCases > 0
-                          ? "border-red-500 bg-red-500/10"
-                          : "border-slate-700 bg-slate-900")">
+    <div class="rounded-xl border p-5 @(Model.DelayedCases > 0
+                                                     ? "border-red-500 bg-red-500/10"
+                                                     : "border-slate-700 bg-slate-900")">
 
-        <div class="text-sm font-medium @(delayedCases > 0
-                                      ? "text-red-400"
-                                      : "text-slate-400")">
+        <div class="text-sm font-medium @(Model.DelayedCases > 0
+                                                                             ? "text-red-400"
+                                                                             : "text-slate-400")">
             Delayed cases
         </div>
 
-        <div class="mt-2 text-3xl font-bold @(delayedCases > 0
-                                      ? "text-red-400"
-                                      : "text-slate-200")">
-            @delayedCases
+        <div class="mt-2 text-3xl font-bold @(Model.DelayedCases > 0
+                                                                             ? "text-red-400"
+                                                                             : "text-slate-200")">
+            @Model.DelayedCases
         </div>
     </div>
 
 </div>
+<h1>Filtered results</h1>
 <!-- Filtering options-->
-<script src="https://cdn.jsdelivr.net/npm/@@tailwindplus/elements@1" type="module"></script> 
+<script src="https://cdn.jsdelivr.net/npm/@@tailwindplus/elements@1" type="module"></script>
 <el-dropdown class="inline-block">
     <button class="cursor-pointer inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white/10 px-3 py-2 text-sm font-semibold text-white inset-ring-1 inset-ring-white/5 hover:bg-white/20">
         Filter status
@@ -134,18 +124,24 @@
 
     <el-menu anchor="bottom end" popover class="w-56 origin-top-right divide-y divide-white/10 rounded-md bg-gray-800 outline-1 -outline-offset-1 outline-white/10 transition transition-discrete [--anchor-gap:--spacing(2)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in">
         <div class="py-1">
-            <a asp-action="Index" asp-controller="Dashboard" asp-area="CaseManager" asp-route-caseStatus="" class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden">All</a>
+            <a asp-action="Index" asp-controller="Dashboard" asp-area="CaseManager" asp-route-caseStatus="" asp-route-search="@Model.Search" class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden">All</a>
 
-            <a asp-action="Index" asp-controller="Dashboard" asp-area="CaseManager" asp-route-caseStatus="active" class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden">Active</a>
-            <a asp-action="Index" asp-controller="Dashboard" asp-area="CaseManager" asp-route-caseStatus="closed" class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden">Closed</a>
+            <a asp-action="Index" asp-controller="Dashboard" asp-area="CaseManager" asp-route-caseStatus="active" asp-route-search="@Model.Search" class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden">Active</a>
+            <a asp-action="Index" asp-controller="Dashboard" asp-area="CaseManager" asp-route-caseStatus="closed" asp-route-search="@Model.Search" class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden">Closed</a>
+
        
-       
-            <a asp-action="Index" asp-controller="Dashboard" asp-area="CaseManager" asp-route-caseStatus="waiting" class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden">Waiting</a>
-            <a asp-action="Index" asp-controller="Dashboard" asp-area="CaseManager" asp-route-caseStatus="delayed" class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden">Delayed</a>
+            <a asp-action="Index" asp-controller="Dashboard" asp-area="CaseManager" asp-route-caseStatus="waiting" asp-route-search="@Model.Search" class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden">Waiting</a>
+            <a asp-action="Index" asp-controller="Dashboard" asp-area="CaseManager" asp-route-caseStatus="delayed" asp-route-search="@Model.Search" class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden">Delayed</a>
         </div>
-    
+
     </el-menu>
 </el-dropdown>
+
+<!-- Search function -->
+<form asp-action="Index" asp-controller="DashBoard" asp-area="caseManager" method="get">
+    <input asp-for="Search" placeholder="Search by case number, client or title..." />
+    <button type="submit">Search</button>
+</form>
 <div class="mt-6 overflow-hidden rounded-xl border border-slate-800 bg-slate-900 shadow-sm">
 
     <!-- Table header -->
@@ -166,6 +162,9 @@
             <!-- Head -->
             <thead class="border-b border-slate-800 bg-slate-950/60">
                 <tr>
+                    <th class="px-5 py-4 font-semibold text-slate-300">
+                        Case number
+                    </th>
                     <th class="px-5 py-4 font-semibold text-slate-300">
                         Client
                     </th>
@@ -196,6 +195,14 @@
                     @foreach (var caseItem in Model.Cases)
                     {
                         <tr class="transition-colors hover:bg-slate-800/50">
+
+                            
+                            <td class="whitespace-nowrap px-5 py-4">
+                                <span class="font-medium text-white">
+                                    @caseItem.CaseNumber
+                                </span>
+                            </td>
+
 
                             <!-- Client -->
                             <td class="whitespace-nowrap px-5 py-4">
