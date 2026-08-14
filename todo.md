@@ -37,4 +37,4 @@
 
 9. add support for 404 and 500 errors ✅
 
-10. Create daschboard for Case Managers ✅
+10. Create dashboard for Case Managers ✅
