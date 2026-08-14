@@ -35,10 +35,13 @@ This project is an ASP.NET Core MVC web application currently under development.
 * Custom 404 and 500 error pages
 * Dashboard pages for case manager, client and admin Areas
 
-### Planned Features
-* Role-specific functionality for case manager and client
-
 ## Status
 
 🚧 This project is currently under active development.
+
+## Current Focus: Case Manager Dashboard
+- add status to case table
+- add activity table
+- add todo table
+
 

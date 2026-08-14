@@ -11,8 +11,8 @@ using caseManageMentSystem.Data;
 namespace caseManageMentSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260412144518_addApplicationUser")]
-    partial class addApplicationUser
+    [Migration("20260813170130_addCaseNumber")]
+    partial class addCaseNumber
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -224,6 +224,83 @@ namespace caseManageMentSystem.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("caseManageMentSystem.Models.Case", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CaseManagerId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CaseNumber")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ClientId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CaseManagerId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("Cases");
+                });
+
+            modelBuilder.Entity("caseManageMentSystem.Models.Note", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CaseId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CaseId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Notes");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -273,6 +350,58 @@ namespace caseManageMentSystem.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("caseManageMentSystem.Models.Case", b =>
+                {
+                    b.HasOne("caseManageMentSystem.Models.ApplicationUser", "CaseManager")
+                        .WithMany("ManagedCases")
+                        .HasForeignKey("CaseManagerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("caseManageMentSystem.Models.ApplicationUser", "Client")
+                        .WithMany("ClientCases")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("CaseManager");
+
+                    b.Navigation("Client");
+                });
+
+            modelBuilder.Entity("caseManageMentSystem.Models.Note", b =>
+                {
+                    b.HasOne("caseManageMentSystem.Models.Case", "Case")
+                        .WithMany("Notes")
+                        .HasForeignKey("CaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("caseManageMentSystem.Models.ApplicationUser", "User")
+                        .WithMany("Notes")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Case");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("caseManageMentSystem.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("ClientCases");
+
+                    b.Navigation("ManagedCases");
+
+                    b.Navigation("Notes");
+                });
+
+            modelBuilder.Entity("caseManageMentSystem.Models.Case", b =>
+                {
+                    b.Navigation("Notes");
                 });
 #pragma warning restore 612, 618
         }
