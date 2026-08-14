@@ -1,4 +1,5 @@
-﻿using caseManageMentSystem.Areas.CaseManager.Enums;
+﻿using caseManageMentSystem.Areas.Admin.Models.ViewModels;
+using caseManageMentSystem.Areas.CaseManager.Enums;
 using caseManageMentSystem.Data;
 using caseManageMentSystem.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -21,8 +22,9 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
             _userManager = userManager;
             _context = context;
         }
-        public async Task<IActionResult> Index(Status? caseStatus, string? search)
+        public async Task<IActionResult> Index(Status? caseStatus, string? search, int page = 1)
         {
+            int pageSize = 4;
   
             //filter
             var userId = _userManager.GetUserId(User);
@@ -64,6 +66,14 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
                 .Select(u => u.FullName)
                 .FirstOrDefaultAsync();
 
+
+            var pagedResult = new PagedResult<Case>
+            {
+                Items = [.. cases.Skip((page - 1) * pageSize).Take(pageSize)],
+                PageNumber = page,
+                PageSize = pageSize,
+                TotalItems = await cases.CountAsync()
+            };
             var viewModel = new CasesViewModel
             {
                 Cases = await cases
@@ -79,6 +89,8 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
                 FullName = loggedInUser ?? string.Empty,
                 CaseStatus = caseStatus,
                 Search = search ?? string.Empty,
+                PagedResult = pagedResult,
+               
             };
 
 
