@@ -36,76 +36,52 @@
     </div>
 
     <!-- Active -->
-    <div class="rounded-xl border p-5 @(Model.ActiveCases > 0
-                                                       ? "border-green-500 bg-green-500/10"
-                                                     : "border-slate-700 bg-slate-900")">
+    <div class="rounded-xl border p-5 @(Model.ActiveCases > 0 ? "border-green-500 bg-green-500/10" : "border-slate-700 bg-slate-900")">
 
-        <div class="text-sm font-medium @(Model.ActiveCases > 0
-                                                                             ? "text-green-400"
-                                                                             : "text-slate-400")">
+        <div class="text-sm font-medium @(Model.ActiveCases > 0 ? "text-green-400" : "text-slate-400")">
             Active cases
         </div>
 
-        <div class="mt-2 text-3xl font-bold @(Model.ActiveCases > 0
-                                                                             ? "text-green-400"
-                                                                             : "text-slate-200")">
+        <div class="mt-2 text-3xl font-bold @(Model.ActiveCases > 0 ? "text-green-400" : "text-slate-200")">
             @Model.ActiveCases
         </div>
     </div>
 
 
     <!-- Closed -->
-    <div class="rounded-xl border p-5 @(Model.ClosedCases > 0
-                                                     ? "border-slate-500 bg-slate-500/10"
-                                                     : "border-slate-700 bg-slate-900")">
+    <div class="rounded-xl border p-5 @(Model.ClosedCases > 0 ? "border-slate-500 bg-slate-500/10" : "border-slate-700 bg-slate-900")">
 
-        <div class="text-sm font-medium @(Model.ClosedCases > 0
-                                                                             ? "text-slate-300"
-                                                                             : "text-slate-400")">
+        <div class="text-sm font-medium @(Model.ClosedCases > 0 ? "text-slate-300" : "text-slate-400")">
             Closed cases
         </div>
 
-        <div class="mt-2 text-3xl font-bold @(Model.ClosedCases > 0
-                                                                             ? "text-slate-200"
-                                                                             : "text-slate-200")">
+        <div class="mt-2 text-3xl font-bold @(Model.ClosedCases > 0 ? "text-slate-200" : "text-slate-200")">
             @Model.ClosedCases
         </div>
     </div>
 
 
     <!-- Waiting -->
-    <div class="rounded-xl border p-5 @(Model.WaitingCases > 0
-                                                     ? "border-yellow-500 bg-yellow-500/10"
-                                                     : "border-slate-700 bg-slate-900")">
+    <div class="rounded-xl border p-5 @(Model.WaitingCases > 0 ? "border-yellow-500 bg-yellow-500/10" : "border-slate-700 bg-slate-900")">
 
-        <div class="text-sm font-medium @(Model.WaitingCases > 0
-                                                                             ? "text-yellow-400"
-                                                                             : "text-slate-400")">
+        <div class="text-sm font-medium @(Model.WaitingCases > 0 ? "text-yellow-400" : "text-slate-400")">
             Waiting cases
         </div>
 
-        <div class="mt-2 text-3xl font-bold @(Model.WaitingCases > 0
-                                                                             ? "text-yellow-400"
-                                                                             : "text-slate-200")">
+        <div class="mt-2 text-3xl font-bold @(Model.WaitingCases > 0 ? "text-yellow-400" : "text-slate-200")">
             @Model.WaitingCases
         </div>
     </div>
 
 
     <!-- Delayed -->
-    <div class="rounded-xl border p-5 @(Model.DelayedCases > 0
-                                                     ? "border-red-500 bg-red-500/10"
-                                                     : "border-slate-700 bg-slate-900")">
+    <div class="rounded-xl border p-5 @(Model.DelayedCases > 0 ? "border-red-500 bg-red-500/10" : "border-slate-700 bg-slate-900")">
 
-        <div class="text-sm font-medium @(Model.DelayedCases > 0
-                                                                             ? "text-red-400"
-                                                                             : "text-slate-400")">
+        <div class="text-sm font-medium @(Model.DelayedCases > 0 ? "text-red-400" : "text-slate-400")">
             Delayed cases
         </div>
 
-        <div class="mt-2 text-3xl font-bold @(Model.DelayedCases > 0
-                                                                             ? "text-red-400"
-                                                                             : "text-slate-200")">
+        <div class="mt-2 text-3xl font-bold @(Model.DelayedCases > 0 ? "text-red-400" : "text-slate-200")">
             @Model.DelayedCases
         </div>
     </div>
@@ -190,9 +166,9 @@
             <!-- Body -->
             <tbody class="divide-y divide-slate-800">
 
-                @if (Model.Cases.Any())
+                @if (Model.PagedResult.Items.Any())
                 {
-                    @foreach (var caseItem in Model.Cases)
+                    @foreach (var caseItem in Model.PagedResult.Items)
                     {
                         <tr class="transition-colors hover:bg-slate-800/50">
 
@@ -276,7 +252,7 @@
                 {
                     <!-- No cases -->
                     <tr>
-                        <td colspan="5" class="px-5 py-12 text-center">
+                        <td colspan="6" class="px-5 py-12 text-center">
 
                             <p class="font-medium text-slate-300">
                                 No cases found
@@ -292,6 +268,30 @@
 
             </tbody>
         </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="flex items-center justify-between px-5 py-4 bg-slate-950/80">
+        <div class="text-sm text-slate-400">
+            Showing @Model.PagedResult.Items.Count() of @Model.PagedResult.TotalItems
+            cases
+        </div>
+        <div class="flex gap-2">
+            @if (Model.PagedResult.HasPreviousPage)
+            {
+                <a asp-action="Index" asp-route-page="@(Model.PagedResult.PageNumber - 1)"
+                   asp-route-search="@Model.Search"
+                   asp-route-caseStatus="@Model.CaseStatus"
+                   class="inline-flex items-center rounded-full bg-slate-800 px-3 py-1 text-sm font-medium text-slate-300 hover:bg-slate-700">Previous</a>
+            }
+            @if (Model.PagedResult.HasNextPage)
+            {
+                <a asp-action="Index" asp-route-page="@(Model.PagedResult.PageNumber + 1)"
+                   asp-route-search="@Model.Search"
+                   asp-route-caseStatus="@Model.CaseStatus"
+                   class="inline-flex items-center rounded-full bg-slate-800 px-3 py-1 text-sm font-medium text-slate-300 hover:bg-slate-700">Next</a>
+            }
+        </div>
     </div>
 
 </div>

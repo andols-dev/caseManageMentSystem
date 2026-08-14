@@ -16,6 +16,8 @@ namespace caseManageMentSystem.Areas.CaseManager.Enums
         public int ClosedCases { get; internal set; }
         public int WaitingCases { get; internal set; }
         public int DelayedCases { get; internal set; }
+
+        public PagedResult<Case> PagedResult { get; set; }
     }
 }
  
