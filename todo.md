@@ -39,4 +39,3 @@
 
 10. Create dashboard for Case Managers ✅
 
-11. Change sqlite to sql 
