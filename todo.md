@@ -39,3 +39,10 @@
 
 10. Create dashboard for Case Managers ✅
 
+11. Change sqlite database to sql database ✅
+
+12. Create a view listing all clients
+
+13. Create detail page for a client
+ 1. Create a page for creating a case. When a case is created, a casehistory will also be created.
+

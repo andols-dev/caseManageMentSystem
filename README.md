@@ -42,5 +42,8 @@ This project is an ASP.NET Core MVC web application currently under development.
 
 🚧 This project is currently under active development.
 
+## 
+Current focus: Clients page
+
 
 
