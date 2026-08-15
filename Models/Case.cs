@@ -21,6 +21,8 @@ namespace caseManageMentSystem.Models
         public DateTime UpdatedDate { get; set; }
 
         // one case can have many notes 
-        public ICollection<Note> Notes { get; set; } = new List<Note>();
+        public ICollection<Note> Notes { get; set; } = [];
+
+        public ICollection<CaseHistory> Histories { get; set; } = [];
     }
 }
