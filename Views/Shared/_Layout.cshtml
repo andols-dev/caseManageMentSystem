@@ -29,6 +29,15 @@
                                    class="text-slate-300 transition hover:text-white">Admin</a>
                             }
 
+                        @if (SignInManager.IsSignedIn(User) && User.IsInRole("caseManager"))
+                        {
+                            <a asp-area="CaseManager" asp-controller="Dashboard" asp-action="Index"
+                               class="text-slate-300 transition hover:text-white">My Dashboard</a>
+
+                            <a asp-area="CaseManager" asp-controller="ClientsList" asp-action="Index"
+                               class="text-slate-300 transition hover:text-white">Clients</a>
+                        }
+
                         </div>
                     </div>
                     <div class="flex items-center gap-4">
