@@ -1,6 +1,7 @@
 ﻿using caseManageMentSystem.Data;
+using caseManageMentSystem.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,15 +9,17 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
 {
     [Area("CaseManager")]
     [Authorize(Roles = "caseManager")]
-    public class ClientsListController(ApplicationDbContext context) : Controller
+    public class ClientsListController(ApplicationDbContext context, UserManager<ApplicationUser> userManager) : Controller
     {
         // GET: ClientsListController
         // Show all clients
 
         private readonly ApplicationDbContext _context = context;
-
+        private readonly UserManager<ApplicationUser> _userManager = userManager;
         public async Task<IActionResult> Index()
         {
+           
+
             // get all the clients(users)
 
             var clients = await _context.Users.ToListAsync();
@@ -24,12 +27,13 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
         }
 
         // GET: ClientsListController/Details/5
-        public ActionResult Details(int id)
+        public async Task<IActionResult> Details(string id)
         {
-            // check if logged in user is a case manager, if not return forbid
+   
+            var client = _context.Users.Find(id);
 
             // if logged in user is not case manager then they can not create a case
-            return View();
+            return View(client);
         }
 
         // GET: ClientsListController/Create

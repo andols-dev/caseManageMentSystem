@@ -57,9 +57,11 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.UseHttpsRedirection();
-
-app.UseExceptionHandler("/Error/HandleErrorCode/500");
-app.UseStatusCodePagesWithReExecute("/Error/HandleErrorCode/{0}");
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Error/HandleErrorCode/500");
+    app.UseStatusCodePagesWithReExecute("/Error/HandleErrorCode/{0}");
+}
 app.UseStaticFiles();
 
 app.UseRouting();
