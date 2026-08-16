@@ -154,7 +154,8 @@ Case Manager
 Client
     │
     └── View own cases
-Role-based authorization is used to restrict access to administrative and case-management functionality.
+Role-based authorization is used to restrict access to administrative
+and case-management functionality.
 
 Database
 The application uses SQL Server with Entity Framework Core.
@@ -193,7 +194,8 @@ The application will then be available through the local ASP.NET Core developmen
 
 ## Development Status
 The project is actively being developed.
-Current development focuses on improving the core case-management functionality and moving the application towards a more production-oriented architecture.
+Current development focuses on improving the core case-management functionality and moving
+the application towards a more production-oriented architecture.
 Planned improvements
     • Improve case workflow and status management
     • Add file attachments
@@ -207,7 +209,8 @@ Planned improvements
     • Deploy the application to a cloud environment
 
 ## What I Wanted to Learn
-This project is primarily a practical exercise in building a realistic business application rather than a simple CRUD application.
+This project is primarily a practical exercise in building a realistic business application
+rather than a simple CRUD application.
 The project has given me the opportunity to work with:
     • ASP.NET Core MVC
     • Entity Framework Core
@@ -221,11 +224,14 @@ The project has given me the opportunity to work with:
     • Audit/history tracking
     • Responsive web interfaces
     • Git and GitHub
-A particular focus is placed on understanding how different parts of a business application interact and how the application can remain maintainable as functionality grows.
+A particular focus is placed on understanding how different parts of a business application
+interact and how the application can remain maintainable as functionality grows.
 
 ## Project Goals
-The long-term goal is to develop the application into a more complete case-management platform while continuously improving its architecture, security, usability and testability.
-The project is also part of my portfolio as I pursue opportunities as a system developer / web developer specializing in .NET and web-based business applications.
+The long-term goal is to develop the application into a more complete case-management platform
+while continuously improving its architecture, security, usability and testability.
+The project is also part of my portfolio as I pursue opportunities as a system developer
+/ web developer specializing in .NET and web-based business applications.
 
 ## Author
 Andreas
