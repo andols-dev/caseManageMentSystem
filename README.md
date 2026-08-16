@@ -53,6 +53,7 @@ Administrators have access to functionality for managing:
 ## Technology Stack
 
 ## Technology           Usage
+```text
 C#                      Application development
 ASP.NET Core MVC        Web application framework
 .NET 10                 Runtime / framework
@@ -67,6 +68,7 @@ Git / GitHub            Version control
 
 ## Application Structure
 The application uses ASP.NET Core MVC Areas to separate functionality based on user roles and responsibilities.
+```text
 caseManageMentSystem/
 │
 ├── Areas/
@@ -102,6 +104,7 @@ The Areas help keep functionality separated and make the application easier to m
 ## Domain Model
 The core of the application is centered around cases.
 A simplified representation of the domain is:
+```text
 ApplicationUser
       │
       ├── Client
@@ -119,6 +122,7 @@ CaseHistory provides an audit trail for changes made to a case.
 Authentication & Authorization
 The application uses ASP.NET Core Identity for authentication and authorization.
 Different functionality is available depending on the user's role.
+```text
 Administrator
     │
     ├── User management
