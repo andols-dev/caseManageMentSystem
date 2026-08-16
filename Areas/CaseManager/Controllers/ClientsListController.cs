@@ -31,12 +31,30 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
         // GET: ClientsListController/Details/5
         public async Task<IActionResult> Details(string id)
         {
-   
+
             // var client = _context.Users.Find(id);
-            
+
             // todo: also add caseManager full name
+
+
+            //var clientAndCases = await _context.Users
+            //    .Where(u => u.Id == id)
+            //    .Select(u => new ClientViewModel
+            //    {
+            //        Name = u.FullName,
+            //        Cases = u.ClientCases.Select(c => new ClientCaseViewModel
+            //        {
+
+            //        })
+            //    })
+
+
+
+
+
             var clientAndCases = await _context.Users
                 .Include(c => c.ClientCases)
+                .ThenInclude(c => c.CaseManager)
                 .FirstOrDefaultAsync(u => u.Id == id);
 
             if (clientAndCases == null) {
