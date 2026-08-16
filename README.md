@@ -81,27 +81,30 @@ Razor Views             Server-side UI
 Tailwind CSS            Styling
 JavaScript              Client-side functionality
 Git / GitHub            Version control
-
+```
 
 ## Application Structure
+
 The application uses ASP.NET Core MVC Areas to separate functionality based on user roles and responsibilities.
+
+```text
 caseManageMentSystem/
 │
 ├── Areas/
-│   ├── Admin/
-│   │   ├── Controllers/
-│   │   ├── Views/
-│   │   └── ...
-│   │
-│   ├── CaseManager/
-│   │   ├── Controllers/
-│   │   ├── Views/
-│   │   └── ...
-│   │
-│   └── Client/
-│       ├── Controllers/
-│       ├── Views/
-│       └── ...
+│ ├── Admin/
+│ │ ├── Controllers/
+│ │ ├── Views/
+│ │ └── ...
+│ │
+│ ├── CaseManager/
+│ │ ├── Controllers/
+│ │ ├── Views/
+│ │ └── ...
+│ │
+│ └── Client/
+│ ├── Controllers/
+│ ├── Views/
+│ └── ...
 │
 ├── Data/
 │
@@ -115,11 +118,16 @@ caseManageMentSystem/
 │
 ├── Program.cs
 └── appsettings.json
+```
+
 The Areas help keep functionality separated and make the application easier to maintain as the system grows.
 
 ## Domain Model
+
 The core of the application is centered around cases.
 A simplified representation of the domain is:
+
+```text
 ApplicationUser
       │
       ├── Client
@@ -131,110 +139,126 @@ ApplicationUser
            /    \
           /      \
        Notes   CaseHistory
+```
+
 A Case contains information about the client, assigned case manager, status, description and timestamps.
 CaseHistory provides an audit trail for changes made to a case.
 
-Authentication & Authorization
+## Authentication & Authorization
+
 The application uses ASP.NET Core Identity for authentication and authorization.
 Different functionality is available depending on the user's role.
-Administrator
-    │
-    ├── User management
-    ├── Role management
-    ├── Client management
-    └── Case management
-
-Case Manager
-    │
-    ├── View cases
-    ├── Manage cases
-    ├── Add notes
-    └── Follow case history
-
-Client
-    │
-    └── View own cases
 Role-based authorization is used to restrict access to administrative
 and case-management functionality.
 
-Database
+```text
+Administrator
+│
+├── User management
+├── Role management
+├── Client management
+└── Case management
+
+Case Manager
+│
+├── View cases
+├── Manage cases
+├── Add notes
+└── Follow case history
+
+Client
+│
+└── View own cases
+
+```
+
+## Database
+
 The application uses SQL Server with Entity Framework Core.
 The main entities include:
-    • ApplicationUser
-    • Case
-    • Client
-    • CaseManager
-    • CaseHistory
-    • Note
-Entity Framework Core is responsible for mapping the application's domain models to the relational database.
 
-Running the Application
+- ApplicationUser
+- Case
+- Client
+- CaseManager
+- CaseHistory
+- Note
+  Entity Framework Core is responsible for mapping the application's domain models to the relational database.
+
+## Running the Application
+
 Prerequisites
 You need:
-    • .NET 10 SDK
-    • SQL Server
-    • Git
-Clone the repository
-git clone https://github.com/andols-dev/caseManageMentSystem.git
-cd caseManageMentSystem
-Configure the database
-Update the connection string in:
-appsettings.json
-Example:
-{
+
+- .NET 10 SDK
+- SQL Server
+- Git
+- Clone the repository
+- git clone https://github.com/andols-dev/caseManageMentSystem.git
+- cd caseManageMentSystem
+- Configure the database
+- Update the connection string in:
+  appsettings.json
+- Example:
+  {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost;Database=CaseManagement;Trusted_Connection=True;TrustServerCertificate=True;"
+  "DefaultConnection": "Server=localhost;Database=CaseManagement;Trusted_Connection=True;TrustServerCertificate=True;"
   }
-}
-Run the application
-dotnet restore
-dotnet build
-dotnet run
-The application will then be available through the local ASP.NET Core development server.
+  }
+- Run the application
+- dotnet restore
+- dotnet build
+- dotnet run
+  The application will then be available through the local ASP.NET Core development server.
 
 ## Development Status
+
 The project is actively being developed.
 Current development focuses on improving the core case-management functionality and moving
 the application towards a more production-oriented architecture.
 Planned improvements
-    • Improve case workflow and status management
-    • Add file attachments
-    • Add notifications
-    • Add case priorities and deadlines
-    • Improve dashboard and statistics
-    • Add automated tests
-    • Improve logging and error handling
-    • Introduce additional service-layer abstractions where appropriate
-    • Improve database migration and seed-data handling
-    • Deploy the application to a cloud environment
+
+- Improve case workflow and status management
+- Add file attachments
+- Add notifications
+- Add case priorities and deadlines
+- Improve dashboard and statistics
+- Add automated tests
+- Improve logging and error handling
+- Introduce additional service-layer abstractions where appropriate
+- Improve database migration and seed-data handling
+  -Deploy the application to a cloud environment
 
 ## What I Wanted to Learn
+
 This project is primarily a practical exercise in building a realistic business application
 rather than a simple CRUD application.
 The project has given me the opportunity to work with:
-    • ASP.NET Core MVC
-    • Entity Framework Core
-    • SQL Server
-    • ASP.NET Core Identity
-    • Role-based authorization
-    • Relational data modeling
-    • MVC Areas
-    • ViewModels
-    • Business workflows
-    • Audit/history tracking
-    • Responsive web interfaces
-    • Git and GitHub
-A particular focus is placed on understanding how different parts of a business application
-interact and how the application can remain maintainable as functionality grows.
+
+- ASP.NET Core MVC
+- Entity Framework Core
+- SQL Server
+- ASP.NET Core Identity
+- Role-based authorization
+- Relational data modeling
+- MVC Areas
+- ViewModels
+- Business workflows
+- Audit/history tracking
+- Responsive web interfaces
+- Git and GitHub
+  A particular focus is placed on understanding how different parts of a business application
+  interact and how the application can remain maintainable as functionality grows.
 
 ## Project Goals
+
 The long-term goal is to develop the application into a more complete case-management platform
 while continuously improving its architecture, security, usability and testability.
 The project is also part of my portfolio as I pursue opportunities as a system developer
 / web developer specializing in .NET and web-based business applications.
 
 ## Author
+
 Andreas
 GitHub:
 https://github.com/andols-dev
-```
