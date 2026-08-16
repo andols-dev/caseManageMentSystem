@@ -18,11 +18,13 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         public async Task<IActionResult> Index()
         {
-           
 
-            // get all the clients(users)
 
-            var clients = await _context.Users.ToListAsync();
+            // get all the clients(users) where the role is client
+
+            var clients = await _userManager.GetUsersInRoleAsync("client");
+
+
             return View(clients);
         }
 
@@ -30,10 +32,19 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
         public async Task<IActionResult> Details(string id)
         {
    
-            var client = _context.Users.Find(id);
+            // var client = _context.Users.Find(id);
+            
+            // todo: also add caseManager full name
+            var clientAndCases = await _context.Users
+                .Include(c => c.ClientCases)
+                .FirstOrDefaultAsync(u => u.Id == id);
 
-            // if logged in user is not case manager then they can not create a case
-            return View(client);
+            if (clientAndCases == null) {
+                return NotFound();
+            }
+
+            //todo: load in cases if the user has any
+            return View(clientAndCases);
         }
 
         // GET: ClientsListController/Create
