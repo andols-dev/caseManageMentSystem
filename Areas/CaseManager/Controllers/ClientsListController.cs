@@ -26,6 +26,9 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
         // GET: ClientsListController/Details/5
         public ActionResult Details(int id)
         {
+            // check if logged in user is a case manager, if not return forbid
+
+            // if logged in user is not case manager then they can not create a case
             return View();
         }
 
