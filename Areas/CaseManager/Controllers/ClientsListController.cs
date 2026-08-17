@@ -1,6 +1,7 @@
 ﻿using caseManageMentSystem.Data;
+using caseManageMentSystem.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,28 +9,60 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
 {
     [Area("CaseManager")]
     [Authorize(Roles = "caseManager")]
-    public class ClientsListController(ApplicationDbContext context) : Controller
+    public class ClientsListController(ApplicationDbContext context, UserManager<ApplicationUser> userManager) : Controller
     {
         // GET: ClientsListController
         // Show all clients
 
         private readonly ApplicationDbContext _context = context;
-
+        private readonly UserManager<ApplicationUser> _userManager = userManager;
         public async Task<IActionResult> Index()
         {
-            // get all the clients(users)
 
-            var clients = await _context.Users.ToListAsync();
+
+            // get all the clients(users) where the role is client
+
+            var clients = await _userManager.GetUsersInRoleAsync("client");
+
+
             return View(clients);
         }
 
         // GET: ClientsListController/Details/5
-        public ActionResult Details(int id)
+        public async Task<IActionResult> Details(string id)
         {
-            // check if logged in user is a case manager, if not return forbid
 
-            // if logged in user is not case manager then they can not create a case
-            return View();
+            // var client = _context.Users.Find(id);
+
+            // todo: also add caseManager full name
+
+
+            //var clientAndCases = await _context.Users
+            //    .Where(u => u.Id == id)
+            //    .Select(u => new ClientViewModel
+            //    {
+            //        Name = u.FullName,
+            //        Cases = u.ClientCases.Select(c => new ClientCaseViewModel
+            //        {
+
+            //        })
+            //    })
+
+
+
+
+
+            var clientAndCases = await _context.Users
+                .Include(c => c.ClientCases)
+                .ThenInclude(c => c.CaseManager)
+                .FirstOrDefaultAsync(u => u.Id == id);
+
+            if (clientAndCases == null) {
+                return NotFound();
+            }
+
+            //todo: load in cases if the user has any
+            return View(clientAndCases);
         }
 
         // GET: ClientsListController/Create

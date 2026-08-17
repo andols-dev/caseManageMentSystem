@@ -62,10 +62,48 @@ namespace caseManageMentSystem.Controllers
             }
             return View(regUser);
         }
-        public IActionResult Login()
+        [HttpGet]
+        public async Task<IActionResult> Login()
         {
+            if (User.Identity?.IsAuthenticated == true)
+            {
+                var user = await _userManager.GetUserAsync(User);
+
+                if (user == null)
+                {
+                    return View();
+                }
+
+                if (await _userManager.IsInRoleAsync(user, "Admin"))
+                {
+                    return RedirectToAction(
+                        "Index",
+                        "Dashboard",
+                        new { area = "Admin" });
+                }
+
+                if (await _userManager.IsInRoleAsync(user, "CaseManager"))
+                {
+                    return RedirectToAction(
+                        "Index",
+                        "Dashboard",
+                        new { area = "CaseManager" });
+                }
+
+                if (await _userManager.IsInRoleAsync(user, "Client"))
+                {
+                    return RedirectToAction(
+                        "Index",
+                        "Dashboard",
+                        new { area = "Client" });
+                }
+
+                return Forbid();
+            }
+
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> Login(LoginUser loginUser)
         {
@@ -75,7 +113,12 @@ namespace caseManageMentSystem.Controllers
                 var result = await _signInManager.PasswordSignInAsync(loginUser.Email, loginUser.Password, isPersistent: loginUser.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    var user = await _userManager.GetUserAsync(User);
+                    var user = await _userManager.FindByEmailAsync(loginUser.Email);
+
+                    if (user == null)
+                    {
+                        return RedirectToAction("Login");
+                    }
                     if (await _userManager.IsInRoleAsync(user, "Admin"))
                     {
                         return RedirectToAction(
@@ -107,7 +150,7 @@ namespace caseManageMentSystem.Controllers
                     ViewBag.Error = true;
                 }
 
-
+                
             }
 
             return View(loginUser);
