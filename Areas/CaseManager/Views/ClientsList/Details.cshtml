@@ -2,7 +2,7 @@
 
 
 <div>
-    <button>Create a case</button> <!--move button to the right-->
+    <a asp-action="Create" asp-controller="ClientsList" asp-area="caseManager" asp-route-clientId="@Model.Id">Create a case</a> <!--move button to the right-->
     @if (Model.ClientCases.FirstOrDefault()?.CaseManager != null)
     {
         <p>
@@ -57,4 +57,4 @@ else
     </div>
 }
 
-<a asp-action="Index" asp-controller="Dashboard" asp-area="caseManager">Dashboard</a>
+<a asp-action="Index" asp-controller="Dashboard" asp-area="caseManager">Go back</a>

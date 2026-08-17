@@ -1,6 +1,7 @@
-﻿using caseManageMentSystem.Models;
+﻿using caseManageMentSystem.Areas.CaseManager.Enums;
+using caseManageMentSystem.Models;
 
-namespace caseManageMentSystem.Areas.CaseManager.Enums
+namespace caseManageMentSystem.Areas.CaseManager.ViewModels
 {
     public class CasesViewModel
     {
