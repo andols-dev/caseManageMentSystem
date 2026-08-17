@@ -5,45 +5,123 @@
     ViewData["Title"] = "User Profile";
 }
 
-<div class="flex flex-col gap-4 rounded-[2rem] border border-slate-800/80 bg-slate-900/95 p-6 shadow-2xl shadow-slate-950/20 sm:flex-row sm:items-center sm:justify-between">
-    <div>
-        <div>
-            
-            <div>
-                <p class="text-sm uppercase tracking-[0.32em] text-cyan-300">User profile</p>
-                <h1 class="mt-2 text-3xl font-semibold text-white">@($"{Model.FullName}")</h1>
-                <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
-                    Your account information and contact
-                    details are shown below.
-                </p>
-            </div>
-    
-            
-            @* Email and user name *@
-            <div class="grid gap-6 sm:grid-cols-2">
-                <div>
-                    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Email</p>
-                    <p class="mt-3 text-xl font-semibold text-white">@Model.Email</p>
-                </div>
-                <div>
-                    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">User name</p>
-                    <p class="mt-3 text-xl font-semibold text-white">@Model.UserName</p>
-                </div>
-            </div>
-            @* Phone number *@
-            <div class="grid gap-6 sm:grid-cols-2">
-                <div>
-                    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Phone number</p>
-                    <p class="mt-3 text-xl font-semibold text-white">@Model.PhoneNumber</p>
-                </div>
+<div class="space-y-6">
 
-            </div>
-                
-            @* Edit profile link *@
-            <div class="flex flex-wrap gap-3">
-                <a asp-area="" asp-action="EditUserProfile" asp-route-id="@Model.Id" class="inline-flex items-center justify-center rounded-full bg-cyan-500 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400">Edit</a>
-                <a asp-area="" asp-action="ChangePassword" class="inline-flex items-center justify-center rounded-full bg-slate-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-600">Change Password</a>
-            </div>
+    <!-- Profile header -->
+    <div class="flex flex-col gap-4 rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-lg shadow-slate-950/20 sm:flex-row sm:items-center sm:justify-between">
+
+        <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-400">
+                User profile
+            </p>
+
+            <h1 class="mt-2 text-2xl font-bold tracking-tight text-white">
+                @Model.FullName
+            </h1>
+
+            <p class="mt-1 text-sm text-slate-400">
+                Your account information and contact details.
+            </p>
         </div>
+
     </div>
+
+
+    <!-- Account information -->
+    <div class="overflow-hidden rounded-xl border border-slate-800 bg-slate-900 shadow-sm">
+
+        <!-- Section header -->
+        <div class="border-b border-slate-800 px-5 py-4">
+            <h2 class="text-lg font-semibold text-white">
+                Account information
+            </h2>
+
+            <p class="mt-1 text-sm text-slate-400">
+                Your personal and contact information.
+            </p>
+        </div>
+
+
+        <!-- Information -->
+        <dl class="divide-y divide-slate-800">
+
+            <!-- Full name -->
+            <div class="px-5 py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+                <dt class="text-sm font-medium text-slate-400">
+                    Name
+                </dt>
+
+                <dd class="mt-1 text-sm font-medium text-white sm:col-span-2 sm:mt-0">
+                    @Model.FullName
+                </dd>
+            </div>
+
+
+            <!-- Email -->
+            <div class="px-5 py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+                <dt class="text-sm font-medium text-slate-400">
+                    Email
+                </dt>
+
+                <dd class="mt-1 text-sm text-slate-200 sm:col-span-2 sm:mt-0">
+                    @Model.Email
+                </dd>
+            </div>
+
+
+            <!-- Username -->
+            <div class="px-5 py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+                <dt class="text-sm font-medium text-slate-400">
+                    User name
+                </dt>
+
+                <dd class="mt-1 text-sm text-slate-200 sm:col-span-2 sm:mt-0">
+                    @Model.UserName
+                </dd>
+            </div>
+
+
+            <!-- Phone number -->
+            <div class="px-5 py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+                <dt class="text-sm font-medium text-slate-400">
+                    Phone number
+                </dt>
+
+                <dd class="mt-1 text-sm text-slate-200 sm:col-span-2 sm:mt-0">
+                    @if (!string.IsNullOrEmpty(Model.PhoneNumber))
+                    {
+                        @Model.PhoneNumber
+                    }
+                    else
+                    {
+                        <span class="text-slate-500">
+                            No phone number provided
+                        </span>
+                    }
+                </dd>
+            </div>
+
+        </dl>
+
+
+        <!-- Actions -->
+        <div class="flex flex-col gap-3 border-t border-slate-800 px-5 py-4 sm:flex-row sm:justify-end">
+
+            <a asp-area=""
+               asp-action="ChangePassword"
+               class="inline-flex items-center justify-center rounded-full bg-slate-800 px-4 py-2 text-sm font-medium text-slate-300 transition-colors hover:bg-slate-700 hover:text-white">
+                Change Password
+            </a>
+
+            <a asp-area=""
+               asp-action="EditUserProfile"
+               asp-route-id="@Model.Id"
+               class="inline-flex items-center justify-center rounded-full bg-cyan-500 px-4 py-2 text-sm font-semibold text-slate-950 transition-colors hover:bg-cyan-400">
+                Edit profile
+            </a>
+
+        </div>
+
+    </div>
+
 </div>

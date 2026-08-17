@@ -1,126 +1,298 @@
 ﻿@model PagedResult<UserVM>
+
 @{
     ViewData["Title"] = "Users";
 }
 
 <div class="space-y-6">
-    <div
-        class="flex flex-col gap-4 rounded-[2rem] border border-slate-800/80 bg-slate-900/95 p-6 shadow-2xl shadow-slate-950/20 sm:flex-row sm:items-center sm:justify-between">
+
+    <!-- Page header -->
+    <div class="flex flex-col gap-4 rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-lg shadow-slate-950/20 sm:flex-row sm:items-center sm:justify-between">
+
         <div>
-            <p class="text-sm uppercase tracking-[0.32em] text-cyan-300">Admin</p>
-            <h1 class="mt-2 text-3xl font-semibold text-white">Users</h1>
-            <p class="mt-2 text-sm text-slate-400">Manage user accounts and roles.</p>
+            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-400">
+                Admin
+            </p>
+
+            <h1 class="mt-2 text-2xl font-bold tracking-tight text-white sm:text-3xl">
+                Users
+            </h1>
+
+            <p class="mt-1 text-sm text-slate-400">
+                Manage user accounts and roles.
+            </p>
         </div>
 
+
+        <!-- Create user -->
         <a asp-action="Create"
-           class="inline-flex items-center justify-center rounded-full bg-cyan-500 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400">
-            Create
-            New User
+           class="inline-flex items-center justify-center rounded-full bg-cyan-500 px-5 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/50">
+            Create new user
         </a>
+
     </div>
-    <!-- search function -->
-    <div
-        class="space-y-6 flex flex-col gap-4 rounded-[2rem] border border-slate-800/80 bg-slate-900/95 p-6 shadow-2xl shadow-slate-950/20 sm:flex-row sm:items-center sm:justify-between">
-        <form asp-action="Index" method="get" class="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4 w-full">
-            <label for="SearchString" class="sr-only">Search</label>
-            <div class="flex flex-1 flex-col gap-2 sm:flex-row sm:items-center w-full">
-                <input id="SearchString" type="text" name="SearchString" value="@ViewData["CurrentFilter"]"
-                       placeholder="Search by name, email, username, or role"
-                       class="w-full rounded-full border border-slate-700 bg-slate-950/90 px-4 py-3 text-sm text-slate-100 placeholder:text-slate-500 shadow-sm transition focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/20" />
-                <button type="submit"
-                        class="inline-flex items-center justify-center rounded-full bg-cyan-500 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/30">
-                    Search
-                </button>
-            </div>
+
+
+    <!-- Search -->
+    <div class="rounded-xl border border-slate-800 bg-slate-900 p-5 shadow-sm">
+
+        <div class="mb-4">
+            <h2 class="text-lg font-semibold text-white">
+                Search users
+            </h2>
+
+            <p class="mt-1 text-sm text-slate-400">
+                Search by name, email, username, or role.
+            </p>
+        </div>
+
+        <form asp-action="Index"
+              method="get"
+              class="flex flex-col gap-3 sm:flex-row">
+
+            <label for="SearchString" class="sr-only">
+                Search users
+            </label>
+
+            <input id="SearchString"
+                   type="text"
+                   name="SearchString"
+                   value="@ViewData["CurrentFilter"]"
+                   placeholder="Search users..."
+                   class="min-w-0 flex-1 rounded-lg border border-slate-700 bg-slate-950 px-3 py-2.5 text-sm text-white placeholder-slate-500 outline-none transition focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500" />
+
+            <button type="submit"
+                    class="inline-flex items-center justify-center rounded-full bg-cyan-500 px-6 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/50">
+                Search
+            </button>
+
         </form>
+
     </div>
 
 
-    <div
-        class="overflow-hidden rounded-[2rem] border border-slate-800/80 bg-slate-900/95 shadow-2xl shadow-slate-950/20">
-        <table class="min-w-full divide-y divide-slate-800 text-sm">
-            <thead class="bg-slate-950/80">
-                <tr>
-                    <th class="px-5 py-4 text-left font-semibold uppercase tracking-[0.14em] text-slate-400">First Name
-                    </th>
-                    <th class="px-5 py-4 text-left font-semibold uppercase tracking-[0.14em] text-slate-400">Last Name
-                    </th>
-                    <th class="px-5 py-4 text-left font-semibold uppercase tracking-[0.14em] text-slate-400">
-                        Username
-                    </th>
-                    <th class="px-5 py-4 text-left font-semibold uppercase tracking-[0.14em] text-slate-400">Email</th>
+    <!-- Users table -->
+    <div class="overflow-hidden rounded-xl border border-slate-800 bg-slate-900 shadow-sm">
 
-                    <th class="px-5 py-4 text-left font-semibold uppercase tracking-[0.14em] text-slate-400">Role</th>
-                    <th class="w-24 px-5 py-4"><b>Actions</b></th>
-                    <th class="w-24 px-5 py-4"></th>
-                    <th class="w-24 px-5 py-4"></th>
-                    <th class="w-24 px-5 py-4"></th>
-                    <th class="w-24 px-5 py-4"></th>
-                    <th class="w-24 px-5 py-4"></th>
-                    <th class="w-24 px-5 py-4"></th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-slate-800 bg-slate-900">
-                @if (Model.Items.Count() == 0)
-                {
+        <!-- Table header -->
+        <div class="border-b border-slate-800 px-5 py-4">
+
+            <h2 class="text-lg font-semibold text-white">
+                User accounts
+            </h2>
+
+            <p class="mt-1 text-sm text-slate-400">
+                Overview of registered users and their assigned roles.
+            </p>
+
+        </div>
+
+
+        <!-- Table -->
+        <div class="overflow-x-auto">
+
+            <table class="w-full text-left text-sm">
+
+                <!-- Head -->
+                <thead class="border-b border-slate-800 bg-slate-950/60">
+
                     <tr>
-                        <td colspan="4" class="px-5 py-8 text-center text-sm text-slate-400">No users found.</td>
-                    </tr>
-                }
-                else
-                {
-                    @foreach (var user in Model.Items)
-                    {
-                        <tr class="hover:bg-slate-950/70">
-                            <td class="px-5 py-4 text-slate-100">@user.User.FirstName</td>
-                            <td class="px-5 py-4 text-slate-100">@user.User.LastName</td>
-                            <td class="px-5 py-4 text-slate-100">@user.User.UserName</td>
 
-                            <td class="px-5 py-4 text-slate-100">@user.User.Email</td>
-                            <td class="px-5 py-4">
-                                <div class="flex flex-wrap gap-2">
-                                    @foreach (var role in user.Roles)
-                                    {
-                                        <span
-                                        class="inline-flex items-center rounded-full bg-slate-800 px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-slate-300">@role</span>
-                                    }
-                                </div>
+                        <th class="whitespace-nowrap px-5 py-4 font-semibold text-slate-300">
+                            First name
+                        </th>
+
+                        <th class="whitespace-nowrap px-5 py-4 font-semibold text-slate-300">
+                            Last name
+                        </th>
+
+                        <th class="whitespace-nowrap px-5 py-4 font-semibold text-slate-300">
+                            Username
+                        </th>
+
+                        <th class="whitespace-nowrap px-5 py-4 font-semibold text-slate-300">
+                            Email
+                        </th>
+
+                        <th class="whitespace-nowrap px-5 py-4 font-semibold text-slate-300">
+                            Role
+                        </th>
+
+                        <th class="whitespace-nowrap px-5 py-4 text-right font-semibold text-slate-300">
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <!-- Body -->
+                <tbody class="divide-y divide-slate-800">
+
+                    @if (Model.Items.Count() == 0)
+                    {
+                        <!-- No users -->
+                        <tr>
+
+                            <td colspan="6"
+                                class="px-5 py-12 text-center">
+
+                                <p class="font-medium text-slate-300">
+                                    No users found
+                                </p>
+
+                                <p class="mt-1 text-sm text-slate-500">
+                                    Try changing your search criteria.
+                                </p>
+
                             </td>
-                            <td class="px-5 py-4">
-                                <a asp-action="Delete" asp-route-id="@user.User.Id"
-                                   class="text-red-500 hover:text-red-400">Delete user</a>
-                            </td>
-                            <td class="px-5 py-4"><a asp-action="Edit" asp-route-id="@user.User.Id">Edit User</a></td>
-                            <td class="px-5 py-4"></td>
-                            <td class="px-5 py-4"></td>
-                            <td class="px-5 py-4"></td>
-                            <td class="px-5 py-4"></td>
-                            <td class="px-5 py-4"></td>
+
                         </tr>
                     }
-                }
-            </tbody>
-        </table>
-        <div class="flex items-center justify-between px-5 py-4 bg-slate-950/80">
+                    else
+                    {
+                        @foreach (var user in Model.Items)
+                        {
+                            <tr class="transition-colors hover:bg-slate-800/50">
+
+                                <!-- First name -->
+                                <td class="whitespace-nowrap px-5 py-4">
+
+                                    <span class="font-medium text-white">
+                                        @user.User.FirstName
+                                    </span>
+
+                                </td>
+
+
+                                <!-- Last name -->
+                                <td class="whitespace-nowrap px-5 py-4">
+
+                                    <span class="font-medium text-white">
+                                        @user.User.LastName
+                                    </span>
+
+                                </td>
+
+
+                                <!-- Username -->
+                                <td class="whitespace-nowrap px-5 py-4">
+
+                                    <span class="text-slate-300">
+                                        @user.User.UserName
+                                    </span>
+
+                                </td>
+
+
+                                <!-- Email -->
+                                <td class="px-5 py-4">
+
+                                    <span class="text-slate-300">
+                                        @user.User.Email
+                                    </span>
+
+                                </td>
+
+
+                                <!-- Roles -->
+                                <td class="px-5 py-4">
+
+                                    <div class="flex flex-wrap gap-2">
+
+                                        @foreach (var role in user.Roles)
+                                        {
+                                            <span class="inline-flex items-center rounded-full bg-slate-700 px-2.5 py-1 text-xs font-semibold text-slate-300 ring-1 ring-inset ring-slate-600">
+                                                @role
+                                            </span>
+                                        }
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- Actions -->
+                                <td class="whitespace-nowrap px-5 py-4">
+
+                                    <div class="flex items-center justify-end gap-2">
+
+                                        <!-- Edit -->
+                                        <a asp-action="Edit"
+                                           asp-route-id="@user.User.Id"
+                                           class="inline-flex items-center rounded-full bg-slate-800 px-3 py-1.5 text-xs font-medium text-slate-300 transition-colors hover:bg-slate-700 hover:text-white">
+                                            Edit
+                                        </a>
+
+
+                                        <!-- Delete -->
+                                        <a asp-action="Delete"
+                                           asp-route-id="@user.User.Id"
+                                           class="inline-flex items-center rounded-full bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-400 ring-1 ring-inset ring-red-500/20 transition-colors hover:bg-red-500/20 hover:text-red-300">
+                                            Delete
+                                        </a>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- Pagination -->
+        <div class="flex flex-col gap-4 border-t border-slate-800 bg-slate-950/80 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+
             <div class="text-sm text-slate-400">
-                Showing @Model.Items.Count() of @Model.TotalItems
+
+                Showing
+                <span class="font-medium text-slate-300">
+                    @Model.Items.Count()
+                </span>
+                of
+                <span class="font-medium text-slate-300">
+                    @Model.TotalItems
+                </span>
                 users
+
             </div>
+
+
             <div class="flex gap-2">
+
                 @if (Model.HasPreviousPage)
                 {
-                    <a asp-action="Index" asp-route-page="@(Model.PageNumber - 1)"
+                    <a asp-action="Index"
+                       asp-route-page="@(Model.PageNumber - 1)"
                        asp-route-searchString="@(ViewData["CurrentFilter"]?.ToString() ?? string.Empty)"
-                       class="inline-flex items-center rounded-full bg-slate-800 px-3 py-1 text-sm font-medium text-slate-300 hover:bg-slate-700">Previous</a>
+                       class="inline-flex items-center rounded-full bg-slate-800 px-4 py-2 text-sm font-medium text-slate-300 transition-colors hover:bg-slate-700 hover:text-white">
+                        Previous
+                    </a>
                 }
+
+
                 @if (Model.HasNextPage)
                 {
-                    <a asp-action="Index" asp-route-page="@(Model.PageNumber + 1)"
+                    <a asp-action="Index"
+                       asp-route-page="@(Model.PageNumber + 1)"
                        asp-route-searchString="@(ViewData["CurrentFilter"]?.ToString() ?? string.Empty)"
-                       class="inline-flex items-center rounded-full bg-slate-800 px-3 py-1 text-sm font-medium text-slate-300 hover:bg-slate-700">Next</a>
+                       class="inline-flex items-center rounded-full bg-slate-800 px-4 py-2 text-sm font-medium text-slate-300 transition-colors hover:bg-slate-700 hover:text-white">
+                        Next
+                    </a>
                 }
+
             </div>
+
         </div>
 
     </div>
+
 </div>
