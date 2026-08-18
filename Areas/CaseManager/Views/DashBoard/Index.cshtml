@@ -183,9 +183,22 @@
 
                             <!-- Client -->
                             <td class="whitespace-nowrap px-5 py-4">
-                                <a asp-action="Details" asp-controller="ClientsList" asp-area="caseManager" asp-route-id="@caseItem.ClientId" class="font-medium text-white">
+@*                                 <a asp-action="Details" asp-controller="ClientsList" asp-area="caseManager" asp-route-id="@caseItem.ClientId" class="font-medium text-white">
                                     @caseItem.Client.FullName
+                                </a> *@
+                                <a asp-action="Details"
+                                   asp-controller="ClientsList"
+                                   asp-area="caseManager"
+                                   asp-route-id="@caseItem.ClientId"
+                                   class="inline-flex items-center gap-2 rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 font-medium text-white transition-all hover:border-cyan-500/50 hover:bg-slate-700 hover:text-cyan-400">
+
+                                    <span>@caseItem.Client.FullName</span>
+
+                                    <span class="text-xs font-semibold uppercase tracking-wide text-slate-500 group-hover:text-cyan-400">
+                                        View
+                                    </span>
                                 </a>
+
                             </td>
 
                             <!-- Title -->
