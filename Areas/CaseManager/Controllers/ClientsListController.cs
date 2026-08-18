@@ -118,6 +118,7 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
 
                 return RedirectToAction("Index", "DashBoard");
             }
+            ViewBag.clientId = caseItem.ClientId;
             return View(caseItem);
         }
 
