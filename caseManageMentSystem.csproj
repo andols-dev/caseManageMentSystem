@@ -37,5 +37,11 @@
 			<Content Include="wwwroot/css/output.css" CopyToPublishDirectory="Always" />
 		</ItemGroup>
 	</Target>
+	<ItemGroup>
+		<Compile Remove="caseManageMentSystem.Tests\**" />
+		<Content Remove="caseManageMentSystem.Tests\**" />
+		<EmbeddedResource Remove="caseManageMentSystem.Tests\**" />
+		<None Remove="caseManageMentSystem.Tests\**" />
+	</ItemGroup>
 
 </Project>
