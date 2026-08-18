@@ -1,88 +1,106 @@
 ﻿@model IEnumerable<ApplicationUser>
 
-<!-- Table -->
-<div class="overflow-x-auto">
-    <table class="w-full text-left text-sm">
+<!-- Clients table container -->
+<div class="mt-6 overflow-hidden rounded-xl border border-slate-800 bg-slate-900 shadow-sm">
 
-        <!-- Head -->
-        <thead class="border-b border-slate-800 bg-slate-950/60">
-            <tr>
-                <th class="px-5 py-4 font-semibold text-slate-300">
-                    First name
-                </th>
-                <th class="px-5 py-4 font-semibold text-slate-300">
-                    Last name
-                </th>
+    <!-- Table header -->
+    <div class="border-b border-slate-800 px-5 py-4">
+        <h2 class="text-lg font-semibold text-white">
+            Clients
+        </h2>
 
-                <th class="px-5 py-4 font-semibold text-slate-300">
-                    Email
-                </th>
+       
+    </div>
 
-                <th class="px-5 py-4 font-semibold text-slate-300">
-                    Actions
-                </th>
-            </tr>
-        </thead>
+    <!-- Table -->
+    <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm">
 
-        <!-- Body -->
-        <tbody class="divide-y divide-slate-800">
+            <!-- Head -->
+            <thead class="border-b border-slate-800 bg-slate-950/60">
+                <tr>
+                    <th class="px-5 py-4 font-semibold text-slate-300">
+                        First name
+                    </th>
 
-            @if (Model.Any())
-            {
-                @foreach (var client in Model)
+                    <th class="px-5 py-4 font-semibold text-slate-300">
+                        Last name
+                    </th>
+
+                    <th class="px-5 py-4 font-semibold text-slate-300">
+                        Email
+                    </th>
+
+                    <th class="px-5 py-4 font-semibold text-slate-300">
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+
+            <!-- Body -->
+            <tbody class="divide-y divide-slate-800">
+
+                @if (Model.Any())
                 {
-                    <tr class="transition-colors hover:bg-slate-800/50">
+                    @foreach (var client in Model)
+                    {
+                        <tr class="transition-colors hover:bg-slate-800/50">
 
-                        <!-- Client firstname-->
-                        <td class="whitespace-nowrap px-5 py-4">
-                            <span class="font-medium text-white">
-                                @client.FirstName
-                            </span>
+                            <!-- First name -->
+                            <td class="whitespace-nowrap px-5 py-4">
+                                <span class="font-medium text-white">
+                                    @client.FirstName
+                                </span>
+                            </td>
+
+                            <!-- Last name -->
+                            <td class="whitespace-nowrap px-5 py-4">
+                                <span class="font-medium text-white">
+                                    @client.LastName
+                                </span>
+                            </td>
+
+                            <!-- Email -->
+                            <td class="px-5 py-4">
+                                <span class="font-medium text-slate-200">
+                                    @client.Email
+                                </span>
+                            </td>
+
+                            <!-- Actions -->
+                            <td class="whitespace-nowrap px-5 py-4">
+                                <a asp-action="Details"
+                                   asp-controller="ClientsList"
+                                   asp-area="CaseManager"
+                                   asp-route-id="@client.Id"
+                                   class="inline-flex items-center rounded-full bg-slate-800 px-3 py-1 text-sm font-medium text-slate-300 transition-colors hover:bg-slate-700 hover:text-white">
+                                    View
+                                </a>
+                            </td>
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <!-- No clients -->
+                    <tr>
+                        <td colspan="4" class="px-5 py-12 text-center">
+
+                            <p class="font-medium text-slate-300">
+                                No clients found
+                            </p>
+
+                            <p class="mt-1 text-sm text-slate-500">
+                                You currently don't have any clients.
+                            </p>
+
                         </td>
-
-
-                        <!-- Client lastname-->
-                        <td class="whitespace-nowrap px-5 py-4">
-                            <span class="font-medium text-white">
-                                @client.LastName
-                            </span>
-                        </td>
-
-                        <!-- Client Email -->
-                        <td class="px-5 py-4">
-                            <span class="font-medium text-slate-200">
-                                @client.Email
-                            </span>
-                        </td>
-
-
-                        <!-- Actions -->
-                        <td class="whitespace-nowrap px-5 py-4">
-
-                            <a asp-action="Details" asp-controller="ClientsList" asp-area="caseManager" asp-route-id="@client.Id"
-                                    class="rounded-lg px-3 py-2 text-xs font-medium text-slate-300 transition-colors hover:bg-slate-800 hover:text-white">
-                                View
-                            </a>
-
-                        </td>
-
                     </tr>
                 }
-            }
-            else
-            {
-                <!-- No clients -->
-                <tr>
-                    <td colspan="6" class="px-5 py-12 text-center">
 
-                        <p class="font-medium text-slate-300">
-                            No clients found
-                        </p>
+            </tbody>
+        </table>
+    </div>
 
-                    </td>
-                </tr>
-            }
-
-        </tbody>
-    </table>
 </div>

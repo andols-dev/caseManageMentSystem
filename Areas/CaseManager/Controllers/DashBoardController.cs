@@ -1,5 +1,6 @@
 ﻿using caseManageMentSystem.Areas.Admin.Models.ViewModels;
 using caseManageMentSystem.Areas.CaseManager.Enums;
+using caseManageMentSystem.Areas.CaseManager.ViewModels;
 using caseManageMentSystem.Data;
 using caseManageMentSystem.Models;
 using Microsoft.AspNetCore.Authorization;

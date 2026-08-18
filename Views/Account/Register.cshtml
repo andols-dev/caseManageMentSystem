@@ -1,58 +1,157 @@
 ﻿@model caseManageMentSystem.Models.RegisterUser
 
-<div class="min-h-[calc(100vh-6rem)] flex items-center justify-center py-12">
-    <div
-        class="w-full max-w-2xl space-y-8  border border-slate-800/80 bg-slate-900/95 p-8 shadow-2xl shadow-slate-950/20">
-        <div class="text-center">
-            <p class="text-sm uppercase tracking-[0.32em] text-cyan-300">Register</p>
+<div class="flex min-h-[calc(100vh-6rem)] items-center justify-center py-12">
+
+    <div class="w-full max-w-lg space-y-6">
+
+        <!-- Header -->
+        <div class="rounded-2xl border border-slate-800 bg-slate-900 p-6 text-center shadow-lg shadow-slate-950/20">
+
+            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-400">
+                Case Management System
+            </p>
+
+            <h1 class="mt-2 text-2xl font-bold tracking-tight text-white sm:text-3xl">
+                Create account
+            </h1>
+
+            <p class="mt-1 text-sm text-slate-400">
+                Register a new account to access the system.
+            </p>
 
         </div>
 
-        <div class="border border-slate-800/80 bg-slate-950/80 p-6 sm:p-8">
-            <form asp-action="Register" method="post" class="space-y-6">
-                <div class="grid gap-4 sm:grid-cols-2">
-                    <label class="space-y-2 block">
-                            
-                        <span class="block mb-2 text-sm font-medium text-slate-200">First name</span>
-                        <input asp-for="FirstName"
-                               class="w-full  border border-slate-700/80 bg-slate-900 px-4 py-3 text-slate-100 outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20" />
-                        <span asp-validation-for="FirstName" class="text-sm text-rose-300"></span>
-                    </label>
 
-                    <label class="space-y-2 block">
-                        <span class="block mb-2 text-sm font-medium text-slate-200">Last name</span>
+        <!-- Registration form -->
+        <div class="overflow-hidden rounded-xl border border-slate-800 bg-slate-900 shadow-sm">
+
+            <!-- Form header -->
+            <div class="border-b border-slate-800 px-5 py-4">
+                <h2 class="text-lg font-semibold text-white">
+                    Account information
+                </h2>
+
+                <p class="mt-1 text-sm text-slate-400">
+                    Enter your information to create your account.
+                </p>
+            </div>
+
+
+            <!-- Form -->
+            <form asp-action="Register"
+                  method="post"
+                  class="space-y-6 p-5">
+
+                <!-- Name -->
+                <div class="grid gap-6 sm:grid-cols-2">
+
+                    <!-- First name -->
+                    <div>
+                        <label asp-for="FirstName"
+                               class="block text-sm font-medium text-slate-300">
+                            First name
+                        </label>
+
+                        <input asp-for="FirstName"
+                               type="text"
+                               autocomplete="given-name"
+                               class="mt-2 block w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2.5 text-sm text-white placeholder-slate-500 outline-none transition focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                               placeholder="First name" />
+
+                        <span asp-validation-for="FirstName"
+                              class="mt-1 block text-sm text-red-400">
+                        </span>
+                    </div>
+
+
+                    <!-- Last name -->
+                    <div>
+                        <label asp-for="LastName"
+                               class="block text-sm font-medium text-slate-300">
+                            Last name
+                        </label>
+
                         <input asp-for="LastName"
-                               class="w-full  border border-slate-700/80 bg-slate-900 px-4 py-3 text-slate-100 outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20" />
-                        <span asp-validation-for="LastName" class="text-sm text-rose-300"></span>
-                    </label>
+                               type="text"
+                               autocomplete="family-name"
+                               class="mt-2 block w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2.5 text-sm text-white placeholder-slate-500 outline-none transition focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                               placeholder="Last name" />
+
+                        <span asp-validation-for="LastName"
+                              class="mt-1 block text-sm text-red-400">
+                        </span>
+                    </div>
+
                 </div>
 
-                <label class="space-y-2 block">
-                    <span class="block mb-2 text-sm font-medium text-slate-200">Email address</span>
+
+                <!-- Email -->
+                <div>
+                    <label asp-for="Email"
+                           class="block text-sm font-medium text-slate-300">
+                        Email address
+                    </label>
+
                     <input asp-for="Email"
-                           class="w-full  border border-slate-700/80 bg-slate-900 px-4 py-3 text-slate-100 outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20" />
-                    <span asp-validation-for="Email" class="text-sm text-rose-300"></span><br />
-                </label>
+                           type="email"
+                           autocomplete="email"
+                           class="mt-2 block w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2.5 text-sm text-white placeholder-slate-500 outline-none transition focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                           placeholder="you@example.com" />
 
-                <label class="space-y-2 block">
-                    <span class="block mb-2 text-sm font-medium text-slate-200">Password</span>
+                    <span asp-validation-for="Email"
+                          class="mt-1 block text-sm text-red-400">
+                    </span>
+                </div>
+
+
+                <!-- Password -->
+                <div>
+                    <label asp-for="Password"
+                           class="block text-sm font-medium text-slate-300">
+                        Password
+                    </label>
+
                     <input asp-for="Password"
-                           class="w-full border border-slate-700/80 bg-slate-900 px-4 py-3 text-slate-100 outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20" />
-                    <span asp-validation-for="Password" class="text-sm text-rose-300"></span>
-                </label>
-                <label class="space-y-2 block">
-                    <span class="block mb-2 text-sm font-medium text-slate-200">Confirm password</span>
-                    <input asp-for="ConfirmPassword" type="password"
-                           class="w-full border border-slate-700/80 bg-slate-900 px-4 py-3 text-slate-100 outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20" />
-                    <span asp-validation-for="ConfirmPassword" class="text-sm text-rose-300"></span>
-                </label>
+                           type="password"
+                           autocomplete="new-password"
+                           class="mt-2 block w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2.5 text-sm text-white placeholder-slate-500 outline-none transition focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                           placeholder="Create a password" />
+
+                    <span asp-validation-for="Password"
+                          class="mt-1 block text-sm text-red-400">
+                    </span>
+                </div>
 
 
+                <!-- Confirm password -->
+                <div>
+                    <label asp-for="ConfirmPassword"
+                           class="block text-sm font-medium text-slate-300">
+                        Confirm password
+                    </label>
+
+                    <input asp-for="ConfirmPassword"
+                           type="password"
+                           autocomplete="new-password"
+                           class="mt-2 block w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2.5 text-sm text-white placeholder-slate-500 outline-none transition focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                           placeholder="Confirm your password" />
+
+                    <span asp-validation-for="ConfirmPassword"
+                          class="mt-1 block text-sm text-red-400">
+                    </span>
+                </div>
+
+
+                <!-- Submit -->
                 <button type="submit"
-                        class="cursor-pointer inline-flex w-full items-center justify-center  bg-cyan-500 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/80">Register
-                    account</button>
-                </form>
-            </div>
+                        class="inline-flex w-full items-center justify-center rounded-full bg-cyan-500 px-5 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/50">
+                    Create account
+                </button>
 
-            </div>
+            </form>
+
         </div>
+
+    </div>
+
+</div>

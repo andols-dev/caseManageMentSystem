@@ -1,60 +1,205 @@
 ﻿@model ApplicationUser
 
+<!-- Client details -->
+<div class="space-y-6">
 
-<div>
-    <button>Create a case</button> <!--move button to the right-->
-    @if (Model.ClientCases.FirstOrDefault()?.CaseManager != null)
-    {
-        <p>
-            Case Manager: @Model.ClientCases?.FirstOrDefault()?.CaseManager.FullName
-        </p>
-    }
+    <!-- Header -->
+    <div class="flex flex-col gap-4 rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-lg shadow-slate-950/20 sm:flex-row sm:items-center sm:justify-between">
 
-    <div class="px-4 sm:px-0">
-        <h3 class="text-base/7 font-semibold text-white">Client Information</h3>
+        <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-400">
+                Client
+            </p>
+
+            <h1 class="mt-2 text-2xl font-bold tracking-tight text-white">
+                @Model.FullName
+            </h1>
+
+            @if (Model.ClientCases.FirstOrDefault()?.CaseManager != null)
+            {
+                <p class="mt-1 text-sm text-slate-400">
+                    Case Manager:
+                    <span class="text-slate-300">
+                        @Model.ClientCases.FirstOrDefault()?.CaseManager.FullName
+                    </span>
+                </p>
+            }
+        </div>
+
+        <!-- Create case -->
+        <div>
+            <a asp-action="Create"
+               asp-controller="ClientsList"
+               asp-area="CaseManager"
+               asp-route-clientId="@Model.Id"
+               class="inline-flex items-center rounded-full bg-cyan-500 px-4 py-2 text-sm font-semibold text-slate-950 transition-colors hover:bg-cyan-400">
+                Create a case
+            </a>
+        </div>
+
     </div>
 
-    <div class="mt-6 border-t border-gray-100">
-        <dl class="divide-y divide-gray-100">
 
-            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                <dt class="text-sm/6 font-medium text-white">
+    <!-- Client information -->
+    <div class="overflow-hidden rounded-xl border border-slate-800 bg-slate-900 shadow-sm">
+
+        <!-- Section header -->
+        <div class="border-b border-slate-800 px-5 py-4">
+            <h2 class="text-lg font-semibold text-white">
+                Client Information
+            </h2>
+
+            <p class="mt-1 text-sm text-slate-400">
+                Personal information for this client.
+            </p>
+        </div>
+
+        <!-- Information -->
+        <dl class="divide-y divide-slate-800">
+
+            <!-- Name -->
+            <div class="px-5 py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+                <dt class="text-sm font-medium text-slate-400">
                     Name
                 </dt>
 
-                <dd class="mt-1 text-sm/6 text-white sm:col-span-2 sm:mt-0">
+                <dd class="mt-1 text-sm font-medium text-white sm:col-span-2 sm:mt-0">
                     @Model.FullName
                 </dd>
             </div>
 
-            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                <dt class="text-sm/6 font-medium text-white">
+            <!-- Email -->
+            <div class="px-5 py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+                <dt class="text-sm font-medium text-slate-400">
                     Email address
                 </dt>
 
-                <dd class="mt-1 text-sm/6 text-white sm:col-span-2 sm:mt-0">
+                <dd class="mt-1 text-sm text-slate-200 sm:col-span-2 sm:mt-0">
                     @Model.Email
                 </dd>
             </div>
+
+            <!-- Case manager -->
+            <div class="px-5 py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+                <dt class="text-sm font-medium text-slate-400">
+                    Case Manager
+                </dt>
+
+                <dd class="mt-1 text-sm text-slate-200 sm:col-span-2 sm:mt-0">
+                    @if (Model.ClientCases.FirstOrDefault()?.CaseManager != null)
+                    {
+                        @Model.ClientCases.FirstOrDefault()?.CaseManager.FullName
+                    }
+                    else
+                    {
+                        <span class="text-slate-500">
+                            No case manager assigned
+                        </span>
+                    }
+                </dd>
+            </div>
+
         </dl>
     </div>
-</div>
-@if(Model.ClientCases.Any())
-{
-    <h1>Cases</h1>
-    @foreach (var caseItem in Model.ClientCases)
-    {
-        
-       <div>@caseItem.CaseNumber</div>
-    } 
 
-}
 
-else
-{
-    <div>
-        <p>No cases</p>
+    <!-- Cases -->
+    <div class="overflow-hidden rounded-xl border border-slate-800 bg-slate-900 shadow-sm">
+
+        <!-- Cases header -->
+        <div class="border-b border-slate-800 px-5 py-4">
+            <h2 class="text-lg font-semibold text-white">
+                Cases
+            </h2>
+
+            <p class="mt-1 text-sm text-slate-400">
+                Cases associated with this client.
+            </p>
+        </div>
+
+        @if (Model.ClientCases.Any())
+        {
+            <!-- Cases table -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+
+                    <thead class="border-b border-slate-800 bg-slate-950/60">
+                        <tr>
+                            <th class="px-5 py-4 font-semibold text-slate-300">
+                                Case number
+                            </th>
+
+                            <th class="px-5 py-4 font-semibold text-slate-300">
+                                Title
+                            </th>
+
+                            <th class="px-5 py-4 font-semibold text-slate-300">
+                                Status
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="divide-y divide-slate-800">
+
+                        @foreach (var caseItem in Model.ClientCases)
+                        {
+                            <tr class="transition-colors hover:bg-slate-800/50">
+
+                                <!-- Case number -->
+                                <td class="whitespace-nowrap px-5 py-4">
+                                    <span class="font-medium text-white">
+                                        @caseItem.CaseNumber
+                                    </span>
+                                </td>
+
+                                <!-- Title -->
+                                <td class="px-5 py-4">
+                                    <span class="text-slate-200">
+                                        @caseItem.Title
+                                    </span>
+                                </td>
+
+                                <!-- Status -->
+                                <td class="whitespace-nowrap px-5 py-4">
+                                    <span class="inline-flex items-center rounded-full bg-slate-800 px-2.5 py-1 text-xs font-semibold text-slate-300 ring-1 ring-inset ring-slate-700">
+                                        @caseItem.Status
+                                    </span>
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <!-- No cases -->
+            <div class="px-5 py-12 text-center">
+
+                <p class="font-medium text-slate-300">
+                    No cases
+                </p>
+
+                <p class="mt-1 text-sm text-slate-500">
+                    This client currently has no cases.
+                </p>
+
+            </div>
+        }
+
     </div>
-}
 
-<a asp-action="Index" asp-controller="Dashboard" asp-area="caseManager">Dashboard</a>
+
+    <!-- Back -->
+    <div>
+        <a asp-action="Index"
+           asp-controller="Dashboard"
+           asp-area="CaseManager"
+           class="inline-flex items-center rounded-full bg-slate-800 px-4 py-2 text-sm font-medium text-slate-300 transition-colors hover:bg-slate-700 hover:text-white">
+            ← Go back
+        </a>
+    </div>
+
+</div>

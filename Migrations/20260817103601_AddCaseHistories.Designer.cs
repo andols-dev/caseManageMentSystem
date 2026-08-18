@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using caseManageMentSystem.Data;
 
@@ -11,9 +12,11 @@ using caseManageMentSystem.Data;
 namespace caseManageMentSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260817103601_AddCaseHistories")]
+    partial class AddCaseHistories
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -246,7 +249,7 @@ namespace caseManageMentSystem.Migrations
 
                     b.Property<string>("CaseNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ClientId")
                         .IsRequired()
@@ -272,9 +275,6 @@ namespace caseManageMentSystem.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CaseManagerId");
-
-                    b.HasIndex("CaseNumber")
-                        .IsUnique();
 
                     b.HasIndex("ClientId");
 

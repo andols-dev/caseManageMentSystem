@@ -1,9 +1,13 @@
-﻿using caseManageMentSystem.Data;
+﻿using caseManageMentSystem.Areas.CaseManager.ViewModels;
+using caseManageMentSystem.Data;
+using caseManageMentSystem.Enums;
 using caseManageMentSystem.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace caseManageMentSystem.Areas.CaseManager.Controllers
 {
@@ -66,24 +70,55 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
         }
 
         // GET: ClientsListController/Create
-        public ActionResult Create()
+        public ActionResult Create(string clientId)
         {
+            ViewBag.ClientId = clientId;
+            // create viewmodel
             return View();
         }
 
         // POST: ClientsListController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create(CreateCaseViewModel caseItem)
         {
-            try
+            
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
             {
-                return RedirectToAction(nameof(Index));
+                return Unauthorized();
             }
-            catch
+
+            if (ModelState.IsValid)
             {
-                return View();
+                var newCase = new Case
+                {
+                    ClientId = caseItem.ClientId,
+                    Title = caseItem.Title,
+                    Description = caseItem.Description,
+                    Status = Enums.Status.active,
+                    CaseNumber = GenerateCaseNumber(),
+                    CreatedDate = DateTime.Now,
+                    CaseManagerId = currentUser.Id,
+                };
+
+                _context.Cases.Add(newCase);
+                await _context.SaveChangesAsync();
+
+                var newCaseHistory = new CaseHistory
+                {
+                    CaseId = newCase.Id,
+                    UserId = currentUser.Id,
+                    Type = CaseHistoryType.CaseCreated,
+                    CreatedDate = DateTime.Now,
+                };
+
+                _context.CaseHistories.Add(newCaseHistory);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Index", "DashBoard");
             }
+            return View(caseItem);
         }
 
         // GET: ClientsListController/Edit/5
@@ -126,6 +161,25 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
             {
                 return View();
             }
+        }
+
+        // create a case number function
+
+        private static string GenerateCaseNumber()
+        {
+            const string chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+            var result = new StringBuilder(13);
+
+            result.Append(DateTime.UtcNow.Year);
+            result.Append('-');
+
+            for (int i = 0; i < 8; i++)
+            {
+                result.Append(chars[RandomNumberGenerator.GetInt32(chars.Length)]);
+            }
+
+            return result.ToString();
         }
     }
 }
