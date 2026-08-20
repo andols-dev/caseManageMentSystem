@@ -36,26 +36,6 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
         public async Task<IActionResult> Details(string id)
         {
 
-            // var client = _context.Users.Find(id);
-
-            // todo: also add caseManager full name
-
-
-            //var clientAndCases = await _context.Users
-            //    .Where(u => u.Id == id)
-            //    .Select(u => new ClientViewModel
-            //    {
-            //        Name = u.FullName,
-            //        Cases = u.ClientCases.Select(c => new ClientCaseViewModel
-            //        {
-
-            //        })
-            //    })
-
-
-
-
-
             var clientAndCases = await _context.Users
                 .Include(c => c.ClientCases)
                 .ThenInclude(c => c.CaseManager)
@@ -65,7 +45,7 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
                 return NotFound();
             }
 
-            //todo: load in cases if the user has any
+
             return View(clientAndCases);
         }
 
