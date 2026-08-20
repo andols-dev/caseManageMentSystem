@@ -203,9 +203,16 @@
 
                             <!-- Title -->
                             <td class="px-5 py-4">
+                                <a asp-action="CaseDetails"
+                                asp-area="caseManager"
+                                asp-controller="ClientsList"
+                                asp-route-caseId="@caseItem.Id"
+                                >
+
                                 <span class="font-medium text-slate-200">
                                     @caseItem.Title
                                 </span>
+                               </a>
                             </td>
 
                             <!-- Status -->

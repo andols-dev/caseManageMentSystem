@@ -22,13 +22,7 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         public async Task<IActionResult> Index()
         {
-
-
-            // get all the clients(users) where the role is client
-
             var clients = await _userManager.GetUsersInRoleAsync("client");
-
-
             return View(clients);
         }
 
@@ -47,6 +41,21 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
 
 
             return View(clientAndCases);
+        }
+
+        // GET: ClientsListController/CaseDetails/5
+        public async Task<IActionResult> CaseDetails(int caseId)
+        {
+
+            var caseItem = await _context.Cases
+                .Include(c => c.CaseManager)
+                .Include(c => c.Notes)
+                .FirstOrDefaultAsync(c => c.Id == caseId);
+            if (caseItem == null)
+            {
+                return NotFound();
+            }
+            return View(caseItem);
         }
 
         // GET: ClientsListController/Create
