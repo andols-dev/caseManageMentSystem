@@ -1,4 +1,6 @@
-﻿namespace caseManageMentSystem.Models
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+
+namespace caseManageMentSystem.Models
 {
     public class Note
     {
@@ -11,6 +13,7 @@
 
         public int CaseId { get; set; }
 
+        [ValidateNever]
         public Case Case { get; set; } = null!;
 
         public string UserId { get; set; } = string.Empty;
