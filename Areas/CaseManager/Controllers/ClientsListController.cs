@@ -5,6 +5,7 @@ using caseManageMentSystem.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;
@@ -110,7 +111,50 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
             ViewBag.clientId = caseItem.ClientId;
             return View(caseItem);
         }
+        [HttpGet]
+        public IActionResult CreateNote(int caseId)
+        {
+            var note = new CreateNoteViewModel
+            {
+                CaseId = caseId
+            };
 
+            return View(note);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateNote(CreateNoteViewModel newNote)
+        {
+
+            var currentUser = await _userManager.GetUserAsync(User);
+                if (currentUser == null)
+                {
+                    return Unauthorized();
+                }
+                if (ModelState.IsValid)
+                {
+                    var note = new Note
+                    {
+                        Name = newNote.Name,
+                        Text = newNote.Text,
+                        CreatedAt = DateTime.UtcNow,
+                        CaseId = newNote.CaseId,
+                        UserId = currentUser.Id,
+                    };
+
+                    _context.Add(note);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction(
+                        "CaseDetails",
+                        "ClientsList",
+                        new { area = "CaseManager", caseId = note.CaseId }
+                    );
+                }
+                
+                return View(newNote);
+        }
         // GET: ClientsListController/Edit/5
         public ActionResult Edit(int id)
         {
