@@ -1,0 +1,211 @@
+﻿@model Case
+
+<!-- Case details -->
+<div class="space-y-6">
+
+    <!-- Header -->
+    <div class="flex flex-col gap-4 rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-lg shadow-slate-950/20 sm:flex-row sm:items-center sm:justify-between">
+
+        <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-400">
+                Case
+            </p>
+
+            <h1 class="mt-2 text-2xl font-bold tracking-tight text-white">
+                @Model.Title
+            </h1>
+
+            <p class="mt-1 text-sm text-slate-400">
+                Case number:
+                <span class="text-slate-300">
+                    @Model.CaseNumber
+                </span>
+            </p>
+        </div>
+
+        <!-- Case number badge -->
+        <div>
+            <span class="inline-flex items-center rounded-full bg-slate-800 px-3 py-1.5 text-xs font-semibold text-slate-300 ring-1 ring-inset ring-slate-700">
+                @Model.CaseNumber
+            </span>
+        </div>
+
+    </div>
+
+
+    <!-- Case information -->
+    <div class="overflow-hidden rounded-xl border border-slate-800 bg-slate-900 shadow-sm">
+
+        <!-- Section header -->
+        <div class="border-b border-slate-800 px-5 py-4">
+            <h2 class="text-lg font-semibold text-white">
+                Case Information
+            </h2>
+
+            <p class="mt-1 text-sm text-slate-400">
+                Information about this case.
+            </p>
+        </div>
+
+        <!-- Information -->
+        <dl class="divide-y divide-slate-800">
+
+            <!-- Case number -->
+            <div class="px-5 py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+                <dt class="text-sm font-medium text-slate-400">
+                    Case number
+                </dt>
+
+                <dd class="mt-1 text-sm font-medium text-white sm:col-span-2 sm:mt-0">
+                    @Model.CaseNumber
+                </dd>
+            </div>
+
+            <!-- Title -->
+            <div class="px-5 py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+                <dt class="text-sm font-medium text-slate-400">
+                    Title
+                </dt>
+
+                <dd class="mt-1 text-sm text-slate-200 sm:col-span-2 sm:mt-0">
+                    @Model.Title
+                </dd>
+            </div>
+
+            <!-- Description -->
+            <div class="px-5 py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+                <dt class="text-sm font-medium text-slate-400">
+                    Description
+                </dt>
+
+                <dd class="mt-1 text-sm text-slate-200 sm:col-span-2 sm:mt-0">
+                    @Model.Description
+                </dd>
+            </div>
+
+            <!-- Case manager -->
+            <div class="px-5 py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+                <dt class="text-sm font-medium text-slate-400">
+                    Case Manager
+                </dt>
+
+                <dd class="mt-1 text-sm text-slate-200 sm:col-span-2 sm:mt-0">
+                    @if (Model.CaseManager != null)
+                    {
+                        @Model.CaseManager.FullName
+                    }
+                    else
+                    {
+                        <span class="text-slate-500">
+                            No case manager assigned
+                        </span>
+                    }
+                </dd>
+            </div>
+
+            <!-- Created date -->
+            <div class="px-5 py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+                <dt class="text-sm font-medium text-slate-400">
+                    Created
+                </dt>
+
+                <dd class="mt-1 text-sm text-slate-200 sm:col-span-2 sm:mt-0">
+                    @Model.CreatedDate.ToString("yyyy-MM-dd HH:mm")
+                </dd>
+            </div>
+
+        </dl>
+    </div>
+
+
+    <!-- Notes -->
+    <div class="overflow-hidden rounded-xl border border-slate-800 bg-slate-900 shadow-sm">
+
+        <!-- Notes header -->
+        <div class="flex items-center justify-between border-b border-slate-800 px-5 py-4">
+
+            <!-- Notes title -->
+            <div>
+                <h2 class="text-lg font-semibold text-white">
+                    Notes
+                </h2>
+
+                <p class="mt-1 text-sm text-slate-400">
+                    Notes associated with this case.
+                </p>
+            </div>
+
+            <!-- Create note -->
+            <a asp-action="Create"
+               asp-controller="Notes"
+               asp-area="CaseManager"
+               asp-route-caseId="@Model.Id"
+               class="inline-flex items-center rounded-full bg-cyan-500 px-4 py-2 text-sm font-semibold text-slate-950 transition-colors hover:bg-cyan-400">
+                Create
+            </a>
+
+        </div>
+
+
+        @if (Model.Notes != null && Model.Notes.Any())
+        {
+            <!-- Notes list -->
+            <div class="divide-y divide-slate-800">
+
+                @foreach (var note in Model.Notes)
+                {
+                    <div class="px-5 py-5 transition-colors hover:bg-slate-800/30">
+
+                        <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+
+                            <!-- Note content -->
+                            <div class="min-w-0">
+                                <p class="whitespace-pre-line text-sm leading-6 text-slate-200">
+                                    @note.Text
+                                </p>
+                            </div>
+
+                            <!-- Note date -->
+                            <div class="shrink-0">
+                                <span class="text-xs text-slate-500">
+                                    @note.CreatedAt.ToString("yyyy-MM-dd HH:mm")
+                                </span>
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        }
+        else
+        {
+            <!-- No notes -->
+            <div class="px-5 py-12 text-center">
+
+                <p class="font-medium text-slate-300">
+                    No notes
+                </p>
+
+                <p class="mt-1 text-sm text-slate-500">
+                    This case currently has no notes.
+                </p>
+
+            </div>
+        }
+
+    </div>
+
+
+    <!-- Back -->
+    <div>
+        <a asp-action="Index"
+           asp-controller="Dashboard"
+           asp-area="CaseManager"
+           class="inline-flex items-center rounded-full bg-slate-800 px-4 py-2 text-sm font-medium text-slate-300 transition-colors hover:bg-slate-700 hover:text-white">
+            ← Go back
+        </a>
+    </div>
+
+</div>
