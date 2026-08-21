@@ -1,6 +1,16 @@
+
 # Case Management System
 
 A web-based case management system built with ASP.NET Core MVC, C#, Entity Framework Core and SQL Server.
+<img width="1864" height="1056" alt="login" src="https://github.com/user-attachments/assets/9cedfc5a-12d7-4a0d-93a5-9ab31b8d8e23" />
+
+<img width="1864" height="1056" alt="logged_out" src="https://github.com/user-attachments/assets/eab47a80-219d-474a-afcf-2ea9f9303b7b" />
+
+<img width="1864" height="1149" alt="dashboard" src="https://github.com/user-attachments/assets/d6ec82a0-2acb-480b-ba06-6ffea96ce1c0" />
+
+<img width="1879" height="914" alt="clientsList" src="https://github.com/user-attachments/assets/a6550207-52c9-4bbe-a507-5d3d29fbaecb" />
+<img width="1879" height="914" alt="clientslist_create_case" src="https://github.com/user-attachments/assets/cd3a3ab9-8f50-41a1-b1ee-41a4205c72e1" />
+<img width="1864" height="941" alt="clientslist_details" src="https://github.com/user-attachments/assets/6546ffb7-dbb4-4903-91b1-7a56b2144e6e" />
 
 ## Overview
 
