@@ -14,11 +14,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 {
-    options.SignIn.RequireConfirmedAccount = false;// For development purposes only
-    options.Password.RequireNonAlphanumeric = false;// For development purposes only
-    options.Password.RequireUppercase = false;// For development purposes only
-    options.Password.RequireDigit = false;// For development purposes only
-    options.Password.RequiredLength = 3; // For development purposes only
+    options.SignIn.RequireConfirmedAccount = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireDigit = true;
+    options.Password.RequiredLength = 12;
 })
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
