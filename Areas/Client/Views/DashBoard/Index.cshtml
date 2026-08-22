@@ -1,7 +1,204 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@using caseManageMentSystem.Areas.CaseManager.Enums
+@using caseManageMentSystem.Areas.Client.ViewModels
+@model DashBoardViewModel
 
-<h1>Client dashboard</h1>
+<div class="space-y-6">
+
+    <!-- Header -->
+    <div class="flex flex-col gap-3 rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-lg shadow-slate-950/20 sm:flex-row sm:items-center sm:justify-between">
+
+        <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-400">
+                Client Dashboard
+            </p>
+
+            <h1 class="mt-2 text-2xl font-bold tracking-tight text-white">
+                Welcome, @Model.FullName
+            </h1>
+
+            <p class="mt-2 text-sm text-slate-400">
+                Overview of your cases and their current status.
+            </p>
+        </div>
+
+    </div>
+
+
+    <!-- Cases section -->
+    <div class="mt-8">
+
+        <div class="mb-4">
+            <h2 class="text-2xl font-bold text-white">
+                Your cases
+            </h2>
+
+            <p class="mt-1 text-sm text-slate-400">
+                Cases associated with your account.
+            </p>
+        </div>
+
+
+        <!-- Cases -->
+        <div class="overflow-hidden rounded-xl border border-slate-800 bg-slate-900 shadow-sm">
+
+            <!-- Table header -->
+            <div class="border-b border-slate-800 px-5 py-4">
+                <h3 class="text-lg font-semibold text-white">
+                    Case overview
+                </h3>
+
+                <p class="mt-1 text-sm text-slate-400">
+                    You currently have @Model.Cases.Count case@(Model.Cases.Count == 1 ? "" : "s").
+                </p>
+            </div>
+
+
+            <!-- Table -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+
+                    <thead class="border-b border-slate-800 bg-slate-950/60">
+                        <tr>
+
+                            <th class="px-5 py-4 font-semibold text-slate-300">
+                                Case number
+                            </th>
+
+                            <th class="px-5 py-4 font-semibold text-slate-300">
+                                Title
+                            </th>
+
+                            <th class="px-5 py-4 font-semibold text-slate-300">
+                                Status
+                            </th>
+
+                            <th class="px-5 py-4 font-semibold text-slate-300">
+                                Created
+                            </th>
+
+                            <th class="px-5 py-4 font-semibold text-slate-300">
+                                Description
+                            </th>
+
+                        </tr>
+                    </thead>
+
+
+                    <tbody class="divide-y divide-slate-800">
+
+                        @if (Model.Cases.Any())
+                        {
+                            @foreach (var caseItem in Model.Cases)
+                            {
+                                <tr class="transition-colors hover:bg-slate-800/50">
+
+                                    <!-- Case number -->
+                                    <td class="whitespace-nowrap px-5 py-4">
+                                        <span class="font-medium text-white">
+                                            @caseItem.CaseNumber
+                                        </span>
+                                    </td>
+
+
+                                    <!-- Title -->
+                                    <td class="px-5 py-4">
+                                        <span class="font-medium text-slate-200">
+                                            @caseItem.Title
+                                        </span>
+                                    </td>
+
+
+                                    <!-- Status -->
+                                    <td class="whitespace-nowrap px-5 py-4">
+
+                                        @switch (caseItem.status)
+                                        {
+                                            case Status.active:
+                                                <span class="inline-flex items-center rounded-full bg-green-500/10 px-2.5 py-1 text-xs font-semibold text-green-400 ring-1 ring-inset ring-green-500/20">
+                                                    <span class="mr-1.5 h-1.5 w-1.5 rounded-full bg-green-400"></span>
+                                                    Active
+                                                </span>
+                                                break;
+                                            case Status.closed:
+                                                <span class="inline-flex items-center rounded-full bg-slate-700 px-2.5 py-1 text-xs font-semibold text-slate-300 ring-1 ring-inset ring-slate-600">
+                                                    <span class="mr-1.5 h-1.5 w-1.5 rounded-full bg-slate-400"></span>
+                                                    Closed
+                                                </span>
+                                                break;
+                                            case Status.delayed:
+                                                <span class="inline-flex items-center rounded-full bg-red-500/10 px-2.5 py-1 text-xs font-semibold text-red-400 ring-1 ring-inset ring-red-500/20">
+                                                    <span class="mr-1.5 h-1.5 w-1.5 rounded-full bg-red-400"></span>
+                                                    Delayed
+                                                </span>
+                                                break;
+                                            case Status.waiting:
+                                            default:
+                                                <span class="inline-flex items-center rounded-full bg-yellow-500/10 px-2.5 py-1 text-xs font-semibold text-yellow-400 ring-1 ring-inset ring-yellow-500/20">
+                                                    <span class="mr-1.5 h-1.5 w-1.5 rounded-full bg-yellow-400"></span>
+                                                    Waiting
+                                                </span>
+                                                break;
+                                        }
+                                    </td>
+
+
+                                    <!-- Created -->
+                                    <td class="whitespace-nowrap px-5 py-4 text-slate-400">
+                                        @caseItem.CreatedAt.ToString("yyyy-MM-dd")
+                                    </td>
+
+
+                                    <!-- Description -->
+                                    <td class="max-w-md px-5 py-4">
+                                        <p class="truncate text-slate-400">
+                                            @caseItem.Description
+                                        </p>
+                                    </td>
+
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <!-- No cases -->
+                            <tr>
+                                <td colspan="5" class="px-5 py-12 text-center">
+
+                                    <div class="mx-auto max-w-md">
+
+                                        <p class="font-medium text-slate-300">
+                                            No cases found
+                                        </p>
+
+                                        <p class="mt-1 text-sm text-slate-500">
+                                            You currently don't have any cases associated with your account.
+                                        </p>
+
+                                    </div>
+
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+
+
+            <!-- Footer -->
+            @if (Model.Cases.Any())
+            {
+                <div class="flex items-center justify-between border-t border-slate-800 bg-slate-950/80 px-5 py-4">
+
+                    <div class="text-sm text-slate-400">
+                        Showing @Model.Cases.Count case@(Model.Cases.Count == 1 ? "" : "s")
+                    </div>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>
