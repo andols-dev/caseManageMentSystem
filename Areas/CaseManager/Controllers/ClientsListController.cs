@@ -5,10 +5,10 @@ using caseManageMentSystem.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
-using System.Text;
+using caseManageMentSystem.Services;
+
+
 
 namespace caseManageMentSystem.Areas.CaseManager.Controllers
 {
@@ -87,7 +87,7 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
                     Title = caseItem.Title,
                     Description = caseItem.Description,
                     Status = Enums.Status.active,
-                    CaseNumber = GenerateCaseNumber(),
+                    CaseNumber = CaseNumberGenerator.Generate(),
                     CreatedDate = DateTime.Now,
                     CaseManagerId = currentUser.Id,
                 };
@@ -197,23 +197,6 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
             }
         }
 
-        // create a case number function
-
-        private static string GenerateCaseNumber()
-        {
-            const string chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-
-            var result = new StringBuilder(13);
-
-            result.Append(DateTime.UtcNow.Year);
-            result.Append('-');
-
-            for (int i = 0; i < 8; i++)
-            {
-                result.Append(chars[RandomNumberGenerator.GetInt32(chars.Length)]);
-            }
-
-            return result.ToString();
-        }
+       
     }
 }

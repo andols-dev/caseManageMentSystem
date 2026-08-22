@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using caseManageMentSystem.Data;
 using caseManageMentSystem.Models;
-using caseManageMentSystem.Enums;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,23 +36,11 @@ builder.Services.Configure<RouteOptions>(options =>
 
 var app = builder.Build();
 
-
 using (var scope = app.Services.CreateScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    await db.Database.EnsureCreatedAsync();
-
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    var roles = Enum.GetNames(typeof(UserRole));
-
-    foreach (var roleName in roles)
-    {
-        if (!await roleManager.RoleExistsAsync(roleName))
-        {
-            await roleManager.CreateAsync(new IdentityRole(roleName));
-        }
-    }
+    await DbInitializer.InitializeAsync(scope.ServiceProvider);
 }
+
 
 app.UseHttpsRedirection();
 if (!app.Environment.IsDevelopment())
