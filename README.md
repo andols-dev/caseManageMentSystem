@@ -1,7 +1,6 @@
-
 # Case Management System
 
-A web-based case management system built with ASP.NET Core MVC, C#, Entity Framework Core and SQL Server.
+A web-based case management system built with ASP.NET Core MVC, Entity Framework Core, SQL Server, and Docker.
 <img width="1864" height="1056" alt="login" src="https://github.com/user-attachments/assets/9cedfc5a-12d7-4a0d-93a5-9ab31b8d8e23" />
 
 <img width="1864" height="1056" alt="logged_out" src="https://github.com/user-attachments/assets/eab47a80-219d-474a-afcf-2ea9f9303b7b" />
@@ -11,6 +10,30 @@ A web-based case management system built with ASP.NET Core MVC, C#, Entity Frame
 <img width="1879" height="914" alt="clientsList" src="https://github.com/user-attachments/assets/a6550207-52c9-4bbe-a507-5d3d29fbaecb" />
 <img width="1879" height="914" alt="clientslist_create_case" src="https://github.com/user-attachments/assets/cd3a3ab9-8f50-41a1-b1ee-41a4205c72e1" />
 <img width="1864" height="941" alt="clientslist_details" src="https://github.com/user-attachments/assets/6546ffb7-dbb4-4903-91b1-7a56b2144e6e" />
+
+## Running the application with Docker
+
+### Prerequisites
+
+You only need:
+
+- Docker Desktop
+- Git
+
+1. Clone the repository
+   - git clone https://github.com/andols-dev/caseManageMentSystem.git
+   - cd caseManageMentSystem
+2. Start the application
+   - docker compose up -d
+
+3. Open the application
+   - Open:
+     http://localhost:8080
+4. Stop the application
+   - docker compose down
+   - To remove the containers and the database volume:
+     docker compose down -v
+   - Use docker compose down -v only when you intentionally want to remove the local Docker database.
 
 ## Overview
 
