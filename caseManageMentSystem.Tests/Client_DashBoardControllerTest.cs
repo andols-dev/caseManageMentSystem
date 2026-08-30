@@ -92,6 +92,47 @@ public class Client_DashBoardControllerTest
     }
     
   
+    [Fact]
+    public async Task Index_Returns_NotFound_When_NoLoggedInUser()
+    {
+        var mockUserStore = new Mock<IUserStore<ApplicationUser>>();
+        var mockUserManager = new Mock<UserManager<ApplicationUser>>(
+            mockUserStore.Object,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null);
+        
+        // check if user is null
+        mockUserManager.Setup(x => x.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync((ApplicationUser)null);
+        
+        // create mock caseService
+        var caseService = new Mock<ICaseService>();
+        
+        // create controller
+        
+        var controller = new DashBoardController(mockUserManager.Object, caseService.Object);
+        
+        // result
+        
+        var result = await controller.Index();
+        
+        // Assert NotFound
+        
+        Assert.IsType<NotFoundResult>(result);
+        
+        // Verify
+        
+        caseService.Verify(
+            c => c.GetCasesForClient(It.IsAny<string>()),
+            Times.Never
+        );
+
+    }
     
     
 }
