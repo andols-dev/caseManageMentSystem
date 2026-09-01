@@ -30,7 +30,6 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
         // GET: ClientsListController/Details/5
         public async Task<IActionResult> Details(string id)
         {
-
             var clientAndCases = await _context.Users
                 .Include(c => c.ClientCases)
                 .ThenInclude(c => c.CaseManager)
@@ -39,15 +38,12 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
             if (clientAndCases == null) {
                 return NotFound();
             }
-
-
             return View(clientAndCases);
         }
 
         // GET: ClientsListController/CaseDetails/5
         public async Task<IActionResult> CaseDetails(int caseId)
         {
-
             var caseItem = await _context.Cases
                 .Include(c => c.CaseManager)
                 .Include(c => c.Notes)
@@ -72,7 +68,6 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(CreateCaseViewModel caseItem)
         {
-            
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
             {
@@ -126,77 +121,30 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateNote(CreateNoteViewModel newNote)
         {
-
             var currentUser = await _userManager.GetUserAsync(User);
                 if (currentUser == null)
                 {
                     return Unauthorized();
                 }
-                if (ModelState.IsValid)
+
+                if (!ModelState.IsValid) return View(newNote);
+                var note = new Note
                 {
-                    var note = new Note
-                    {
-                        Name = newNote.Name,
-                        Text = newNote.Text,
-                        CreatedAt = DateTime.UtcNow,
-                        CaseId = newNote.CaseId,
-                        UserId = currentUser.Id,
-                    };
+                    Name = newNote.Name,
+                    Text = newNote.Text,
+                    CreatedAt = DateTime.UtcNow,
+                    CaseId = newNote.CaseId,
+                    UserId = currentUser.Id,
+                };
 
-                    _context.Add(note);
-                    await _context.SaveChangesAsync();
+                _context.Add(note);
+                await _context.SaveChangesAsync();
 
-                    return RedirectToAction(
-                        "CaseDetails",
-                        "ClientsList",
-                        new { area = "CaseManager", caseId = note.CaseId }
-                    );
-                }
-                
-                return View(newNote);
+                return RedirectToAction(
+                    "CaseDetails",
+                    "ClientsList",
+                    new { area = "CaseManager", caseId = note.CaseId }
+                );
         }
-        // GET: ClientsListController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: ClientsListController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: ClientsListController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: ClientsListController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-       
     }
 }
