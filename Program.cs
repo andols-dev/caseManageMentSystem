@@ -1,3 +1,4 @@
+using caseManageMentSystem.Areas.CaseManager.Services;
 using caseManageMentSystem.Areas.Client.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +28,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.LogoutPath = "/Account/Logout";
 });
 builder.Services.AddScoped<ICaseService, CaseService>();
+builder.Services.AddScoped<INoteService, NoteService>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 

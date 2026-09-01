@@ -1,5 +1,6 @@
 ﻿using caseManageMentSystem.Areas.Admin.Controllers;
 using caseManageMentSystem.Areas.CaseManager.Controllers;
+using caseManageMentSystem.Areas.CaseManager.Services;
 using caseManageMentSystem.Data;
 using caseManageMentSystem.Models;
 using Microsoft.AspNetCore.Identity;
@@ -11,15 +12,10 @@ namespace caseManageMentSystem.Tests
 {
     public class ClientsListControllerTests
     {
-   
-
-
         [Fact]
         public async Task Index_ReturnsClientsView()
         {
-            
             var userStoreMock = new Mock<IUserStore<ApplicationUser>>();
-
             var userManagerMock = new Mock<UserManager<ApplicationUser>>(
                 userStoreMock.Object,
                     null!,
@@ -49,9 +45,12 @@ namespace caseManageMentSystem.Tests
                 .Setup(x => x.GetUsersInRoleAsync("client"))
                 .ReturnsAsync( clients );
 
+
+            var iNoteService = new Mock<INoteService>();
             var controller = new ClientsListController(
                 null!,
-                userManagerMock.Object
+                userManagerMock.Object,
+                iNoteService.Object
             );
 
             var result = await controller.Index();
@@ -90,9 +89,11 @@ namespace caseManageMentSystem.Tests
                 .Setup(x => x.GetUsersInRoleAsync("client"))
                 .ReturnsAsync(clients);
 
+            var iNoteService = new Mock<INoteService>();
             var controller = new ClientsListController(
                 null!,
-                userManagerMock.Object
+                userManagerMock.Object,
+                iNoteService.Object
             );
 
             var result = await controller.Index();
@@ -128,9 +129,11 @@ namespace caseManageMentSystem.Tests
                 null
             );
 
+            var iNoteService = new Mock<INoteService>();
             var controller = new ClientsListController(
                 context,
-                mockUserManager.Object
+                mockUserManager.Object,
+                iNoteService.Object
             );
             var result = await controller.Details("123");
             Assert.IsType<NotFoundResult>(result);
@@ -169,10 +172,13 @@ namespace caseManageMentSystem.Tests
                 null,
                 null,
                 null);
-
+            
+            var iNoteService = new Mock<INoteService>();
             var controller = new ClientsListController(
                 context,
-                mockUserManager.Object);
+                mockUserManager.Object,
+                iNoteService.Object
+                );
 
             // Act
             var result = await controller.Details(client.Id);
@@ -250,10 +256,13 @@ namespace caseManageMentSystem.Tests
                 null,
                 null,
                 null);
-
+            
+            var iNoteService = new Mock<INoteService>();
             var controller = new ClientsListController(
                 context,
-                mockUserManager.Object);
+                mockUserManager.Object,
+                iNoteService.Object
+                );
 
             // Act
             var result = await controller.Details(client.Id);
@@ -277,7 +286,5 @@ namespace caseManageMentSystem.Tests
                 model.ClientCases,
                 c => Assert.Equal("manager-1", c.CaseManager.Id));
         }
-
-
     }
 }
