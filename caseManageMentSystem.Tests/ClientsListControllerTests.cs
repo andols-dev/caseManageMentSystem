@@ -11,15 +11,10 @@ namespace caseManageMentSystem.Tests
 {
     public class ClientsListControllerTests
     {
-   
-
-
         [Fact]
         public async Task Index_ReturnsClientsView()
         {
-            
             var userStoreMock = new Mock<IUserStore<ApplicationUser>>();
-
             var userManagerMock = new Mock<UserManager<ApplicationUser>>(
                 userStoreMock.Object,
                     null!,
@@ -277,7 +272,5 @@ namespace caseManageMentSystem.Tests
                 model.ClientCases,
                 c => Assert.Equal("manager-1", c.CaseManager.Id));
         }
-
-
     }
 }

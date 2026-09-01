@@ -1,4 +1,5 @@
-﻿using caseManageMentSystem.Areas.CaseManager.ViewModels;
+﻿using caseManageMentSystem.Areas.CaseManager.Services;
+using caseManageMentSystem.Areas.CaseManager.ViewModels;
 using caseManageMentSystem.Data;
 using caseManageMentSystem.Enums;
 using caseManageMentSystem.Models;
@@ -14,7 +15,7 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
 {
     [Area("CaseManager")]
     [Authorize(Roles = "caseManager")]
-    public class ClientsListController(ApplicationDbContext context, UserManager<ApplicationUser> userManager) : Controller
+    public class ClientsListController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, INoteService noteService) : Controller
     {
         // GET: ClientsListController
         // Show all clients
@@ -128,22 +129,12 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
                 }
 
                 if (!ModelState.IsValid) return View(newNote);
-                var note = new Note
-                {
-                    Name = newNote.Name,
-                    Text = newNote.Text,
-                    CreatedAt = DateTime.UtcNow,
-                    CaseId = newNote.CaseId,
-                    UserId = currentUser.Id,
-                };
-
-                _context.Add(note);
-                await _context.SaveChangesAsync();
+                await noteService.CreateNote(newNote, currentUser);
 
                 return RedirectToAction(
                     "CaseDetails",
                     "ClientsList",
-                    new { area = "CaseManager", caseId = note.CaseId }
+                    new { area = "CaseManager", caseId = newNote.CaseId }
                 );
         }
     }
