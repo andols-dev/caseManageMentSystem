@@ -90,6 +90,68 @@ public class Client_DashBoardControllerTest
         
 
     }
+
+    [Fact]
+    public async Task Index_Get_LoggedInUserNoCases()
+    {
+        // create test-user
+        var testUser1 = new ApplicationUser()
+        {
+            Id = Guid.NewGuid().ToString(),
+            FirstName = "John",
+            LastName = "Doe",
+        };
+        
+        // moq user manager
+        var mockUserStore = new Mock<IUserStore<ApplicationUser>>();
+
+        var mockUserManager = new Mock<UserManager<ApplicationUser>>(
+            mockUserStore.Object,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null);
+
+        // get user
+        mockUserManager.Setup(x => x.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(testUser1);
+        
+        // Create a list of cases, empty
+        List<CaseListItemViewModel> emptyCaseList = [];
+        
+        // moq case service
+
+        var moqICaseService = new Mock<ICaseService>();
+        
+        moqICaseService.Setup(c => c.GetCasesForClient(testUser1.Id)).ReturnsAsync(emptyCaseList);
+        
+        // create controller
+        
+        var controller = new DashBoardController(mockUserManager.Object, moqICaseService.Object);
+        
+        // create result
+
+        var result = await controller.Index();
+        
+        // Assert viewresult
+        
+        var viewResult = Assert.IsType<ViewResult>(result);
+        
+        // Assert model
+        var model = Assert.IsType<DashBoardViewModel>(viewResult.Model);
+        
+        // Assert Fullname
+        
+        Assert.Equal(testUser1.FullName, model.FullName);
+        
+        // Assert empty list
+        Assert.Empty(model.Cases);
+        
+        moqICaseService.Verify(c => c.GetCasesForClient(testUser1.Id), Times.Once);
+    }
     
   
     [Fact]
