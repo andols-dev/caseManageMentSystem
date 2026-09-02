@@ -46,9 +46,11 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
         // GET: ClientsListController/Create
         public ActionResult Create(string clientId)
         {
-            ViewBag.ClientId = clientId;
-            // create viewmodel
-            return View();
+            var model = new CreateCaseViewModel()
+            {
+                ClientId = clientId
+            };
+            return View(model);
         }
 
         // POST: ClientsListController/Create
