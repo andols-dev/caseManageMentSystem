@@ -27,21 +27,18 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
         {
             int pageSize = 4;
   
-            //filter
+          
             var userId = _userManager.GetUserId(User);
 
             if (userId == null)
             {
                 return Unauthorized();
             }
-
-
+            
             var allCases = _context.Cases
                 .Where(c => c.CaseManagerId == userId);
 
             var cases = allCases;
-            //search
-            // användaren är inloggad case manager, ska kunna söka på ärendenummer, klient eller titel...
 
             if (!string.IsNullOrEmpty(search))
             {
@@ -54,9 +51,6 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
                     c.Client.LastName.Contains(search) ||
                     (c.Client.FirstName + " " + c.Client.LastName).Contains(search));
             }
-
-
-
             if (caseStatus.HasValue)
             {
                 cases = cases.Where(c => c.Status == caseStatus.Value);
@@ -93,8 +87,6 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
                 PagedResult = pagedResult,
                
             };
-
-
             return  View(viewModel);
         }
     }
