@@ -15,7 +15,7 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
 {
     [Area("CaseManager")]
     [Authorize(Roles = "caseManager")]
-    public class ClientsListController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, INoteService noteService) : Controller
+    public class ClientsListController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, INoteService noteService, ICaseCaseManagerService caseService, ICaseHistoryService caseHistoryService) : Controller
     {
         // GET: ClientsListController
         // Show all clients
@@ -71,41 +71,19 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
         {
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
-            {
                 return Unauthorized();
-            }
 
-            if (ModelState.IsValid)
-            {
-                var newCase = new Case
-                {
-                    ClientId = caseItem.ClientId,
-                    Title = caseItem.Title,
-                    Description = caseItem.Description,
-                    Status = Enums.Status.active,
-                    CaseNumber = CaseNumberGenerator.Generate(),
-                    CreatedDate = DateTime.Now,
-                    CaseManagerId = currentUser.Id,
-                };
-
-                _context.Cases.Add(newCase);
-                await _context.SaveChangesAsync();
-
-                var newCaseHistory = new CaseHistory
-                {
-                    CaseId = newCase.Id,
-                    UserId = currentUser.Id,
-                    Type = CaseHistoryType.CaseCreated,
-                    CreatedDate = DateTime.Now,
-                };
-
-                _context.CaseHistories.Add(newCaseHistory);
-                await _context.SaveChangesAsync();
-
-                return RedirectToAction("Index", "DashBoard");
-            }
-            ViewBag.clientId = caseItem.ClientId;
-            return View(caseItem);
+            if (!ModelState.IsValid)
+                return View(caseItem);
+            
+            // Create case
+            var newCase = await caseService.CreateCase(caseItem, currentUser);
+            
+            // Create case history
+            await caseHistoryService.CreateCaseHistory(newCase.Id, currentUser);
+            
+            return RedirectToAction("Index", "DashBoard");
+            
         }
         [HttpGet]
         public IActionResult CreateNote(int caseId)

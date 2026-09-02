@@ -47,10 +47,14 @@ namespace caseManageMentSystem.Tests
 
 
             var iNoteService = new Mock<INoteService>();
+            var iCaseService = new Mock<ICaseCaseManagerService>();
+            var iCaseHistory = new Mock<ICaseHistoryService>();
             var controller = new ClientsListController(
                 null!,
                 userManagerMock.Object,
-                iNoteService.Object
+                iNoteService.Object,
+                iCaseService.Object,
+                iCaseHistory.Object
             );
 
             var result = await controller.Index();
@@ -90,10 +94,14 @@ namespace caseManageMentSystem.Tests
                 .ReturnsAsync(clients);
 
             var iNoteService = new Mock<INoteService>();
+            var iCaseService = new Mock<ICaseCaseManagerService>();
+            var iCaseHistory = new Mock<ICaseHistoryService>();
             var controller = new ClientsListController(
                 null!,
                 userManagerMock.Object,
-                iNoteService.Object
+                iNoteService.Object,
+                iCaseService.Object,
+                iCaseHistory.Object
             );
 
             var result = await controller.Index();
@@ -130,10 +138,14 @@ namespace caseManageMentSystem.Tests
             );
 
             var iNoteService = new Mock<INoteService>();
+            var iCaseService = new Mock<ICaseCaseManagerService>();
+            var iCaseHistory = new Mock<ICaseHistoryService>();
             var controller = new ClientsListController(
                 context,
                 mockUserManager.Object,
-                iNoteService.Object
+                iNoteService.Object,
+                iCaseService.Object,
+                iCaseHistory.Object
             );
             var result = await controller.Details("123");
             Assert.IsType<NotFoundResult>(result);
@@ -174,10 +186,14 @@ namespace caseManageMentSystem.Tests
                 null);
             
             var iNoteService = new Mock<INoteService>();
+            var iCaseService = new Mock<ICaseCaseManagerService>();
+            var iCaseHistory = new Mock<ICaseHistoryService>();
             var controller = new ClientsListController(
                 context,
                 mockUserManager.Object,
-                iNoteService.Object
+                iNoteService.Object,
+                iCaseService.Object,
+                iCaseHistory.Object
                 );
 
             // Act
@@ -258,10 +274,14 @@ namespace caseManageMentSystem.Tests
                 null);
             
             var iNoteService = new Mock<INoteService>();
+            var iCaseService = new Mock<ICaseCaseManagerService>();
+            var iCaseHistory = new Mock<ICaseHistoryService>();
             var controller = new ClientsListController(
                 context,
                 mockUserManager.Object,
-                iNoteService.Object
+                iNoteService.Object,
+                iCaseService.Object,
+                iCaseHistory.Object
                 );
 
             // Act
