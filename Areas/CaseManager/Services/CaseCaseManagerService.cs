@@ -25,4 +25,9 @@ public class CaseCaseManagerService(ApplicationDbContext context) : ICaseCaseMan
         
         return newCase;
     }
+
+    public Task<Case?> GetCaseDetails(int caseId)
+    {
+        throw new NotImplementedException();
+    }
 }
