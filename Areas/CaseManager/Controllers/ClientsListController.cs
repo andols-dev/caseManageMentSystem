@@ -39,15 +39,8 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
         // GET: ClientsListController/CaseDetails/5
         public async Task<IActionResult> CaseDetails(int caseId)
         {
-            var caseItem = await _context.Cases
-                .Include(c => c.CaseManager)
-                .Include(c => c.Notes)
-                .FirstOrDefaultAsync(c => c.Id == caseId);
-            if (caseItem == null)
-            {
-                return NotFound();
-            }
-            return View(caseItem);
+            var caseItem = await caseService.GetCaseDetails(caseId);
+            return caseItem == null ? NotFound() : View(caseItem);
         }
 
         // GET: ClientsListController/Create
