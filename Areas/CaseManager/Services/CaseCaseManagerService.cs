@@ -2,6 +2,7 @@
 using caseManageMentSystem.Data;
 using caseManageMentSystem.Models;
 using caseManageMentSystem.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace caseManageMentSystem.Areas.CaseManager.Services;
 
@@ -28,6 +29,9 @@ public class CaseCaseManagerService(ApplicationDbContext context) : ICaseCaseMan
 
     public Task<Case?> GetCaseDetails(int caseId)
     {
-        throw new NotImplementedException();
+       return context.Cases
+            .Include(c => c.CaseManager)
+            .Include(c => c.Notes)
+            .FirstOrDefaultAsync(c => c.Id == caseId);
     }
 }
