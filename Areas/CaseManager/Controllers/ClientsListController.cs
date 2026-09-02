@@ -15,7 +15,7 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
 {
     [Area("CaseManager")]
     [Authorize(Roles = "caseManager")]
-    public class ClientsListController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, INoteService noteService, ICaseCaseManagerService caseService, ICaseHistoryService caseHistoryService) : Controller
+    public class ClientsListController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, INoteService noteService, ICaseCaseManagerService caseService, ICaseHistoryService caseHistoryService, IClientService clientService) : Controller
     {
         // GET: ClientsListController
         // Show all clients
@@ -31,15 +31,9 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
         // GET: ClientsListController/Details/5
         public async Task<IActionResult> Details(string id)
         {
-            var clientAndCases = await _context.Users
-                .Include(c => c.ClientCases)
-                .ThenInclude(c => c.CaseManager)
-                .FirstOrDefaultAsync(u => u.Id == id);
+            var clientAndCases = await clientService.GetClientWithCases(id);
 
-            if (clientAndCases == null) {
-                return NotFound();
-            }
-            return View(clientAndCases);
+            return clientAndCases == null ? NotFound() : View(clientAndCases);
         }
 
         // GET: ClientsListController/CaseDetails/5
