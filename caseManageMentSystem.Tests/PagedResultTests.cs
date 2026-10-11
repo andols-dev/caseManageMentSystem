@@ -16,4 +16,12 @@ public class PagedResultTests
         // Assert
         Assert.Equal(5, pagedResult.TotalPages);
     }
+    [Fact]
+    public void HasPreviousPage_ShouldBeGreaterThen1()
+    {
+        var pagedResult = new PagedResult<Case>();
+        pagedResult.PageNumber = 2;
+        
+        Assert.True(pagedResult.HasPreviousPage);
+    }
 }
