@@ -4,17 +4,19 @@ namespace caseManageMentSystem.Tests;
 
 public class PagedResultTests
 {
-    [Fact]
-    public void PagedResult_HasCorrectNumberOfPages()
+    [Theory]
+    [InlineData(5, 22, 5)]
+    [InlineData(10, 30, 3)]
+    public void PagedResult_HasCorrectNumberOfPages(int pageSize, int totalItems, int expectedTotalPages)
     {
         // Arrange
         var pagedResult = new PagedResult<Case>();
         // Act
-        pagedResult.PageSize = 5;
-        pagedResult.TotalItems = 22;
+        pagedResult.PageSize =  pageSize;
+        pagedResult.TotalItems =  totalItems;
         
         // Assert
-        Assert.Equal(5, pagedResult.TotalPages);
+        Assert.Equal(expectedTotalPages, pagedResult.TotalPages);
     }
     [Fact]
     public void HasPreviousPage_ShouldReturnTrueWhenNotOnFirstPage()
