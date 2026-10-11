@@ -32,4 +32,24 @@ public class PagedResultTests
         pagedResult.PageNumber = 1;
         Assert.False(pagedResult.HasPreviousPage);
     }
+
+    [Fact]
+    public void HasNextPage_ShouldReturnTrueWhenNotOnLastPage()
+    {
+        var pagedResult = new PagedResult<Case>();
+        pagedResult.PageNumber = 2;
+        pagedResult.PageSize = 10;
+        pagedResult.TotalItems = 30;
+        Assert.True(pagedResult.HasNextPage);
+    }
+    
+    [Fact]
+    public void HasNextPage_ShouldReturnFalseWhenOnLastPage()
+    {
+        var pagedResult = new PagedResult<Case>();
+        pagedResult.PageNumber = 3;
+        pagedResult.PageSize = 10;
+        pagedResult.TotalItems = 30;
+        Assert.False(pagedResult.HasNextPage);
+    }
 }
