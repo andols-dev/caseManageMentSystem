@@ -61,9 +61,6 @@ public class PagedResultTests
     public void PagedResult_ShouldThrowWhenPageSizeIsInvalid(int pageSize)
     {
         var pagedResult = new PagedResult<Case>();
-        
-        pagedResult.PageSize = pageSize;
-        Assert.Throws<ArgumentOutOfRangeException>(() => pagedResult.PageNumber = pageSize);
-        
+        Assert.Throws<ArgumentOutOfRangeException>(() => pagedResult.PageSize = pageSize);
     }
 }
