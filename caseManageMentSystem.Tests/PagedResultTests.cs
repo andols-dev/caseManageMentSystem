@@ -54,4 +54,16 @@ public class PagedResultTests
         pagedResult.TotalItems = 30;
         Assert.False(pagedResult.HasNextPage);
     }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    public void PagedResult_ShouldThrowWhenPageSizeIsInvalid(int pageSize)
+    {
+        var pagedResult = new PagedResult<Case>();
+        
+        pagedResult.PageSize = pageSize;
+        Assert.Throws<ArgumentOutOfRangeException>(() => pagedResult.PageNumber = pageSize);
+        
+    }
 }
