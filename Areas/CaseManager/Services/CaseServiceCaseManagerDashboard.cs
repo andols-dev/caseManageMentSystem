@@ -1,14 +1,16 @@
 ﻿using caseManageMentSystem.Areas.CaseManager.Enums;
 using caseManageMentSystem.Areas.CaseManager.ViewModels;
+using caseManageMentSystem.Data;
 using caseManageMentSystem.Models;
 
 namespace caseManageMentSystem.Areas.CaseManager.Services;
 
-public class CaseServiceCaseManagerDashboard : ICaseServiceCaseManagerDashboard
+public class CaseServiceCaseManagerDashboard(ApplicationDbContext context) : ICaseServiceCaseManagerDashboard
 {
     public IQueryable<Case> GetAllCases(string userId)
     {
-        throw new NotImplementedException();
+        return context.Cases
+            .Where(c => c.CaseManagerId == userId);
     }
 
     public IQueryable<Case> GetCasesBySearchTerm(IQueryable<Case> cases, string searchTerm)
