@@ -11,13 +11,12 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
 {
     [Area("CaseManager")]
     [Authorize(Roles = "caseManager")]
-    public class DashBoardController(UserManager<ApplicationUser> userManager, ICaseServiceCaseManagerDashboard caseService, IUserServiceCaseManagerDaschboard userService ) : Controller
+    public class DashBoardController(UserManager<ApplicationUser> userManager, ICaseServiceCaseManagerDashboard caseService, IUserServiceCaseManagerDaschboard userService, IPagedResultServiceCaseManagerDaschboard pagedResultService ) : Controller
     {
         public async Task<IActionResult> Index(Status? caseStatus, string? search, int page = 1)
         {
             var pageSize = 4;
             var userId = userManager.GetUserId(User);
-
             if (userId == null)
                 return Unauthorized();
             
@@ -41,20 +40,13 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
 
             // Get logged-in user full name
             var loggedInUser = await userService.GetUserFullName(userId);
+            cases = cases.OrderBy(c => c.CaseNumber)
+                .ThenBy(c => c.Id);
+            var pagedResult = await pagedResultService.CreatePagedResult(cases, page, pageSize);
             
-            var pagedResult = new PagedResult<Case>
-            {
-                Items = [.. cases.Skip((page - 1) * pageSize).Take(pageSize)],
-                PageNumber = page,
-                PageSize = pageSize,
-                TotalItems = await cases.CountAsync()
-            };
             var viewModel = new CasesViewModel
             {
-                Cases = await cases
-                    .Include(c => c.Client)
-                    .ToListAsync(),
-
+                Cases = pagedResult.Items.ToList(),
                 TotalCases = await loggedInUserCases.CountAsync(),
                 ActiveCases = await loggedInUserCases.CountAsync(c => c.Status == Status.active),
                 ClosedCases = await loggedInUserCases.CountAsync(c => c.Status == Status.closed),
