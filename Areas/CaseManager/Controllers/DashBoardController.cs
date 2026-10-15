@@ -26,15 +26,8 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
             var cases = loggedInUserCases ?? throw new ArgumentNullException(nameof(loggedInUserCases));
 
             if (!string.IsNullOrEmpty(search))
-            {
-                search = search.Trim();
-                cases = cases.Where(c => 
-                    c.CaseNumber.Contains(search) || 
-                    c.Title.Contains(search) ||
-                    c.Client.FirstName.Contains(search) ||
-                    c.Client.LastName.Contains(search) ||
-                    (c.Client.FirstName + " " + c.Client.LastName).Contains(search));
-            }
+                cases = caseService.GetCasesBySearchTerm(cases, search);
+                
             if (caseStatus.HasValue)
                 cases = cases.Where(c => c.Status == caseStatus.Value);
 

@@ -15,7 +15,14 @@ public class CaseServiceCaseManagerDashboard(ApplicationDbContext context) : ICa
 
     public IQueryable<Case> GetCasesBySearchTerm(IQueryable<Case> cases, string searchTerm)
     {
-        throw new NotImplementedException();
+        searchTerm = searchTerm.Trim();
+        cases = cases.Where(c => 
+            c.CaseNumber.Contains(searchTerm) || 
+            c.Title.Contains(searchTerm) ||
+            c.Client.FirstName.Contains(searchTerm) ||
+            c.Client.LastName.Contains(searchTerm) ||
+            (c.Client.FirstName + " " + c.Client.LastName).Contains(searchTerm));
+        return cases;
     }
 
     public CasesViewModel CreateCaseViewModel(List<Case> cases, int totalCases, int activeCases, int closedCases, int waitingCases,
