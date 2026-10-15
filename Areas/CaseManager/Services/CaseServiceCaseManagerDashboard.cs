@@ -2,6 +2,7 @@
 using caseManageMentSystem.Areas.CaseManager.ViewModels;
 using caseManageMentSystem.Data;
 using caseManageMentSystem.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace caseManageMentSystem.Areas.CaseManager.Services;
 
@@ -25,18 +26,21 @@ public class CaseServiceCaseManagerDashboard(ApplicationDbContext context) : ICa
         return cases;
     }
 
-    public CasesViewModel CreateCaseViewModel(List<Case> cases, int totalCases, int activeCases, int closedCases, int waitingCases,
-        int delayedCases, string fullName, Status? caseStatus, string search, PagedResult<Case> pagedResult)
+    public async Task<CasesViewModel> CreateCaseViewModel(PagedResult<Case> pagedResult, IQueryable<Case> loggedInUserCases, Status? caseStatus,
+        string search, string loggedInUser)
     {
-        return new CasesViewModel(Cases = cases,
-            TotalCases = totalCases,
-            ActiveCases = activeCases,
-            ClosedCases = closedCases,
-            WaitingCases = waitingCases,
-            DelayedCases = delayedCases,
-            FullName = fullName,
+        return new CasesViewModel
+        {
+            Cases = pagedResult.Items.ToList(),
+            TotalCases = await loggedInUserCases.CountAsync(),
+            ActiveCases = await loggedInUserCases.CountAsync(c => c.Status == Status.active),
+            ClosedCases = await loggedInUserCases.CountAsync(c => c.Status == Status.closed),
+            WaitingCases = await loggedInUserCases.CountAsync(c => c.Status == Status.waiting),
+            DelayedCases = await loggedInUserCases.CountAsync(c => c.Status == Status.delayed),
+            FullName = loggedInUser ?? string.Empty,
             CaseStatus = caseStatus,
-            Search = search,
-            PagedResult = pagedResult);
+            Search = search ?? string.Empty,
+            PagedResult = pagedResult,
+        };
     }
 }

@@ -10,15 +10,11 @@ public interface ICaseServiceCaseManagerDashboard
     
     IQueryable<Case> GetCasesBySearchTerm(IQueryable<Case> cases,string searchTerm);
     
-    CasesViewModel CreateCaseViewModel(
-        List<Case> cases,
-        int totalCases,
-        int activeCases,
-        int closedCases,
-        int waitingCases,
-        int delayedCases,
-        string fullName,
+    Task<CasesViewModel> CreateCaseViewModel(
+        PagedResult<Case> pagedResult,
+        IQueryable<Case> loggedInUserCases,
         Status? caseStatus,
         string search,
-        PagedResult<Case> pagedResult);
+        string loggedInUser
+);
 }

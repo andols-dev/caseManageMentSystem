@@ -36,20 +36,7 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
             cases = cases.OrderBy(c => c.CaseNumber)
                 .ThenBy(c => c.Id);
             var pagedResult = await pagedResultService.CreatePagedResult(cases, page, pageSize);
-            
-            var viewModel = new CasesViewModel
-            {
-                Cases = pagedResult.Items.ToList(),
-                TotalCases = await loggedInUserCases.CountAsync(),
-                ActiveCases = await loggedInUserCases.CountAsync(c => c.Status == Status.active),
-                ClosedCases = await loggedInUserCases.CountAsync(c => c.Status == Status.closed),
-                WaitingCases = await loggedInUserCases.CountAsync(c => c.Status == Status.waiting),
-                DelayedCases = await loggedInUserCases.CountAsync(c => c.Status == Status.delayed),
-                FullName = loggedInUser ?? string.Empty,
-                CaseStatus = caseStatus,
-                Search = search ?? string.Empty,
-                PagedResult = pagedResult,
-            };
+            var viewModel = await caseService.CreateCaseViewModel(pagedResult, loggedInUserCases, caseStatus, search, loggedInUser);
             return  View(viewModel);
         }
     }
