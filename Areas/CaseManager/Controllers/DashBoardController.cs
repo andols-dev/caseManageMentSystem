@@ -1,11 +1,9 @@
 ﻿using caseManageMentSystem.Areas.CaseManager.Enums;
 using caseManageMentSystem.Areas.CaseManager.Services;
-using caseManageMentSystem.Areas.CaseManager.ViewModels;
 using caseManageMentSystem.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace caseManageMentSystem.Areas.CaseManager.Controllers
 {
@@ -37,7 +35,7 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
                 .ThenBy(c => c.Id);
             var pagedResult = await pagedResultService.CreatePagedResult(cases, page, pageSize);
             var viewModel = await caseService.CreateCaseViewModel(pagedResult, loggedInUserCases, caseStatus, search, loggedInUser);
-            return  View(viewModel);
+            return View(viewModel);
         }
     }
 }
