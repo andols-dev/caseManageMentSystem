@@ -5,6 +5,7 @@ using caseManageMentSystem.Areas.CaseManager.Services;
 using caseManageMentSystem.Data;
 using caseManageMentSystem.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 
@@ -70,5 +71,55 @@ public class CaseManagerDashBoardTests
 
         // Assert
         Assert.Empty(result);
+    }
+    
+    // test the controller
+    [Fact]
+    public async Task Index_ReturnCasesThatBelongsToUser()
+    {
+        // Arrange
+        var userManager = new Mock<UserManager<ApplicationUser>>();
+        var caseService = new Mock<ICaseServiceCaseManagerDashboard>();
+        var userService = new Mock<IUserServiceCaseManagerDaschboard>();
+        var pagedResultService = new Mock<IPagedResultServiceCaseManagerDaschboard>();
+        
+        var mockUserStore = new Mock<IUserStore<ApplicationUser>>();
+
+        var mockUserManager = new Mock<UserManager<ApplicationUser>>(
+            mockUserStore.Object,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null);
+        
+        mockUserManager
+            .Setup(m => m.GetUserId(It.IsAny<ClaimsPrincipal>()))
+            .Returns("123");
+        // create a new controller. What is needed: UserManager<ApplicationUser> userManager, ICaseServiceCaseManagerDashboard caseService, IUserServiceCaseManagerDaschboard userService, IPagedResultServiceCaseManagerDaschboard pagedResultService
+        var controller = new DashBoardController(mockUserManager.Object, caseService.Object, userService.Object, pagedResultService.Object );
+
+        caseService
+            .Setup(c => c.GetAllCases("123"))
+            .Returns(new List<Case>()
+                {
+                    new Case
+                    {
+                        Id = 1,
+                    }
+                }.AsQueryable()
+            );
+        
+        // Act
+        var result = await controller.Index(null, null); 
+        
+        // check that result is viewresult
+        Assert.IsType(typeof(ViewResult), result);
+        
+        caseService.Verify(c => c.GetAllCases("123"), Times.Once);    
+        
     }
 }
