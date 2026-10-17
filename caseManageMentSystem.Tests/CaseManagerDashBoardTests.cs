@@ -119,4 +119,32 @@ public class CaseManagerDashBoardTests
         caseService.Verify(c => c.GetAllCases("123"), Times.Once);    
         
     }
+
+    [Fact]
+    public async Task Index_NoUserId_ReturnsUnauthorizedResult()
+    {
+        // Arrange
+        var caseService = new Mock<ICaseServiceCaseManagerDashboard>();
+        var userService = new Mock<IUserServiceCaseManagerDaschboard>();
+        var pagedResultService = new Mock<IPagedResultServiceCaseManagerDaschboard>();
+        var userStore = new Mock<IUserStore<ApplicationUser>>();
+        var userManager = new Mock<UserManager<ApplicationUser>>(
+            userStore.Object,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null);
+
+        var controller = new DashBoardController(userManager.Object, caseService.Object, userService.Object, pagedResultService.Object );
+        // Act
+        var result = await controller.Index(null, null); 
+        
+        // Assert
+        Assert.IsType(typeof(UnauthorizedResult), result);
+        
+    }
 }
