@@ -100,7 +100,8 @@ public class CaseManagerDashBoardTests
                 }
             },
         }.AsQueryable();
-       
+        context.AddRange(caseList);
+        await context.SaveChangesAsync();
         var service = new CaseServiceCaseManagerDashboard(context);
         // Act
         var result = service.GetCasesBySearchTerm(caseList, "test1");
@@ -175,7 +176,8 @@ public class CaseManagerDashBoardTests
                 }
             },
         }.AsQueryable();
-       
+        context.AddRange(caseList);
+        await context.SaveChangesAsync();
         var service = new CaseServiceCaseManagerDashboard(context);
         // Act
         var result = service.GetCasesBySearchTerm(caseList, searchTerm);
@@ -215,7 +217,7 @@ public class CaseManagerDashBoardTests
             },
             new Case
             {
-                Id = 1,
+                Id = 2,
                 CaseManagerId = "3",
                 Status = Status.closed,
                 Title =  "Test",
@@ -240,7 +242,8 @@ public class CaseManagerDashBoardTests
                 }
             },
         }.AsQueryable();
-       
+        context.AddRange(caseList);
+        await context.SaveChangesAsync();
         var service = new CaseServiceCaseManagerDashboard(context);
         // Act
         var result = service.GetCasesBySearchTerm(caseList, searchTerm);
@@ -275,7 +278,7 @@ public class CaseManagerDashBoardTests
             },
             new Case
             {
-                Id = 1,
+                Id = 2,
                 CaseManagerId = "3",
                 Status = Status.closed,
                 Title =  "Test",
@@ -300,14 +303,88 @@ public class CaseManagerDashBoardTests
                 }
             },
         }.AsQueryable();
-       
+        context.AddRange(caseList);
+        await context.SaveChangesAsync();
         var service = new CaseServiceCaseManagerDashboard(context);
         // Act
         var result = service.GetCasesBySearchTerm(caseList, searchTerm);
         // Assert
         Assert.Equal(expected, result.Count());
     }
-    
+    [Fact]
+    public async Task CreateCaseViewModel_ReturnsCorrectViewMode()
+    {
+        // Arrange
+        var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+            .UseInMemoryDatabase(Guid.NewGuid().ToString())
+            .Options;
+        await using var context = new ApplicationDbContext(options);
+        
+        var caseList = new List<Case>()
+        {
+            new Case
+            {
+                Id = 1,
+                CaseManagerId = "2",
+                Status = Status.active,
+                Title =  "Test",
+                CaseNumber = "2026-65893215",
+                Client = new ApplicationUser()
+                {
+                    FirstName = "Anna",
+                    LastName = "Andersson"
+                }
+            },
+            new Case
+            {
+                Id = 2,
+                CaseManagerId = "3",
+                Status = Status.closed,
+                Title =  "Test",
+                CaseNumber = CaseNumberGenerator.Generate(),
+                Client = new ApplicationUser()
+                {
+                    FirstName = "Boris",
+                    LastName = "Jönsson"
+                }
+            },
+            new Case
+            {
+                Id = 3,
+                CaseManagerId = "2",
+                Status = Status.active,
+                Title =  "Test",
+                CaseNumber = CaseNumberGenerator.Generate(),
+                Client = new ApplicationUser()
+                {
+                    FirstName = "David",
+                    LastName = "Andersson"
+                }
+            },
+        }.AsQueryable();
+        context.AddRange(caseList);
+        await context.SaveChangesAsync();
+       var caseService = new CaseServiceCaseManagerDashboard(context);
+       var pagedResultService = new PagedResultServiceCaseManagerDaschboard();
+       var query = context.Cases.AsQueryable();
+       // Act
+       var pagedResult = await pagedResultService.CreatePagedResult(query,1,4);
+       var result = await caseService.CreateCaseViewModel(pagedResult, query, Status.active, "test", "Daniel Andersson");
+       
+       // Assert
+       Assert.Equal(3, result.TotalCases);
+       Assert.Equal(2, result.ActiveCases);
+       Assert.Equal(1, result.ClosedCases);
+       Assert.Equal(0, result.WaitingCases);
+       Assert.Equal(0, result.DelayedCases);
+
+       Assert.Equal("Daniel Andersson", result.FullName);
+       Assert.Equal("test", result.Search);
+       Assert.Equal(Status.active, result.CaseStatus);
+
+       Assert.Equal(3, result.Cases.Count);
+       Assert.Same(pagedResult, result.PagedResult);
+    }
     
     // test the controller
     [Fact]
