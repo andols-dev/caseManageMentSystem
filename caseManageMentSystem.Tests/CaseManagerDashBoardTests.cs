@@ -4,6 +4,7 @@ using caseManageMentSystem.Areas.CaseManager.Enums;
 using caseManageMentSystem.Areas.CaseManager.Services;
 using caseManageMentSystem.Data;
 using caseManageMentSystem.Models;
+using caseManageMentSystem.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -71,6 +72,161 @@ public class CaseManagerDashBoardTests
 
         // Assert
         Assert.Empty(result);
+    }
+    // testing the service, GetCasesBySearchTerm
+    [Fact]
+    public async Task GetCasesBySearchTerm_ReturnEmpty_WhenSearchTermDontMatch()
+    {
+        // Arrange
+        var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+            .UseInMemoryDatabase(Guid.NewGuid().ToString())
+            .Options;
+        await using var context = new ApplicationDbContext(options);
+        
+        var caseList = new List<Case>()
+        {
+            new Case
+            {
+                Id = 1,
+                CaseManagerId = "2",
+                Status = Status.active,
+                Title =  "Test",
+                CaseNumber = CaseNumberGenerator.Generate(),
+                Client = new ApplicationUser()
+                {
+                    FirstName = "Anna",
+                    LastName = "Andersson"
+                }
+            },
+        }.AsQueryable();
+       
+        var service = new CaseServiceCaseManagerDashboard(context);
+        // Act
+        var result = service.GetCasesBySearchTerm(caseList, "test1");
+        // Assert
+        Assert.Empty(result);
+    }
+    
+    [Fact]
+    public async Task GetCasesBySearchTerm_SearchByTitle_ReturnsMatchingCase()
+    {
+        // Arrange
+        var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+            .UseInMemoryDatabase(Guid.NewGuid().ToString())
+            .Options;
+        await using var context = new ApplicationDbContext(options);
+        
+        var caseList = new List<Case>()
+        {
+            new Case
+            {
+                Id = 1,
+                CaseManagerId = "2",
+                Status = Status.active,
+                Title =  "Test",
+                CaseNumber = CaseNumberGenerator.Generate(),
+                Client = new ApplicationUser()
+                {
+                    FirstName = "Anna",
+                    LastName = "Andersson"
+                }
+            },
+            new Case
+            {
+                Id = 1,
+                CaseManagerId = "3",
+                Status = Status.closed,
+                Title =  "Test",
+                CaseNumber = CaseNumberGenerator.Generate(),
+                Client = new ApplicationUser()
+                {
+                    FirstName = "Boris",
+                    LastName = "Jönsson"
+                }
+            },
+            new Case
+            {
+                Id = 3,
+                CaseManagerId = "2",
+                Status = Status.active,
+                Title =  "Test",
+                CaseNumber = CaseNumberGenerator.Generate(),
+                Client = new ApplicationUser()
+                {
+                    FirstName = "David",
+                    LastName = "Andersson"
+                }
+            },
+        }.AsQueryable();
+       
+        var service = new CaseServiceCaseManagerDashboard(context);
+        // Act
+        var result = service.GetCasesBySearchTerm(caseList, "Test");
+        // Assert
+        Assert.Equal(3, result.Count());
+    }
+    [Theory]
+    [InlineData(1,"David")]
+    [InlineData(1,"Anna")]
+    [InlineData(1,"Dav")]
+    [InlineData(2, "Andersson")]
+    [InlineData(0, "Kalle")]
+    public async Task GetCasesBySearchTerm_SearchByClientName_ReturnsMatchingCase(int expected, string searchTerm)
+    {
+        // Arrange
+        var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+            .UseInMemoryDatabase(Guid.NewGuid().ToString())
+            .Options;
+        await using var context = new ApplicationDbContext(options);
+        
+        var caseList = new List<Case>()
+        {
+            new Case
+            {
+                Id = 1,
+                CaseManagerId = "2",
+                Status = Status.active,
+                Title =  "Test",
+                CaseNumber = CaseNumberGenerator.Generate(),
+                Client = new ApplicationUser()
+                {
+                    FirstName = "Anna",
+                    LastName = "Andersson"
+                }
+            },
+            new Case
+            {
+                Id = 1,
+                CaseManagerId = "3",
+                Status = Status.closed,
+                Title =  "Test",
+                CaseNumber = CaseNumberGenerator.Generate(),
+                Client = new ApplicationUser()
+                {
+                    FirstName = "Boris",
+                    LastName = "Jönsson"
+                }
+            },
+            new Case
+            {
+                Id = 3,
+                CaseManagerId = "2",
+                Status = Status.active,
+                Title =  "Test",
+                CaseNumber = CaseNumberGenerator.Generate(),
+                Client = new ApplicationUser()
+                {
+                    FirstName = "David",
+                    LastName = "Andersson"
+                }
+            },
+        }.AsQueryable();
+       
+        var service = new CaseServiceCaseManagerDashboard(context);
+        // Act
+        var result = service.GetCasesBySearchTerm(caseList, searchTerm);
+        // Assert
+        Assert.Equal(expected, result.Count());
     }
     
     // test the controller
