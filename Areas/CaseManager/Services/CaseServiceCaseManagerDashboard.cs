@@ -11,6 +11,7 @@ public class CaseServiceCaseManagerDashboard(ApplicationDbContext context) : ICa
     public IQueryable<Case> GetAllCases(string userId)
     {
         return context.Cases
+            .Include(c => c.Client)
             .Where(c => c.CaseManagerId == userId);
     }
 
