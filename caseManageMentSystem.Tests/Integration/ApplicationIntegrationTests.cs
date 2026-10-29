@@ -1,6 +1,8 @@
 ﻿using System.Net;
+using caseManageMentSystem.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace caseManageMentSystem.Tests.Integration;
 
@@ -9,11 +11,7 @@ public class ApplicationIntegrationTests
     [Fact]
     public async Task LoginPage_ReturnsExpectedResponse()
     {
-        await using var factory = new WebApplicationFactory<Program>()
-            .WithWebHostBuilder(builder =>
-            {
-                builder.UseEnvironment("Testing");
-            });
+        await using var factory = new CustomWebApplicationFactory();
 
         using  var client = factory.CreateClient(
             new WebApplicationFactoryClientOptions
@@ -26,5 +24,18 @@ public class ApplicationIntegrationTests
             response.StatusCode == HttpStatusCode.OK ||
             response.StatusCode == HttpStatusCode.Redirect,
             $"Unexpected HTTP-status code: {(int)response.StatusCode}");
+    }
+    [Fact]
+    public void ApplicationDbContext_UsesSqlite()
+    {
+        using var factory = new CustomWebApplicationFactory();
+        using var scope = factory.Services.CreateScope();
+
+        var db = scope.ServiceProvider
+            .GetRequiredService<ApplicationDbContext>();
+
+        Assert.Equal(
+            "Microsoft.EntityFrameworkCore.Sqlite",
+            db.Database.ProviderName);
     }
 }

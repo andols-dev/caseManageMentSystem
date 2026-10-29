@@ -48,7 +48,7 @@ builder.Services.Configure<RouteOptions>(options =>
 
 var app = builder.Build();
 
-if (!app.Environment.IsEnvironment("Testint"))
+if (!app.Environment.IsEnvironment("Testing"))
 {
     using (var scope = app.Services.CreateScope())
     {
