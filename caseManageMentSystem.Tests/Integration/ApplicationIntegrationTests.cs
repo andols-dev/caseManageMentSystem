@@ -2,6 +2,7 @@
 using caseManageMentSystem.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace caseManageMentSystem.Tests.Integration;
@@ -37,5 +38,20 @@ public class ApplicationIntegrationTests
         Assert.Equal(
             "Microsoft.EntityFrameworkCore.Sqlite",
             db.Database.ProviderName);
+    }
+
+    [Fact]
+    public async Task Database_CanCreateSchema()
+    {
+       await using var factory = new CustomWebApplicationFactory();
+
+       await factory.InitializeDatabaseAsync();
+       
+       using var  scope = factory.Services.CreateScope();
+       var db = scope.ServiceProvider
+           .GetRequiredService<ApplicationDbContext>();
+       
+       Assert.True(await db.Database.CanConnectAsync());
+       Assert.True(await db.Cases.AnyAsync() == false);
     }
 }
