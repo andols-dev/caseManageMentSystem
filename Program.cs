@@ -32,6 +32,11 @@ builder.Services.AddScoped<INoteService, NoteService>();
 builder.Services.AddScoped<ICaseCaseManagerService, CaseCaseManagerService>();
 builder.Services.AddScoped<ICaseHistoryService, CaseHistoryService>();
 builder.Services.AddScoped<IClientService, ClientService>();
+builder.Services.AddScoped<ICaseServiceCaseManagerDashboard,  CaseServiceCaseManagerDashboard>();
+builder.Services.AddScoped<IUserServiceCaseManagerDaschboard,  UserServiceCaseManagerDaschboard>();
+builder.Services.AddScoped<IPagedResultServiceCaseManagerDaschboard,   PagedResultServiceCaseManagerDaschboard>();
+
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
