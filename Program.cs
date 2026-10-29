@@ -91,7 +91,4 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=Login}/{id?}");
 
-
-
 app.Run();
-public partial class Program { }

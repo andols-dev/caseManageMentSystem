@@ -156,4 +156,52 @@ public class ApplicationIntegrationTests
         Assert.Equal(manager.Id, savedCase.CaseManagerId);
         Assert.Equal(createdCase.Id, caseHistory.CaseId);
     }
+
+    [Fact]
+    public async Task CreatingCase_ThroughHttp_ReturnsResponse()
+    {
+        await using var factory = new CustomWebApplicationFactory();
+        await factory.InitializeDatabaseAsync();
+        using var client = factory.CreateClient();
+        var response = await client.GetAsync($"CaseManager/ClientsList/Create?clientId=test-client");
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task CreatingCase_ThroughHttp_CreatesCaseAndHistory()
+    {
+        await using var factory = new CustomWebApplicationFactory();
+        await factory.InitializeDatabaseAsync();
+        string clientId;
+        using var scope = factory.Services.CreateScope();
+        using var httpClient = factory.CreateClient();
+
+        var db = scope.ServiceProvider
+            .GetRequiredService<ApplicationDbContext>();
+            
+        var client = new ApplicationUser
+        {
+            UserName = "client@test.local",
+            Email = "client@test.local",
+            FirstName = "Test",
+            LastName = "Client",
+            EmailConfirmed = true
+        };
+            
+        var manager = new ApplicationUser
+        {
+            UserName = "manager@test.local",
+            Email = "manager@test.local",
+            FirstName = "Test",
+            LastName = "Manager",
+            EmailConfirmed = true
+        };
+        db.Users.AddRange(client, manager);
+        await db.SaveChangesAsync();
+        clientId = client.Id;
+        var response = await httpClient.GetAsync(
+            $"/CaseManager/ClientsList/Create?clientId={clientId}"
+        );
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+    }
 }
