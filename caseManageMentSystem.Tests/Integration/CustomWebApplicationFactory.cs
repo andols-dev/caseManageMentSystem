@@ -41,6 +41,4 @@ public class CustomWebApplicationFactory
         var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         await db.Database.EnsureCreatedAsync();
     }
-    
-    
 }

@@ -1,6 +1,10 @@
 ﻿using System.Net;
 using caseManageMentSystem.Areas.CaseManager.Enums;
+using caseManageMentSystem.Areas.CaseManager.Services;
+using caseManageMentSystem.Areas.CaseManager.ViewModels;
+using caseManageMentSystem.Areas.Client.Services;
 using caseManageMentSystem.Data;
+using caseManageMentSystem.Enums;
 using caseManageMentSystem.Models;
 using caseManageMentSystem.Services;
 using Microsoft.AspNetCore.Hosting;
@@ -103,5 +107,53 @@ public class ApplicationIntegrationTests
         Assert.Equal("Integration Test", savedCase.Title);
         Assert.Equal(client.Id, savedCase.ClientId);
         Assert.Equal(caseManager.Id, savedCase.CaseManagerId);
+    }
+
+    [Fact]
+    public async Task CreatingCase_SavesCaseAndHistory()
+    {
+        await using var  factory = new CustomWebApplicationFactory();
+        await factory.InitializeDatabaseAsync();
+        using var scope = factory.Services.CreateScope();
+        var db = scope.ServiceProvider
+            .GetRequiredService<ApplicationDbContext>();
+        var caseService = scope.ServiceProvider
+            .GetRequiredService<ICaseCaseManagerService>();
+        var historyService = scope.ServiceProvider
+            .GetRequiredService<ICaseHistoryService>();
+
+        var client = new ApplicationUser
+        {
+            UserName = "client@test.local",
+            Email = "client@test.local",
+            FirstName = "Test",
+            LastName = "Client",
+            EmailConfirmed = true,
+        };
+        var manager = new ApplicationUser
+        {
+            UserName = "manager@test.local",
+            Email = "manager@test.local",
+            FirstName = "Test",
+            LastName = "Manager",
+            EmailConfirmed = true,
+        };
+        db.Users.AddRange(client, manager);
+        await db.SaveChangesAsync();
+        var viewModel = new CreateCaseViewModel
+        {
+            ClientId = client.Id,
+            Title = "Integration Test case",
+            Description = "Testing case creation and history",
+        };
+        var createdCase = await caseService.CreateCase(viewModel, manager);
+        var createdHistory =  historyService.CreateCaseHistory(createdCase.Id, manager);
+        var savedCase = await db.Cases.SingleAsync(c => c.Id == createdCase.Id);
+        var caseHistory = await db.CaseHistories.SingleAsync(c => c.Id == createdCase.Id);
+        
+        Assert.Equal("Integration Test case", savedCase.Title);
+        Assert.Equal(client.Id, savedCase.ClientId);
+        Assert.Equal(manager.Id, savedCase.CaseManagerId);
+        Assert.Equal(createdCase.Id, caseHistory.CaseId);
     }
 }
