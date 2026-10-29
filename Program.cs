@@ -48,10 +48,14 @@ builder.Services.Configure<RouteOptions>(options =>
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
+if (!app.Environment.IsEnvironment("Testint"))
 {
-    await DbInitializer.InitializeAsync(scope.ServiceProvider);
+    using (var scope = app.Services.CreateScope())
+    {
+        await DbInitializer.InitializeAsync(scope.ServiceProvider);
+    }
 }
+
 
 
 app.UseHttpsRedirection();
@@ -90,3 +94,4 @@ app.MapControllerRoute(
 
 
 app.Run();
+public partial class Program { }
