@@ -34,4 +34,11 @@ public class CustomWebApplicationFactory
                     $"Data Source={_databaseName}.db"));
         });
     }
+
+    public async Task InitializeDatabaseAsync()
+    {
+        using var  scope = Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        await db.Database.EnsureCreatedAsync();
+    }
 }
