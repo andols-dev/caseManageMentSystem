@@ -48,10 +48,14 @@ builder.Services.Configure<RouteOptions>(options =>
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
+if (!app.Environment.IsEnvironment("Testing"))
 {
-    await DbInitializer.InitializeAsync(scope.ServiceProvider);
+    using (var scope = app.Services.CreateScope())
+    {
+        await DbInitializer.InitializeAsync(scope.ServiceProvider);
+    }
 }
+
 
 
 app.UseHttpsRedirection();
@@ -86,7 +90,5 @@ app.MapAreaControllerRoute(
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=Login}/{id?}");
-
-
 
 app.Run();
