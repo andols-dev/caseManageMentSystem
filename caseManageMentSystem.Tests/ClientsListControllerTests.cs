@@ -51,7 +51,6 @@ namespace caseManageMentSystem.Tests
             var iCaseHistory = new Mock<ICaseHistoryService>();
             var iClientService = new Mock<IClientService>();
             var controller = new ClientsListController(
-                null!,
                 userManagerMock.Object,
                 iNoteService.Object,
                 iCaseService.Object,
@@ -100,7 +99,6 @@ namespace caseManageMentSystem.Tests
             var iCaseHistory = new Mock<ICaseHistoryService>();
             var iClientService = new Mock<IClientService>();
             var controller = new ClientsListController(
-                null!,
                 userManagerMock.Object,
                 iNoteService.Object,
                 iCaseService.Object,
@@ -146,7 +144,6 @@ namespace caseManageMentSystem.Tests
             var iCaseHistory = new Mock<ICaseHistoryService>();
             var iClientService = new Mock<IClientService>();
             var controller = new ClientsListController(
-                context,
                 mockUserManager.Object,
                 iNoteService.Object,
                 iCaseService.Object,
@@ -161,11 +158,6 @@ namespace caseManageMentSystem.Tests
         public async Task Details_Return_Client_When_ClientHasNoCases()
         {
             // Arrange
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString())
-                .Options;
-
-            await using var context = new ApplicationDbContext(options);
 
             var client = new ApplicationUser
             {
@@ -175,8 +167,6 @@ namespace caseManageMentSystem.Tests
                 LastName = "Client"
             };
 
-            context.Users.Add(client);
-            await context.SaveChangesAsync();
 
             var mockUserStore = new Mock<IUserStore<ApplicationUser>>();
 
@@ -195,8 +185,12 @@ namespace caseManageMentSystem.Tests
             var iCaseService = new Mock<ICaseCaseManagerService>();
             var iCaseHistory = new Mock<ICaseHistoryService>();
             var iClientService = new Mock<IClientService>();
+
+            iClientService
+                .Setup(s => s.GetClientWithCases(client.Id))
+                .ReturnsAsync(client);
+            
             var controller = new ClientsListController(
-                context,
                 mockUserManager.Object,
                 iNoteService.Object,
                 iCaseService.Object,
@@ -286,7 +280,6 @@ namespace caseManageMentSystem.Tests
             var iCaseHistory = new Mock<ICaseHistoryService>();
             var iClientService = new Mock<IClientService>();
             var controller = new ClientsListController(
-                context,
                 mockUserManager.Object,
                 iNoteService.Object,
                 iCaseService.Object,

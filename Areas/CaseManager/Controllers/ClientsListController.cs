@@ -15,16 +15,12 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
 {
     [Area("CaseManager")]
     [Authorize(Roles = "caseManager")]
-    public class ClientsListController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, INoteService noteService, ICaseCaseManagerService caseService, ICaseHistoryService caseHistoryService, IClientService clientService) : Controller
+    public class ClientsListController(UserManager<ApplicationUser> userManager, INoteService noteService, ICaseCaseManagerService caseService, ICaseHistoryService caseHistoryService, IClientService clientService) : Controller
     {
-        // GET: ClientsListController
-        // Show all clients
 
-        private readonly ApplicationDbContext _context = context;
-        private readonly UserManager<ApplicationUser> _userManager = userManager;
         public async Task<IActionResult> Index()
         {
-            var clients = await _userManager.GetUsersInRoleAsync("client");
+            var clients = await userManager.GetUsersInRoleAsync("client");
             return View(clients);
         }
 
@@ -58,7 +54,7 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(CreateCaseViewModel caseItem)
         {
-            var currentUser = await _userManager.GetUserAsync(User);
+            var currentUser = await userManager.GetUserAsync(User);
             if (currentUser == null)
                 return Unauthorized();
 
@@ -89,7 +85,7 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateNote(CreateNoteViewModel newNote)
         {
-            var currentUser = await _userManager.GetUserAsync(User);
+            var currentUser = await userManager.GetUserAsync(User);
                 if (currentUser == null)
                 {
                     return Unauthorized();
