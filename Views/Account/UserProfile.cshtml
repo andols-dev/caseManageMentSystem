@@ -106,7 +106,17 @@
 
         <!-- Actions -->
         <div class="flex flex-col gap-3 border-t border-slate-800 px-5 py-4 sm:flex-row sm:justify-end">
+            
 
+            <a asp-action="Index"
+               asp-controller="DashBoard"
+               asp-area="Client"
+               asp-route-id="@Model.Id"
+               class="inline-flex items-center justify-center rounded-full bg-slate-800 px-4 py-2 text-sm font-medium text-slate-300 transition-colors hover:bg-slate-700 hover:text-white">
+                Go back
+            </a>
+
+          
             <a asp-area=""
                asp-action="ChangePassword"
                class="inline-flex items-center justify-center rounded-full bg-slate-800 px-4 py-2 text-sm font-medium text-slate-300 transition-colors hover:bg-slate-700 hover:text-white">
