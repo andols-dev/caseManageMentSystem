@@ -27,7 +27,6 @@
     <Folder Include="Areas\CaseManager\Models\" />
     <Folder Include="Areas\Client\Data\" />
     <Folder Include="Areas\Client\Models\" />
-    <Folder Include="Services\" />
   </ItemGroup>
   	<ItemGroup>
 		<UpToDateCheckBuilt Include="wwwroot/css/site.css" Set="Css" />
@@ -44,6 +43,10 @@
 		<Content Remove="caseManageMentSystem.Tests\**" />
 		<EmbeddedResource Remove="caseManageMentSystem.Tests\**" />
 		<None Remove="caseManageMentSystem.Tests\**" />
+	</ItemGroup>
+	<ItemGroup>
+	  <_ContentIncludedByDefault Remove="Areas\Admin\Views\Home\Index.cshtml" />
+	  <_ContentIncludedByDefault Remove="Areas\Admin\Views\DashBoard\Index.cshtml" />
 	</ItemGroup>
 
 </Project>

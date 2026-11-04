@@ -123,7 +123,7 @@ namespace caseManageMentSystem.Controllers
                     {
                         return RedirectToAction(
                             "Index",
-                            "Dashboard",
+                            "User",
                             new { area = "Admin" });
                     }
                     if (await _userManager.IsInRoleAsync(user, "CaseManager"))
