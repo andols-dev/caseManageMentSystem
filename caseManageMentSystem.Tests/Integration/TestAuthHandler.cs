@@ -19,9 +19,10 @@ public class TestAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions
 
     protected override Task<AuthenticateResult> HandleAuthenticateAsync()
     {
+        var userId = Request.Headers["X-Test-UserId"].ToString();
         var claims = new[]
         {
-            new Claim(ClaimTypes.NameIdentifier, "test-manager-id"),
+            new Claim(ClaimTypes.NameIdentifier, userId),
             new Claim(ClaimTypes.Name, "manager@test.local"),
             new Claim(ClaimTypes.Role, "caseManager"),
         };

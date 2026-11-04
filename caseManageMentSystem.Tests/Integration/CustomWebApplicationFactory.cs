@@ -1,4 +1,5 @@
 ﻿using caseManageMentSystem.Data;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +33,15 @@ public class CustomWebApplicationFactory
             services.AddDbContext<ApplicationDbContext>(
                 options => options.UseSqlite(
                     $"Data Source={_databaseName}.db"));
+
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = "Test";
+                    options.DefaultChallengeScheme = "Test";
+                    options.DefaultForbidScheme = "Test";
+                }
+            )
+            .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("Test", options => { });
         });
     }
 

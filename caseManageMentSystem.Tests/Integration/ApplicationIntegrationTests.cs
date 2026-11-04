@@ -7,6 +7,7 @@ using caseManageMentSystem.Data;
 using caseManageMentSystem.Enums;
 using caseManageMentSystem.Models;
 using caseManageMentSystem.Services;
+using HtmlAgilityPack;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +21,7 @@ public class ApplicationIntegrationTests
     public async Task LoginPage_ReturnsExpectedResponse()
     {
         await using var factory = new CustomWebApplicationFactory();
-
+        await factory.InitializeDatabaseAsync();
         using  var client = factory.CreateClient(
             new WebApplicationFactoryClientOptions
             {
@@ -174,7 +175,6 @@ public class ApplicationIntegrationTests
         await factory.InitializeDatabaseAsync();
         string clientId;
         using var scope = factory.Services.CreateScope();
-        using var httpClient = factory.CreateClient();
 
         var db = scope.ServiceProvider
             .GetRequiredService<ApplicationDbContext>();
@@ -198,10 +198,56 @@ public class ApplicationIntegrationTests
         };
         db.Users.AddRange(client, manager);
         await db.SaveChangesAsync();
+        var managerId = manager.Id;
+
         clientId = client.Id;
+        using var httpClient = factory.CreateClient(
+            new WebApplicationFactoryClientOptions
+            {
+                AllowAutoRedirect = false
+            });
+        httpClient.DefaultRequestHeaders.Add(
+            "X-Test-UserId",
+            managerId
+        );
         var response = await httpClient.GetAsync(
             $"/CaseManager/ClientsList/Create?clientId={clientId}"
         );
+        var formData = new Dictionary<string, string>
+        {
+            { "ClientId", clientId },
+            { "Title", "Första testärendet" },
+            { "Description", "Detta är ett integrationstest." }
+        };
+        var html = await response.Content.ReadAsStringAsync();
+        var htmlDoc = new HtmlDocument();
+        htmlDoc.LoadHtml(html);
+
+        var token = htmlDoc.DocumentNode
+            .SelectSingleNode("//input[@name='__RequestVerificationToken']")
+            ?.GetAttributeValue("value", null);
+
+        Assert.NotNull(token);
+        var postContent = new FormUrlEncodedContent(formData);
+        postContent.Headers.Add(
+            "RequestVerificationToken",
+            token
+            );
+        var postResponse = await httpClient.PostAsync(
+            "/CaseManager/ClientsList/Create",
+            postContent
+            );
+        Assert.Equal(
+            HttpStatusCode.Redirect,
+            postResponse.StatusCode
+        );
+        using var verificationScope = factory.Services.CreateScope();
+        
+        var verificationDb = verificationScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var createdCase = await verificationDb.Cases.FirstOrDefaultAsync(c => c.ClientId == clientId);
+        Assert.NotNull(createdCase);
+
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        
     }
 }
