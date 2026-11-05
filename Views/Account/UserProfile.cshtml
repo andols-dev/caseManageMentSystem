@@ -1,8 +1,11 @@
 ﻿@using caseManageMentSystem.ViewModels
+@using System.Security.Claims
 @model UserProfileViewModel
 
 @{
     ViewData["Title"] = "User Profile";
+    var role = User.Claims
+        .FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
 }
 
 <div class="space-y-6">
@@ -110,7 +113,7 @@
 
             <a asp-action="Index"
                asp-controller="DashBoard"
-               asp-area="Client"
+               asp-area="@role"
                asp-route-id="@Model.Id"
                class="inline-flex items-center justify-center rounded-full bg-slate-800 px-4 py-2 text-sm font-medium text-slate-300 transition-colors hover:bg-slate-700 hover:text-white">
                 Go back
