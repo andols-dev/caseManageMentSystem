@@ -3,6 +3,7 @@
 namespace caseManageMentSystem.Areas.Client.ViewModels;
 
 public record CaseListItemViewModel(
+    int Id,
     string CaseNumber,
     string Title, 
     string Description,

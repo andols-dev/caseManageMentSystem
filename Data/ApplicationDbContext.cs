@@ -14,6 +14,7 @@ namespace caseManageMentSystem.Data
         public DbSet<Case> Cases { get; set; }
         public DbSet<Note> Notes { get; set; }
         public DbSet<CaseHistory> CaseHistories { get; set; }
+        public DbSet<CaseDocument> CaseDocuments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -59,6 +60,11 @@ namespace caseManageMentSystem.Data
                 .HasOne(n => n.Case)
                 .WithMany(c => c.Notes)
                 .HasForeignKey(n => n.CaseId);
+            builder.Entity<CaseDocument>()
+                .HasOne(d => d.Case)
+                .WithMany(c => c.Documents)
+                .HasForeignKey(d => d.CaseId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

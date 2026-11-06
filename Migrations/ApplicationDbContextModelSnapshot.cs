@@ -17,7 +17,7 @@ namespace caseManageMentSystem.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.11")
+                .HasAnnotation("ProductVersion", "10.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -281,6 +281,45 @@ namespace caseManageMentSystem.Migrations
                     b.ToTable("Cases");
                 });
 
+            modelBuilder.Entity("caseManageMentSystem.Models.CaseDocument", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CaseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<long>("FileSize")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("StoredFileName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<DateTime>("UploadedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CaseId");
+
+                    b.ToTable("CaseDocuments");
+                });
+
             modelBuilder.Entity("caseManageMentSystem.Models.CaseHistory", b =>
                 {
                     b.Property<int>("Id")
@@ -422,6 +461,17 @@ namespace caseManageMentSystem.Migrations
                     b.Navigation("Client");
                 });
 
+            modelBuilder.Entity("caseManageMentSystem.Models.CaseDocument", b =>
+                {
+                    b.HasOne("caseManageMentSystem.Models.Case", "Case")
+                        .WithMany("Documents")
+                        .HasForeignKey("CaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Case");
+                });
+
             modelBuilder.Entity("caseManageMentSystem.Models.CaseHistory", b =>
                 {
                     b.HasOne("caseManageMentSystem.Models.Case", "Case")
@@ -471,6 +521,8 @@ namespace caseManageMentSystem.Migrations
 
             modelBuilder.Entity("caseManageMentSystem.Models.Case", b =>
                 {
+                    b.Navigation("Documents");
+
                     b.Navigation("Histories");
 
                     b.Navigation("Notes");
