@@ -12,6 +12,7 @@ public class CaseService(ApplicationDbContext context) : ICaseService
             .AsNoTracking()
             .Where(c => c.ClientId == clientId)
             .Select(c => new CaseListItemViewModel(
+                c.Id,
                 c.CaseNumber,
                 c.Title,
                 c.Description,

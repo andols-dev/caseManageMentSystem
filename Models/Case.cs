@@ -24,5 +24,7 @@ namespace caseManageMentSystem.Models
         public ICollection<Note> Notes { get; set; } = [];
 
         public ICollection<CaseHistory> Histories { get; set; } = [];
+        public ICollection<CaseDocument> Documents { get; set; }
+            = new List<CaseDocument>();
     }
 }

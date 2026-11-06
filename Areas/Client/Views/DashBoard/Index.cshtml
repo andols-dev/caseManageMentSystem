@@ -1,4 +1,5 @@
-﻿@using caseManageMentSystem.Areas.CaseManager.Enums
+﻿
+@using caseManageMentSystem.Areas.CaseManager.Enums
 @using caseManageMentSystem.Areas.Client.ViewModels
 @model DashBoardViewModel
 
@@ -43,6 +44,7 @@
 
             <!-- Table header -->
             <div class="border-b border-slate-800 px-5 py-4">
+
                 <h3 class="text-lg font-semibold text-white">
                     Case overview
                 </h3>
@@ -50,14 +52,17 @@
                 <p class="mt-1 text-sm text-slate-400">
                     You currently have @Model.Cases.Count case@(Model.Cases.Count == 1 ? "" : "s").
                 </p>
+
             </div>
 
 
             <!-- Table -->
             <div class="overflow-x-auto">
+
                 <table class="w-full text-left text-sm">
 
                     <thead class="border-b border-slate-800 bg-slate-950/60">
+
                         <tr>
 
                             <th class="px-5 py-4 font-semibold text-slate-300">
@@ -80,7 +85,12 @@
                                 Description
                             </th>
 
+                            <th class="px-5 py-4 text-right font-semibold text-slate-300">
+                                Actions
+                            </th>
+
                         </tr>
+
                     </thead>
 
 
@@ -119,18 +129,21 @@
                                                     Active
                                                 </span>
                                                 break;
+
                                             case Status.closed:
                                                 <span class="inline-flex items-center rounded-full bg-slate-700 px-2.5 py-1 text-xs font-semibold text-slate-300 ring-1 ring-inset ring-slate-600">
                                                     <span class="mr-1.5 h-1.5 w-1.5 rounded-full bg-slate-400"></span>
                                                     Closed
                                                 </span>
                                                 break;
+
                                             case Status.delayed:
                                                 <span class="inline-flex items-center rounded-full bg-red-500/10 px-2.5 py-1 text-xs font-semibold text-red-400 ring-1 ring-inset ring-red-500/20">
                                                     <span class="mr-1.5 h-1.5 w-1.5 rounded-full bg-red-400"></span>
                                                     Delayed
                                                 </span>
                                                 break;
+
                                             case Status.waiting:
                                             default:
                                                 <span class="inline-flex items-center rounded-full bg-yellow-500/10 px-2.5 py-1 text-xs font-semibold text-yellow-400 ring-1 ring-inset ring-yellow-500/20">
@@ -139,6 +152,7 @@
                                                 </span>
                                                 break;
                                         }
+
                                     </td>
 
 
@@ -155,6 +169,34 @@
                                         </p>
                                     </td>
 
+
+                                    <!-- Actions -->
+                                    <td class="whitespace-nowrap px-5 py-4 text-right">
+
+                                        <a asp-area="Client"
+                                           asp-controller="DashBoard"
+                                           asp-action="Details"
+                                           asp-route-id="@caseItem.Id"
+                                           class="inline-flex items-center rounded-full bg-cyan-500 px-4 py-2 text-xs font-semibold text-slate-950 transition-colors hover:bg-cyan-400">
+
+                                            View Details
+
+                                            <svg class="ml-2 h-4 w-4"
+                                                 fill="none"
+                                                 stroke="currentColor"
+                                                 viewBox="0 0 24 24">
+
+                                                <path stroke-linecap="round"
+                                                      stroke-linejoin="round"
+                                                      stroke-width="2"
+                                                      d="M9 5l7 7-7 7" />
+
+                                            </svg>
+
+                                        </a>
+
+                                    </td>
+
                                 </tr>
                             }
                         }
@@ -162,7 +204,7 @@
                         {
                             <!-- No cases -->
                             <tr>
-                                <td colspan="5" class="px-5 py-12 text-center">
+                                <td colspan="6" class="px-5 py-12 text-center">
 
                                     <div class="mx-auto max-w-md">
 
@@ -181,7 +223,9 @@
                         }
 
                     </tbody>
+
                 </table>
+
             </div>
 
 

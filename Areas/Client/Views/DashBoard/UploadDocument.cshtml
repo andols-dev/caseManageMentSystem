@@ -1,0 +1,285 @@
+﻿
+@model Case
+
+@{
+    ViewData["Title"] = "Upload Documents";
+}
+
+<div class="space-y-6">
+
+    <!-- Header -->
+    <div class="rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-lg shadow-slate-950/20">
+
+        <p class="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-400">
+            Documents
+        </p>
+
+        <h1 class="mt-2 text-2xl font-bold tracking-tight text-white">
+            Upload Documents
+        </h1>
+
+        <p class="mt-1 text-sm text-slate-400">
+            Upload documents to case:
+            <span class="text-slate-300">@Model.CaseNumber</span>
+        </p>
+
+    </div>
+
+
+    <!-- Upload form -->
+    <div class="overflow-hidden rounded-xl border border-slate-800 bg-slate-900 shadow-sm">
+
+        <!-- Section header -->
+        <div class="border-b border-slate-800 px-5 py-4">
+
+            <h2 class="text-lg font-semibold text-white">
+                Select Documents
+            </h2>
+
+            <p class="mt-1 text-sm text-slate-400">
+                You can upload multiple documents at once.
+            </p>
+
+        </div>
+
+
+        <form asp-area="Client"
+              asp-controller="DashBoard"
+              asp-action="UploadDocument"
+              method="post"
+              enctype="multipart/form-data"
+              class="space-y-6 p-5">
+
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" name="caseId" value="@Model.Id" />
+
+
+            <!-- File upload area -->
+            <div>
+
+                <label for="files"
+                       class="mb-2 block text-sm font-medium text-slate-300">
+                    Choose files
+                </label>
+
+                <div id="dropZone"
+                     class="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-700 bg-slate-950/50 px-6 py-12 text-center transition-colors hover:border-cyan-500/70">
+
+                    <svg class="mb-4 h-12 w-12 text-cyan-400"
+                         fill="none"
+                         stroke="currentColor"
+                         viewBox="0 0 24 24">
+
+                        <path stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="1.5"
+                              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+
+                    </svg>
+
+                    <p class="text-sm font-semibold text-white">
+                        Drag and drop your files here
+                    </p>
+
+                    <p class="mt-1 text-sm text-slate-400">
+                        or click below to browse your computer
+                    </p>
+
+                    <input type="file"
+                           id="files"
+                           name="files"
+                           multiple
+                           accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png"
+                           class="hidden" />
+
+                    <button type="button"
+                            id="browseButton"
+                            class="mt-5 rounded-full bg-cyan-500 px-5 py-2 text-sm font-semibold text-slate-950 transition-colors hover:bg-cyan-400">
+                        Browse files
+                    </button>
+
+                </div>
+
+                <p class="mt-3 text-xs text-slate-500">
+                    Allowed formats: PDF, Word, Excel, JPG and PNG.
+                    Maximum 5 files, 10 MB per file.
+                </p>
+
+            </div>
+
+
+            <!-- Validation -->
+            <div asp-validation-summary="All"
+                 class="text-sm text-red-400">
+            </div>
+
+
+            <!-- Selected files -->
+            <div id="selectedFilesContainer" class="hidden">
+
+                <h3 class="mb-3 text-sm font-semibold text-white">
+                    Selected files
+                </h3>
+
+                <div id="selectedFiles"
+                     class="divide-y divide-slate-800 rounded-xl border border-slate-800">
+                </div>
+
+            </div>
+
+
+            <!-- Buttons -->
+            <div class="flex flex-col-reverse gap-3 border-t border-slate-800 pt-5 sm:flex-row sm:justify-end">
+
+                <a asp-area="Client"
+                   asp-controller="DashBoard"
+                   asp-action="Details"
+                   asp-route-id="@Model.Id"
+                   class="inline-flex items-center justify-center rounded-full bg-slate-800 px-5 py-2.5 text-sm font-medium text-slate-300 transition-colors hover:bg-slate-700 hover:text-white">
+
+                    Cancel
+
+                </a>
+
+                <button type="submit"
+                        id="uploadButton"
+                        disabled
+                        class="inline-flex items-center justify-center rounded-full bg-cyan-500 px-5 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-40">
+
+                    Upload Documents
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <script>
+
+        const fileInput = document.getElementById("files");
+        const browseButton = document.getElementById("browseButton");
+        const dropZone = document.getElementById("dropZone");
+        const selectedFilesContainer = document.getElementById("selectedFilesContainer");
+        const selectedFiles = document.getElementById("selectedFiles");
+        const uploadButton = document.getElementById("uploadButton");
+
+        const maxFiles = 5;
+        const maxFileSize = 10 * 1024 * 1024;
+
+        const allowedExtensions = [
+            ".pdf", ".doc", ".docx",
+            ".xls", ".xlsx",
+            ".jpg", ".jpeg", ".png"
+        ];
+
+        browseButton.addEventListener("click", () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener("change", () => {
+            renderFiles(fileInput.files);
+        });
+
+        dropZone.addEventListener("dragover", (event) => {
+            event.preventDefault();
+            dropZone.classList.add("border-cyan-400");
+        });
+
+        dropZone.addEventListener("dragleave", () => {
+            dropZone.classList.remove("border-cyan-400");
+        });
+
+        dropZone.addEventListener("drop", (event) => {
+            event.preventDefault();
+
+            dropZone.classList.remove("border-cyan-400");
+
+            fileInput.files = event.dataTransfer.files;
+
+            renderFiles(fileInput.files);
+        });
+
+        function renderFiles(files) {
+
+            selectedFiles.innerHTML = "";
+
+            let valid = true;
+
+            if (files.length > maxFiles) {
+                alert("You can upload a maximum of 5 files.");
+                fileInput.value = "";
+                files = [];
+                valid = false;
+            }
+
+            Array.from(files).forEach(file => {
+
+                const extension = "." + file.name.split(".").pop().toLowerCase();
+
+                const row = document.createElement("div");
+
+                row.className = "flex items-center justify-between gap-3 px-4 py-3";
+
+                const fileInfo = document.createElement("div");
+                fileInfo.className = "min-w-0";
+
+                const name = document.createElement("p");
+                name.className = "truncate text-sm font-medium text-slate-200";
+                name.textContent = file.name;
+
+                const size = document.createElement("p");
+                size.className = "text-xs text-slate-500";
+                size.textContent = formatSize(file.size);
+
+                fileInfo.appendChild(name);
+                fileInfo.appendChild(size);
+
+                const status = document.createElement("span");
+
+                if (!allowedExtensions.includes(extension)) {
+                    status.textContent = "Invalid file type";
+                    status.className = "shrink-0 text-xs text-red-400";
+                    valid = false;
+                }
+                else if (file.size === 0 || file.size > maxFileSize) {
+                    status.textContent = "Invalid file size";
+                    status.className = "shrink-0 text-xs text-red-400";
+                    valid = false;
+                }
+                else {
+                    status.textContent = "Ready";
+                    status.className = "shrink-0 text-xs text-emerald-400";
+                }
+
+                row.appendChild(fileInfo);
+                row.appendChild(status);
+
+                selectedFiles.appendChild(row);
+
+            });
+
+            selectedFilesContainer.classList.toggle("hidden", files.length === 0);
+
+            uploadButton.disabled = files.length === 0 || !valid;
+        }
+
+        function formatSize(bytes) {
+
+            if (bytes < 1024 * 1024) {
+                return (bytes / 1024).toFixed(1) + " KB";
+            }
+
+            return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+        }
+
+    </script>
+
+}
