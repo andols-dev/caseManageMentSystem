@@ -91,7 +91,91 @@
 <h1>Filtered results</h1>
 <!-- Filtering options-->
 <script src="https://cdn.jsdelivr.net/npm/@@tailwindplus/elements@1" type="module"></script>
-<el-dropdown class="inline-block">
+cshtml
+<!-- Filter and Search -->
+<div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+
+    <!-- Filter -->
+    <el-dropdown class="inline-block shrink-0">
+
+        <button class="inline-flex w-full cursor-pointer justify-center gap-x-1.5 rounded-md bg-white/10 px-3 py-2 text-sm font-semibold text-white inset-ring-1 inset-ring-white/5 hover:bg-white/20">
+
+            Filter status
+
+            <svg viewBox="0 0 20 20"
+                 fill="currentColor"
+                 class="-mr-1 size-5 text-gray-400"
+                 aria-hidden="true">
+                <path d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+                      clip-rule="evenodd"
+                      fill-rule="evenodd" />
+            </svg>
+
+        </button>
+
+        <el-menu anchor="bottom start"
+                 popover
+                 class="w-56 origin-top-left divide-y divide-white/10 rounded-md bg-gray-800 outline-1 -outline-offset-1 outline-white/10">
+
+            <div class="py-1">
+
+                <a asp-action="Index" asp-controller="Dashboard" asp-area="CaseManager"
+                   asp-route-caseStatus="" asp-route-search="@Model.Search"
+                   class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white">
+                    All
+                </a>
+
+                <a asp-action="Index" asp-controller="Dashboard" asp-area="CaseManager"
+                   asp-route-caseStatus="active" asp-route-search="@Model.Search"
+                   class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white">
+                    Active
+                </a>
+
+                <a asp-action="Index" asp-controller="Dashboard" asp-area="CaseManager"
+                   asp-route-caseStatus="closed" asp-route-search="@Model.Search"
+                   class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white">
+                    Closed
+                </a>
+
+                <a asp-action="Index" asp-controller="Dashboard" asp-area="CaseManager"
+                   asp-route-caseStatus="waiting" asp-route-search="@Model.Search"
+                   class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white">
+                    Waiting
+                </a>
+
+                <a asp-action="Index" asp-controller="Dashboard" asp-area="CaseManager"
+                   asp-route-caseStatus="delayed" asp-route-search="@Model.Search"
+                   class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white">
+                    Delayed
+                </a>
+
+            </div>
+
+        </el-menu>
+
+    </el-dropdown>
+
+
+    <!-- Search function -->
+    <form asp-action="Index"
+          asp-controller="Dashboard"
+          asp-area="CaseManager"
+          method="get"
+          class="flex w-full max-w-md gap-2">
+
+        <input asp-for="Search"
+               placeholder="Search by case number, client or title..."
+               class="min-w-0 flex-1 rounded-md border border-white/10 bg-white/10 px-3 py-2 text-sm text-white placeholder-gray-400 outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500" />
+
+        <button type="submit"
+                class="shrink-0 rounded-md bg-cyan-500 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400">
+            Search
+        </button>
+
+    </form>
+
+</div>
+@*<el-dropdown class="inline-block">
     <button class="cursor-pointer inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white/10 px-3 py-2 text-sm font-semibold text-white inset-ring-1 inset-ring-white/5 hover:bg-white/20">
         Filter status
         <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="-mr-1 size-5 text-gray-400">
@@ -118,7 +202,7 @@
 <form asp-action="Index" asp-controller="DashBoard" asp-area="caseManager" method="get">
     <input asp-for="Search" placeholder="Search by case number, client or title..." />
     <button type="submit">Search</button>
-</form>
+</form>*@
 <div class="mt-6 overflow-hidden rounded-xl border border-slate-800 bg-slate-900 shadow-sm">
 
     <!-- Table header -->
