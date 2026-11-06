@@ -1,4 +1,252 @@
-﻿@model IEnumerable<ApplicationUser>
+﻿
+@model PagedResult<ApplicationUser>
+
+<!-- Clients table container -->
+<div class="mt-6 overflow-hidden rounded-xl border border-slate-800 bg-slate-900 shadow-sm">
+
+    <!-- Table header -->
+    <div class="border-b border-slate-800 px-5 py-4">
+        <h2 class="text-lg font-semibold text-white">
+            Clients
+        </h2>
+        <p class="mt-1 text-sm text-slate-400">
+            Manage and view registered clients.
+        </p>
+    </div>
+
+    <!-- Search -->
+    <div class="border-b border-slate-800 px-5 py-4">
+
+        <form asp-action="Index"
+              asp-controller="ClientsList"
+              asp-area="CaseManager"
+              method="get"
+              class="flex flex-col gap-3 sm:flex-row">
+
+            <div class="relative flex-1">
+
+                @*
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>*@
+
+                <input type="text"
+                       name="search"
+                       value="@ViewBag.Search"
+                       placeholder="Search by name or email..."
+                       class="w-full rounded-lg border border-slate-700 bg-slate-950 py-2.5 pl-10 pr-4 text-sm text-white placeholder-slate-500 outline-none transition focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500" />
+
+            </div>
+
+            <button type="submit"
+                    class="rounded-lg bg-cyan-500 px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400">
+                Search
+            </button>
+
+            @if (!string.IsNullOrWhiteSpace(ViewBag.Search as string))
+            {
+                <a asp-action="Index"
+                   asp-controller="ClientsList"
+                   asp-area="CaseManager"
+                   class="inline-flex items-center justify-center rounded-lg border border-slate-700 px-5 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-slate-800 hover:text-white">
+                    Clear
+                </a>
+            }
+
+        </form>
+
+    </div>
+
+    <!-- Table -->
+    <div class="overflow-x-auto">
+
+        <table class="w-full text-left text-sm">
+
+            <!-- Head -->
+            <thead class="border-b border-slate-800 bg-slate-950/60">
+                <tr>
+                    <th class="px-5 py-4 font-semibold text-slate-300">
+                        First name
+                    </th>
+
+                    <th class="px-5 py-4 font-semibold text-slate-300">
+                        Last name
+                    </th>
+
+                    <th class="px-5 py-4 font-semibold text-slate-300">
+                        Email
+                    </th>
+
+                    <th class="px-5 py-4 font-semibold text-slate-300">
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+
+            <!-- Body -->
+            <tbody class="divide-y divide-slate-800">
+
+                @if (Model.Items.Any())
+                {
+                    @foreach (var client in Model.Items)
+                    {
+                        <tr class="transition-colors hover:bg-slate-800/50">
+
+                            <!-- First name -->
+                            <td class="whitespace-nowrap px-5 py-4">
+                                <span class="font-medium text-white">
+                                    @client.FirstName
+                                </span>
+                            </td>
+
+                            <!-- Last name -->
+                            <td class="whitespace-nowrap px-5 py-4">
+                                <span class="font-medium text-white">
+                                    @client.LastName
+                                </span>
+                            </td>
+
+                            <!-- Email -->
+                            <td class="px-5 py-4">
+                                <span class="font-medium text-slate-200">
+                                    @client.Email
+                                </span>
+                            </td>
+
+                            <!-- Actions -->
+                            <td class="whitespace-nowrap px-5 py-4">
+                                <a asp-action="Details"
+                                   asp-controller="ClientsList"
+                                   asp-area="CaseManager"
+                                   asp-route-id="@client.Id"
+                                   class="inline-flex items-center rounded-full bg-slate-800 px-3 py-1 text-sm font-medium text-slate-300 transition-colors hover:bg-slate-700 hover:text-white">
+                                    View
+                                </a>
+                            </td>
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <!-- No clients -->
+                    <tr>
+                        <td colspan="4" class="px-5 py-12 text-center">
+
+                            <p class="font-medium text-slate-300">
+                                No clients found
+                            </p>
+
+                            <p class="mt-1 text-sm text-slate-500">
+                                @if (!string.IsNullOrWhiteSpace(ViewBag.Search as string))
+                                {
+                                    <span>Try searching with another name or email address.</span>
+                                }
+                                else
+                                {
+                                    <span>You currently don't have any clients.</span>
+                                }
+                            </p>
+
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <!-- Pagination -->
+    @if (Model.TotalPages > 1)
+    {
+        <div class="flex items-center justify-between border-t border-slate-800 px-5 py-4">
+
+            <!-- Previous -->
+            <div>
+
+                @if (Model.HasPreviousPage)
+                {
+                    <a asp-action="Index"
+                       asp-controller="ClientsList"
+                       asp-area="CaseManager"
+                       asp-route-pageNumber="@(Model.PageNumber - 1)"
+                       asp-route-search="@ViewBag.Search"
+                       class="inline-flex items-center gap-2 rounded-lg border border-slate-700 px-4 py-2 text-sm font-medium text-slate-300 transition hover:bg-slate-800 hover:text-white">
+
+                        <span>&larr;</span>
+                        Previous
+
+                    </a>
+                }
+                else
+                {
+                    <span class="inline-flex cursor-not-allowed items-center gap-2 rounded-lg border border-slate-800 px-4 py-2 text-sm font-medium text-slate-600">
+
+                        <span>&larr;</span>
+                        Previous
+
+                    </span>
+                }
+
+            </div>
+
+            <!-- Page information -->
+            <div class="text-sm text-slate-400">
+                Page <span class="font-semibold text-white">@Model.PageNumber</span>
+                of <span class="font-semibold text-white">@Model.TotalPages</span>
+            </div>
+
+            <!-- Next -->
+            <div>
+
+                @if (Model.HasNextPage)
+                {
+                    <a asp-action="Index"
+                       asp-controller="ClientsList"
+                       asp-area="CaseManager"
+                       asp-route-pageNumber="@(Model.PageNumber + 1)"
+                       asp-route-search="@ViewBag.Search"
+                       class="inline-flex items-center gap-2 rounded-lg border border-slate-700 px-4 py-2 text-sm font-medium text-slate-300 transition hover:bg-slate-800 hover:text-white">
+
+                        Next
+                        <span>&rarr;</span>
+
+                    </a>
+                }
+                else
+                {
+                    <span class="inline-flex cursor-not-allowed items-center gap-2 rounded-lg border border-slate-800 px-4 py-2 text-sm font-medium text-slate-600">
+
+                        Next
+                        <span>&rarr;</span>
+
+                    </span>
+                }
+
+            </div>
+
+        </div>
+    }
+
+    <!-- Results information -->
+    <div class="border-t border-slate-800 px-5 py-3">
+        <p class="text-xs text-slate-500">
+            Showing @Model.Items.Count() of @Model.TotalItems clients
+        </p>
+    </div>
+
+</div>
+
+@*
+@model IEnumerable<ApplicationUser>
 
 <!-- Clients table container -->
 <div class="mt-6 overflow-hidden rounded-xl border border-slate-800 bg-slate-900 shadow-sm">
@@ -104,3 +352,4 @@
     </div>
 
 </div>
+*@

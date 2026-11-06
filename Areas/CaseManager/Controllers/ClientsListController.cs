@@ -15,14 +15,87 @@ namespace caseManageMentSystem.Areas.CaseManager.Controllers
 {
     [Area("CaseManager")]
     [Authorize(Roles = "caseManager")]
-    public class ClientsListController(UserManager<ApplicationUser> userManager, INoteService noteService, ICaseCaseManagerService caseService, ICaseHistoryService caseHistoryService, IClientService clientService) : Controller
+    public class ClientsListController(
+        ApplicationDbContext context,
+        UserManager<ApplicationUser> userManager,
+        INoteService noteService,
+        ICaseCaseManagerService caseService,
+        ICaseHistoryService caseHistoryService,
+        IClientService clientService)  : Controller
     {
+        [HttpGet]
+        public async Task<IActionResult> Index(string? search, int pageNumber = 1)
+        {
+            const int pageSize = 10;
 
-        public async Task<IActionResult> Index()
+            // Get clients belonging to the client role
+            var clientsQuery = context.Users.Where(user =>
+                context.UserRoles.Any(userRole =>
+                    userRole.UserId == user.Id &&
+                    context.Roles.Any(role =>
+                        role.Id == userRole.RoleId &&
+                        role.NormalizedName == "CLIENT"
+                    )
+                )
+            );
+
+            // Search by first name, last name or email
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                search = search.Trim();
+                var searchLower = search.ToLower();
+
+                clientsQuery = clientsQuery.Where(user =>
+                    (user.FirstName != null &&
+                     user.FirstName.ToLower().Contains(searchLower)) ||
+
+                    (user.LastName != null &&
+                     user.LastName.ToLower().Contains(searchLower)) ||
+
+                    (user.Email != null &&
+                     user.Email.ToLower().Contains(searchLower))
+                );
+            }
+
+            // Get total number of matching clients
+            var totalItems = await clientsQuery.CountAsync();
+
+            // Calculate pagination
+            var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+
+            pageNumber = Math.Max(1, pageNumber);
+
+            if (totalPages > 0)
+                pageNumber = Math.Min(pageNumber, totalPages);
+
+            // Get clients for current page
+            var clients = await clientsQuery
+                .OrderBy(user => user.LastName)
+                .ThenBy(user => user.FirstName)
+                .ThenBy(user => user.Id)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            // Create paged result
+            var result = new PagedResult<ApplicationUser>
+            {
+                Items = clients,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalItems = totalItems
+            };
+
+            ViewBag.Search = search;
+
+            return View(result);
+        }
+
+        /*public async Task<IActionResult> Index()
         {
             var clients = await userManager.GetUsersInRoleAsync("client");
             return View(clients);
-        }
+        }*/
 
         // GET: ClientsListController/Details/5
         public async Task<IActionResult> Details(string id)
