@@ -1,4 +1,8 @@
-﻿@model caseManageMentSystem.Models.RegisterUser
+﻿@{
+    ViewData["Title"] = "Register account";
+    Layout = "_Login_Layout";
+}
+@model caseManageMentSystem.Models.RegisterUser
 
 <div class="flex min-h-[calc(100vh-6rem)] items-center justify-center py-12">
 
@@ -144,7 +148,7 @@
 
                 <!-- Submit -->
                 <button type="submit"
-                        class="inline-flex w-full items-center justify-center rounded-full bg-cyan-500 px-5 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/50">
+                        class="cursor-pointer inline-flex w-full items-center justify-center rounded-full bg-cyan-500 px-5 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/50">
                     Create account
                 </button>
 

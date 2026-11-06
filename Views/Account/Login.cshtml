@@ -1,5 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Sign In";
+    Layout = "_Login_Layout";
 }
 
 @model caseManageMentSystem.Models.LoginUser
@@ -110,10 +111,13 @@
 
                 <!-- Submit -->
                 <button type="submit"
-                        class="inline-flex w-full items-center justify-center rounded-full bg-cyan-500 px-5 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/50">
+                        class=" cursor-pointer inline-flex w-full items-center justify-center rounded-full bg-cyan-500 px-5 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/50">
                     Sign in
                 </button>
-
+                <a asp-area="" asp-controller="Account" asp-action="Register"
+                   class="inline-flex w-full items-center justify-center rounded-full border border-cyan-500/50 bg-transparent px-5 py-2.5 text-sm font-semibold text-cyan-400 transition-all duration-200 hover:border-cyan-400 hover:bg-cyan-500/10 hover:text-cyan-300 focus:outline-none focus:ring-2 focus:ring-cyan-500/50">
+                    Register
+                </a>
             </form>
 
         </div>
