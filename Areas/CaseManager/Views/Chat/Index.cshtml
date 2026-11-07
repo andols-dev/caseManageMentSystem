@@ -1,0 +1,341 @@
+﻿
+@{
+    ViewData["Title"] = "Messages";
+}
+
+<script src="https://cdn.jsdelivr.net/npm/@@tailwindcss/browser@4"></script>
+
+<div class="space-y-6">
+
+    <!-- Header -->
+    <div class="flex flex-col gap-4 rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-lg sm:flex-row sm:items-center sm:justify-between">
+        <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-400">Communication</p>
+            <h1 class="mt-2 text-2xl font-bold text-white">Messages</h1>
+            <p class="mt-1 text-sm text-slate-400">Communicate with other Case Managers.</p>
+        </div>
+
+        <div class="relative">
+            <button type="button" onclick="toggleContacts()"
+                    class="inline-flex items-center gap-2 rounded-full bg-cyan-500 px-5 py-2.5 text-sm font-semibold text-slate-950 hover:bg-cyan-400">
+                <span>+</span> New Message
+            </button>
+
+            <!-- Contact dropdown -->
+            <div id="contactDropdown" class="hidden absolute right-0 top-full z-50 mt-3 w-80 overflow-hidden rounded-2xl border border-slate-700 bg-slate-900 shadow-xl">
+                <div class="border-b border-slate-800 p-4">
+                    <h3 class="text-sm font-semibold text-white">New Conversation</h3>
+                    <p class="mt-1 text-xs text-slate-400">Select a Case Manager.</p>
+                </div>
+
+                <div class="p-3 border-b border-slate-800">
+                    <input id="contactSearch" oninput="renderContacts()"
+                           placeholder="Search Case Managers..."
+                           class="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 text-sm text-white outline-none focus:border-cyan-500" />
+                </div>
+
+                <div id="contactList" class="max-h-72 overflow-y-auto"></div>
+                <div id="noContacts" class="hidden p-5 text-center text-sm text-slate-500">No contacts found.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat container -->
+    <div class="grid min-h-[650px] grid-cols-12 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900 shadow-lg">
+
+        <!-- Conversations -->
+        <div class="col-span-12 border-b border-slate-800 lg:col-span-4 lg:border-b-0 lg:border-r">
+
+            <div class="border-b border-slate-800 p-4">
+                <input id="conversationSearch" oninput="renderConversations()"
+                       placeholder="Search conversations..."
+                       class="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 text-sm text-white outline-none focus:border-cyan-500" />
+            </div>
+
+            <div class="flex items-center justify-between px-5 py-4">
+                <h2 class="text-sm font-semibold text-white">Conversations</h2>
+                <span id="contactCount" class="text-xs text-slate-500"></span>
+            </div>
+
+            <div id="conversationList" class="divide-y divide-slate-800"></div>
+
+            <div id="emptyConversations" class="hidden p-6 text-center text-sm text-slate-500">
+                No conversations yet.
+            </div>
+        </div>
+
+        <!-- Chat window -->
+        <div class="col-span-12 flex min-h-[550px] flex-col lg:col-span-8">
+
+            <!-- Empty state -->
+            <div id="emptyChat" class="flex flex-1 flex-col items-center justify-center p-8 text-center">
+                <div class="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-cyan-500/10 text-3xl text-cyan-400">✉</div>
+                <h2 class="text-lg font-semibold text-white">Your Messages</h2>
+                <p class="mt-2 text-sm text-slate-400">Select a conversation or start a new message.</p>
+            </div>
+
+            <!-- Active conversation -->
+            <div id="activeChat" class="hidden flex flex-1 flex-col">
+
+                <div class="flex items-center justify-between border-b border-slate-800 px-5 py-4">
+                    <div class="flex items-center gap-3">
+                        <div id="activeAvatar" class="flex h-11 w-11 items-center justify-center rounded-full bg-cyan-500/20 font-semibold text-cyan-400"></div>
+                        <div>
+                            <h2 id="activeName" class="text-sm font-semibold text-white"></h2>
+                            <p id="activeStatus" class="mt-1 text-xs"></p>
+                        </div>
+                    </div>
+                    <span class="text-xs text-slate-500">Private conversation</span>
+                </div>
+
+                <div id="messagesContainer" class="flex flex-1 flex-col gap-5 overflow-y-auto p-5"></div>
+
+                <div class="border-t border-slate-800 p-4">
+                    <form onsubmit="sendMessage(event)" class="flex items-center gap-3">
+                        <input id="messageInput" type="text" autocomplete="off"
+                               placeholder="Write a message..."
+                               class="min-w-0 flex-1 rounded-full border border-slate-700 bg-slate-800 px-5 py-3 text-sm text-white outline-none focus:border-cyan-500" />
+                        <button type="submit" class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-cyan-500 text-slate-950 hover:bg-cyan-400">
+                            &#10148;
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const currentUserId = 0;
+
+    const contacts = [
+        { id: 1, name: "Anna Svensson", initials: "AS", online: true, color: "cyan" },
+        { id: 2, name: "Erik Johansson", initials: "EJ", online: false, color: "indigo" },
+        { id: 3, name: "Maria Andersson", initials: "MA", online: true, color: "purple" },
+        { id: 4, name: "David Nilsson", initials: "DN", online: false, color: "emerald" }
+    ];
+
+    let conversations = [
+        {
+            id: 1,
+            contactId: 1,
+            unread: 0,
+            messages: [
+                { sender: 1, text: "Hi! Can you review the latest case?", time: "09:35", date: "Today" },
+                { sender: 0, text: "Of course! I'll take a look.", time: "09:38", date: "Today" },
+                { sender: 1, text: "Thank you! I appreciate your help.", time: "09:42", date: "Today" }
+            ]
+        },
+        {
+            id: 2,
+            contactId: 2,
+            unread: 2,
+            messages: [
+                { sender: 2, text: "Have you checked the documents?", time: "Yesterday", date: "Yesterday" }
+            ]
+        }
+    ];
+
+    let activeId = null;
+
+    const colors = {
+        cyan: "bg-cyan-500/20 text-cyan-400",
+        indigo: "bg-indigo-500/20 text-indigo-400",
+        purple: "bg-purple-500/20 text-purple-400",
+        emerald: "bg-emerald-500/20 text-emerald-400"
+    };
+
+    function escapeHtml(value) {
+        return String(value).replace(/[&<>"']/g, c => ({
+            "&": "&amp;", "<": "&lt;", ">": "&gt;",
+            '"': "&quot;", "'": "&#39;"
+        })[c]);
+    }
+
+    function getContact(id) {
+        return contacts.find(c => c.id === id);
+    }
+
+    function toggleContacts() {
+        const dropdown = document.getElementById("contactDropdown");
+        dropdown.classList.toggle("hidden");
+        document.getElementById("contactSearch").value = "";
+        renderContacts();
+    }
+
+    function renderContacts() {
+        const search = document.getElementById("contactSearch").value.toLowerCase();
+        const filtered = contacts.filter(c => c.name.toLowerCase().includes(search));
+
+        document.getElementById("contactList").innerHTML = filtered.map(c => `
+            <button type="button" onclick="startConversation(${c.id})"
+                class="flex w-full items-center gap-3 px-4 py-3 text-left hover:bg-slate-800">
+                <div class="flex h-10 w-10 items-center justify-center rounded-full ${colors[c.color]} font-semibold">${c.initials}</div>
+                <div class="flex-1">
+                    <p class="text-sm font-semibold text-white">${escapeHtml(c.name)}</p>
+                    <p class="text-xs ${c.online ? 'text-emerald-400' : 'text-slate-500'}">${c.online ? '● Online' : 'Offline'}</p>
+                </div>
+                <span class="text-slate-500">+</span>
+            </button>
+        `).join("");
+
+        document.getElementById("noContacts").classList.toggle("hidden", filtered.length > 0);
+    }
+
+    function startConversation(contactId) {
+        let conversation = conversations.find(c => c.contactId === contactId);
+
+        if (!conversation) {
+            conversation = {
+                id: Date.now(),
+                contactId,
+                unread: 0,
+                messages: []
+            };
+            conversations.push(conversation);
+        }
+
+        document.getElementById("contactDropdown").classList.add("hidden");
+        openConversation(conversation.id);
+    }
+
+    function openConversation(id) {
+        activeId = id;
+        const conversation = conversations.find(c => c.id === id);
+        const contact = getContact(conversation.contactId);
+
+        conversation.unread = 0;
+
+        document.getElementById("emptyChat").classList.add("hidden");
+        document.getElementById("activeChat").classList.remove("hidden");
+
+        document.getElementById("activeAvatar").textContent = contact.initials;
+        document.getElementById("activeAvatar").className =
+            `flex h-11 w-11 items-center justify-center rounded-full font-semibold ${colors[contact.color]}`;
+
+        document.getElementById("activeName").textContent = contact.name;
+        document.getElementById("activeStatus").textContent = contact.online ? "● Online" : "Offline";
+        document.getElementById("activeStatus").className =
+            `mt-1 text-xs ${contact.online ? 'text-emerald-400' : 'text-slate-500'}`;
+
+        renderMessages();
+        renderConversations();
+        document.getElementById("messageInput").focus();
+    }
+
+    function renderMessages() {
+        const conversation = conversations.find(c => c.id === activeId);
+        const contact = getContact(conversation.contactId);
+        const container = document.getElementById("messagesContainer");
+
+        if (!conversation.messages.length) {
+            container.innerHTML = `<p class="m-auto text-center text-sm text-slate-500">Start your conversation with ${escapeHtml(contact.name)}.</p>`;
+            return;
+        }
+
+        let previousDate = "";
+
+        container.innerHTML = conversation.messages.map(m => {
+            let separator = "";
+
+            if (m.date !== previousDate) {
+                previousDate = m.date;
+                separator = `<div class="flex justify-center"><span class="rounded-full bg-slate-800 px-3 py-1 text-xs text-slate-500">${escapeHtml(m.date)}</span></div>`;
+            }
+
+            if (m.sender === currentUserId) {
+                return `${separator}
+                    <div class="ml-auto flex max-w-[85%] flex-col items-end">
+                        <div class="rounded-2xl rounded-br-md bg-cyan-600 px-4 py-3">
+                            <p class="break-words text-sm leading-6 text-white">${escapeHtml(m.text)}</p>
+                        </div>
+                        <p class="mt-1 text-xs text-slate-500">${escapeHtml(m.time)} · Sent</p>
+                    </div>`;
+            }
+
+            return `${separator}
+                <div class="flex max-w-[85%] items-end gap-2">
+                    <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${colors[contact.color]} text-xs font-semibold">${contact.initials}</div>
+                    <div>
+                        <div class="rounded-2xl rounded-bl-md border border-slate-700 bg-slate-800 px-4 py-3">
+                            <p class="break-words text-sm leading-6 text-slate-200">${escapeHtml(m.text)}</p>
+                        </div>
+                        <p class="mt-1 text-xs text-slate-500">${escapeHtml(m.time)}</p>
+                    </div>
+                </div>`;
+        }).join("");
+
+        container.scrollTop = container.scrollHeight;
+    }
+
+    function sendMessage(event) {
+        event.preventDefault();
+
+        const input = document.getElementById("messageInput");
+        const text = input.value.trim();
+
+        if (!text || activeId === null) return;
+
+        const conversation = conversations.find(c => c.id === activeId);
+        const now = new Date();
+
+        conversation.messages.push({
+            sender: currentUserId,
+            text,
+            time: now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+            date: "Today"
+        });
+
+        input.value = "";
+        renderMessages();
+        renderConversations();
+    }
+
+    function renderConversations() {
+        const search = document.getElementById("conversationSearch").value.toLowerCase();
+
+        const filtered = [...conversations]
+            .filter(c => getContact(c.contactId).name.toLowerCase().includes(search))
+            .sort((a, b) => {
+                const ma = a.messages.at(-1);
+                const mb = b.messages.at(-1);
+                return (mb?.time || "").localeCompare(ma?.time || "");
+            });
+
+        document.getElementById("contactCount").textContent = `${filtered.length} contacts`;
+
+        document.getElementById("conversationList").innerHTML = filtered.map(c => {
+            const contact = getContact(c.contactId);
+            const last = c.messages.at(-1);
+
+            return `
+                <button type="button" onclick="openConversation(${c.id})"
+                    class="flex w-full items-center gap-3 border-l-2 ${activeId === c.id ? 'border-cyan-400 bg-slate-800/70' : 'border-transparent'} px-5 py-4 text-left hover:bg-slate-800">
+                    <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full ${colors[contact.color]} font-semibold">${contact.initials}</div>
+                    <div class="min-w-0 flex-1">
+                        <div class="flex items-center justify-between gap-2">
+                            <p class="truncate text-sm font-semibold text-white">${escapeHtml(contact.name)}</p>
+                            <span class="text-xs text-slate-500">${last ? escapeHtml(last.time) : ""}</span>
+                        </div>
+                        <p class="mt-1 truncate text-xs text-slate-400">${last ? escapeHtml((last.sender === 0 ? "You: " : "") + last.text) : "No messages yet"}</p>
+                    </div>
+                    ${c.unread ? `<span class="flex h-5 min-w-5 items-center justify-center rounded-full bg-cyan-500 px-1.5 text-xs font-bold text-slate-950">${c.unread}</span>` : ""}
+                </button>`;
+        }).join("");
+
+        document.getElementById("emptyConversations").classList.toggle("hidden", filtered.length > 0);
+    }
+
+    document.addEventListener("click", event => {
+        const dropdown = document.getElementById("contactDropdown");
+        if (!dropdown.contains(event.target) &&
+            !event.target.closest("#contactDropdown") &&
+            !event.target.closest('[onclick="toggleContacts()"]')) {
+            dropdown.classList.add("hidden");
+        }
+    });
+
+    renderContacts();
+    renderConversations();
+
+</script>
